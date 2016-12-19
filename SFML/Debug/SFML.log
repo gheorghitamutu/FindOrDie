@@ -1,0 +1,143 @@
+﻿  TileMap.cpp
+c:\users\gicu\documents\github\findordie\sfml\tilemap.cpp(32): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\tilemap.cpp(33): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\tilemap.cpp(34): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\tilemap.cpp(35): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\tilemap.cpp(38): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\tilemap.cpp(39): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\tilemap.cpp(40): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\tilemap.cpp(41): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  Player.cpp
+  PauseMenu.cpp
+c:\users\gicu\documents\github\findordie\sfml\pausemenu.cpp(14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\pausemenu.cpp(20): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\pausemenu.cpp(26): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  MainMenu.cpp
+c:\users\gicu\documents\github\findordie\sfml\mainmenu.cpp(13): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\mainmenu.cpp(19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\mainmenu.cpp(25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  main.cpp
+c:\users\gicu\documents\github\findordie\sfml\mainmenu.h(4): warning C4005: 'MAX_NUMBER_OF_ITEMS': macro redefinition
+  c:\users\gicu\documents\github\findordie\sfml\characterselectionmenu.h(6): note: see previous definition of 'MAX_NUMBER_OF_ITEMS'
+c:\users\gicu\documents\github\findordie\sfml\main.cpp(17): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\main.cpp(18): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\main.cpp(19): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  CharacterSelectionMenu.cpp
+c:\users\gicu\documents\github\findordie\sfml\characterselectionmenu.cpp(13): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\characterselectionmenu.cpp(19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Animation.cpp
+c:\users\gicu\documents\github\findordie\sfml\animation.cpp(11): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\gicu\documents\github\findordie\sfml\animation.cpp(12): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
+  SFML.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\Debug\SFML.exe
+  SFML.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\Debug\SFML.pdb (Full PDB)
+
+Project Performance Summary:
+     4456 ms  C:\Users\Gicu\Documents\GitHub\FindOrDie\SFML\SFML.vcxproj   1 calls
+               4456 ms  Build                                      1 calls
+
+Target Performance Summary:
+        0 ms  AfterBuildCompileEvent                     1 calls
+        0 ms  GetCopyToOutputDirectoryXamlAppDefs        1 calls
+        0 ms  _CheckForCompileOutputs                    1 calls
+        0 ms  GetResolvedWinMD                           1 calls
+        0 ms  _Manifest                                  1 calls
+        0 ms  _SelectedFiles                             1 calls
+        0 ms  PostBuildEvent                             1 calls
+        0 ms  _Midl                                      1 calls
+        0 ms  SelectCustomBuild                          1 calls
+        0 ms  _ClCompile                                 1 calls
+        0 ms  FixupCLCompileOptions                      1 calls
+        0 ms  GetReferenceAssemblyPaths                  1 calls
+        0 ms  ModifyUnitTestPlatformVersion              1 calls
+        0 ms  CreateCustomManifestResourceNames          1 calls
+        0 ms  ResolveAssemblyReferences                  1 calls
+        0 ms  BeforeLink                                 1 calls
+        0 ms  AfterBuild                                 1 calls
+        0 ms  ComputeCLInputPDBName                      1 calls
+        0 ms  ComputeManifestInputsTargets               1 calls
+        0 ms  _BuildLinkAction                           1 calls
+        0 ms  SelectClCompile                            1 calls
+        0 ms  BeforeResourceCompile                      1 calls
+        0 ms  ResolveReferences                          1 calls
+        0 ms  ComputeCLCompileGeneratedXDCFiles          1 calls
+        0 ms  BuildGenerateSources                       1 calls
+        0 ms  _CopySourceItemsToOutputDirectory          1 calls
+        0 ms  ComputeLinkImportLibraryOutputsForClean    1 calls
+        0 ms  AfterResourceCompile                       1 calls
+        0 ms  _Xsd                                       1 calls
+        0 ms  ComputeCustomBuildOutput                   1 calls
+        0 ms  _GenerateSatelliteAssemblyInputs           1 calls
+        0 ms  MakeDirsForResourceCompile                 1 calls
+        0 ms  _ResourceCompile                           1 calls
+        0 ms  ComputeLinkInputsFromProject               1 calls
+        0 ms  Build                                      1 calls
+        0 ms  _Link                                      1 calls
+        0 ms  BuildLinkTraverse                          1 calls
+        0 ms  _XdcMake                                   1 calls
+        0 ms  CreateSatelliteAssemblies                  1 calls
+        0 ms  CopyFilesToOutputDirectory                 1 calls
+        0 ms  ExpandSDKReferences                        1 calls
+        0 ms  BuildCompileTraverse                       1 calls
+        0 ms  AfterBuildGenerateSources                  1 calls
+        0 ms  ComputeManifestGeneratedLinkerInputs       1 calls
+        0 ms  AfterMidl                                  1 calls
+        0 ms  ComputeMIDLGeneratedCompileInputs          1 calls
+        0 ms  _Deploy                                    1 calls
+        0 ms  AfterResolveReferences                     1 calls
+        0 ms  BeforeResolveReferences                    1 calls
+        0 ms  DoLinkOutputFilesMatch                     1 calls
+        0 ms  PreLinkEvent                               1 calls
+        0 ms  PreBuildEvent                              1 calls
+        0 ms  MakeDirsForMidl                            1 calls
+        0 ms  _BscMake                                   1 calls
+        0 ms  _Appverifier                               1 calls
+        0 ms  _BuildGenerateSourcesAction                1 calls
+        0 ms  BuildLink                                  1 calls
+        0 ms  ComputeCLCompileGeneratedSbrFiles          1 calls
+        0 ms  ResolveSDKReferences                       1 calls
+        0 ms  _ALink                                     1 calls
+        0 ms  Desktop_PlatformPrepareForBuild            1 calls
+        0 ms  ComputeCLGeneratedLinkInputs               1 calls
+        0 ms  _SplitProjectReferencesByFileExistence     1 calls
+        0 ms  BuildGenerateSourcesTraverse               1 calls
+        0 ms  AssignTargetPaths                          1 calls
+        0 ms  ComputeLegacyManifestEmbedding             1 calls
+        0 ms  ComputeCLOutputs                           1 calls
+        0 ms  BeforeClCompile                            1 calls
+        0 ms  PrepareForRun                              1 calls
+        0 ms  PrepareResourceNames                       1 calls
+        0 ms  AfterBuildGenerateSourcesEvent             1 calls
+        0 ms  MakeDirsForXdcMake                         1 calls
+        0 ms  GetInstalledSDKLocations                   1 calls
+        0 ms  ResolvedXDCMake                            1 calls
+        0 ms  AfterClCompile                             1 calls
+        0 ms  _BuildCompileAction                        1 calls
+        0 ms  ComputeRCGeneratedLinkInputs               1 calls
+        0 ms  BeforeBuildGenerateSources                 1 calls
+        0 ms  AfterLink                                  1 calls
+        0 ms  BuildCompile                               1 calls
+        0 ms  PlatformPrepareForBuild                    1 calls
+        1 ms  ResolveProjectReferences                   1 calls
+        1 ms  _PrepareForBuild                           1 calls
+        1 ms  _PrepareForReferenceResolution             1 calls
+        1 ms  GetFrameworkPaths                          1 calls
+        1 ms  ComputeRCOutputs                           1 calls
+        1 ms  AssignProjectConfiguration                 1 calls
+        1 ms  MakeDirsForBscMake                         1 calls
+        1 ms  WarnCompileDuplicatedFilename              1 calls
+        1 ms  RegisterOutput                             1 calls
+        1 ms  MakeDirsForCl                              1 calls
+        1 ms  ComputeReferenceCLInput                    1 calls
+        1 ms  SplitResourcesByCulture                    1 calls
+        1 ms  MakeDirsForLink                            1 calls
+        1 ms  GetCopyToOutputDirectoryItems              1 calls
+        1 ms  ComputeLinkSwitches                        1 calls
+        2 ms  FinalizeBuildStatus                        1 calls
+        2 ms  InitializeBuildStatus                      1 calls
+        3 ms  SetBuildDefaultEnvironmentVariables        1 calls
+        3 ms  PrepareForBuild                            1 calls
+        6 ms  _CheckForInvalidConfigurationAndPlatform   1 calls
+      112 ms  SetCABuildNativeEnvironmentVariables       1 calls
+      260 ms  Link                                       1 calls
+     4051 ms  ClCompile                                  1 calls
