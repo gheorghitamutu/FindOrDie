@@ -9,7 +9,7 @@ TileMap::TileMap(sf::Vector2u tileSize, const int* tiles, unsigned int width, un
 	{
 		//handle error
 	}
-
+	m_tileset.setSmooth(true);
 	// resize the vertex array to fit the level size
 	m_vertices.setPrimitiveType(sf::Quads);
 	m_vertices.resize(width * height * 4);
@@ -22,11 +22,11 @@ TileMap::TileMap(sf::Vector2u tileSize, const int* tiles, unsigned int width, un
 			int tileNumber = tiles[i + j * width];
 
 			// find its position in the tileset texture
-			int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
+			int tu = tileNumber% (m_tileset.getSize().x / tileSize.x);
 			int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
 
 			// get a pointer to the current tile's quad
-			sf::Vertex* quad = &m_vertices[(i + j * width) * 4];
+			sf::Vertex* quad = &m_vertices[(i + j * width)* 4];
 
 			// define its 4 corners
 			quad[0].position = sf::Vector2f(i * tileSize.x, j * tileSize.y);

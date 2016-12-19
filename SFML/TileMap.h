@@ -14,7 +14,7 @@ public:
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	
-	std::string tileset = "Animation/Man/fullPlayerAnimations.png";
+	std::string tileset = "Animation/Terrain/grass4.png";
 	sf::VertexArray m_vertices;
 	sf::Texture m_tileset;
 };

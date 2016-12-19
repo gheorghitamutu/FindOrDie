@@ -1,13 +1,9 @@
 #include "Player.h"
 
-
-
-
-Player::Player(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed):
-	animation(texture, imageCount, switchTime)
+Player::Player(sf::Texture* texture):
+	animation(texture)
 {
-	this->speed = speed;
-	row = 0;
+	texture->setSmooth(true);
 	body.setSize(sf::Vector2f(50.0f, 50.0f));
 	body.setPosition(1920 / 2.0f, 1080 / 2.0f);
 	body.setTexture(texture);
@@ -18,7 +14,7 @@ Player::~Player()
 {
 }
 
-void Player::Update(float deltaTime)
+void Player::Update()
 {
 	sf::Vector2f movement(0.0f, 0.0f);
 	unsigned int shiftIncreaseSpeed = 1;
@@ -86,9 +82,9 @@ void Player::Update(float deltaTime)
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 		row = 1;
 		movement.x -= speed*deltaTime;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) { //!!!
-			body.setPosition(body.getPosition().x - 10, body.getPosition().y);
-		}
+	//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) { 
+	//		body.setPosition(body.getPosition().x - 10, body.getPosition().y);
+	//	}
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		row = 2;
@@ -116,4 +112,9 @@ void Player::Update(float deltaTime)
 void Player::Draw(sf::RenderWindow& window)
 {
 	window.draw(body);
+}
+
+void Player::RestartClock()
+{
+	deltaTime = clock.restart().asSeconds();
 }

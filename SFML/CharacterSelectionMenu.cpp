@@ -85,7 +85,8 @@ void CharacterSelectionMenu::options(bool &newGame, bool &gamePause, bool &inCha
 
 		}
 		//no idea why this works
-		Player player(&texture, sf::Vector2u(8, 24), 0.1f, 100.0f);
+		//later edit: small idea why this works
+		Player player(&texture);
 	}
 }
 

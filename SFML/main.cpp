@@ -10,7 +10,7 @@ int main()
 	settings.antialiasingLevel = 16;
 
 	
-	sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML works!", sf::Style::Resize | sf::Style::Close, settings);
+	sf::RenderWindow window(sf::VideoMode(1920, 1080), "Find Or Die!", sf::Style::Resize | sf::Style::Close, settings);
 
 	sf::View cam = window.getDefaultView();
 
@@ -20,10 +20,7 @@ int main()
 
 	sf::Texture playerTexture;
 	playerTexture.loadFromFile("Animation/Man/fullPlayerAnimations.png");
-	Player player(&playerTexture, sf::Vector2u(8, 24), 0.1f, 50.0f); // 24-row, 8-columns, 0.1f switchTime
-
-	float deltaTime = 0.0f;
-	sf::Clock clock;
+	Player player(&playerTexture);
 
 	bool newGame = true;
 	bool gamePause = false;
@@ -32,22 +29,22 @@ int main()
 
 	const int level[] =
 	{
-		0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0,
-		0, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3,
-		0, 1, 0, 0, 2, 0, 3, 3, 3, 0, 1, 1, 1, 0, 0, 0,
-		0, 1, 1, 0, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2, 0, 0,
-		0, 0, 1, 0, 3, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 0,
-		0, 0, 1, 0, 3, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1,
-		0, 0, 1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1,
-		0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0,
-		0, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3,
-		0, 1, 0, 0, 2, 0, 3, 3, 3, 0, 1, 1, 1, 0, 0, 0,
-		0, 1, 1, 0, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2, 0, 0,
-		0, 0, 1, 0, 3, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 0,
-		0, 0, 1, 0, 3, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1,
-		0, 0, 1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1,
+		0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 2,
+		0, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 2,
+		0, 1, 0, 0, 2, 0, 3, 3, 3, 0, 1, 1, 1, 0, 0, 2,
+		0, 1, 1, 0, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2, 0, 2,
+		0, 0, 1, 0, 3, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 2,
+		0, 0, 1, 0, 3, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 2,
+		0, 0, 1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 2,
+		0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+		0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 2,
+		0, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 2,
+		0, 1, 0, 0, 2, 0, 3, 3, 3, 0, 1, 1, 1, 0, 0, 2,
+		0, 1, 1, 0, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2, 0, 2,
+		0, 0, 1, 0, 3, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 2,
+		0, 0, 1, 0, 3, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 2,
+		3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2,
 	};
 
 	// create the tilemap from the level definition
@@ -57,9 +54,9 @@ int main()
 
 	while (window.isOpen())
 	{
-		deltaTime = clock.restart().asSeconds();
-		sf::Event event;
+		player.RestartClock();
 
+		sf::Event event;
 		while (window.pollEvent(event))
 		{
 			menu.options(newGame, gamePause, inCharacterSelection, event, window);
@@ -70,6 +67,7 @@ int main()
 	     	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) cam.zoom(0.95f);
 
 		}
+
 		window.clear(sf::Color(80, 100, 50));
 		if (!gamePause && !newGame && inCharacterSelection) characterSelectionMenu.draw(window);
 		if (!gamePause && newGame && !inCharacterSelection) menu.draw(window);
@@ -77,7 +75,7 @@ int main()
 		if (!gamePause && !newGame && !inCharacterSelection) {
 		window.setView(cam);
 		window.draw(map);
-		player.Update(deltaTime);
+		player.Update();
 		player.Draw(window);
 		}
 		window.display();
