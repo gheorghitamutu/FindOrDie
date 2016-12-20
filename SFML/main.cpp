@@ -4,6 +4,7 @@
 #include "MainMenu.h"
 #include "PauseMenu.h"
 #include "TileMap.h"
+#include "Map.h"
 int main()
 {
 	sf::ContextSettings settings;
@@ -21,6 +22,8 @@ int main()
 	sf::Texture playerTexture;
 	playerTexture.loadFromFile("Animation/Man/fullPlayerAnimations.png");
 	Player player(&playerTexture);
+
+	Map newMap;
 
 	bool newGame = true;
 	bool gamePause = false;
@@ -74,7 +77,8 @@ int main()
 		if (gamePause && !newGame && !inCharacterSelection) pauseMenu.draw(window);
 		if (!gamePause && !newGame && !inCharacterSelection) {
 		window.setView(cam);
-		window.draw(map);
+	//	window.draw(map);
+		newMap.drawMap(window);
 		player.Update();
 		player.Draw(window);
 		}
