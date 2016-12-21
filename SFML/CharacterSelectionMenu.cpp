@@ -86,7 +86,7 @@ void CharacterSelectionMenu::options(bool &newGame, bool &gamePause, bool &inCha
 		}
 		//no idea why this works
 		//later edit: small idea why this works
-		Player player(&texture);
+		Player player(&texture, window);
 	}
 }
 

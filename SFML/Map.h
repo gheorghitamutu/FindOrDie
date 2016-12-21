@@ -5,7 +5,8 @@
 #include <cctype>
 #include <sstream>
 #include <string>
-
+#include<math.h>
+#define SIZE 64
 class Map
 {
 public:
@@ -13,12 +14,12 @@ public:
 	~Map();
 	void drawMap(sf::RenderWindow& window);
 	
-	
+private:
 	sf::Texture tileTexture;
 	sf::Sprite tiles;
-	sf::Vector2i map[100][100];
+	sf::Vector2i map[300][300];
 	sf::Vector2i loadcounter = sf::Vector2i(0, 0);
-
+//	sf::View camera;
 	std::string tileLocation;
 };
 
