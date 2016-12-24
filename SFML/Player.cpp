@@ -66,7 +66,7 @@ void Player::Update(sf::Event event)
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 4;
-		movement.y += normalRunSpeed;
+		movement.y += normalRunSpeed * 2;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 5;
@@ -78,11 +78,11 @@ void Player::Update(sf::Event event)
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 7;
-		movement.y -= normalRunSpeed;
+		movement.y -= normalRunSpeed * 2;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
 		row = 0;
-		movement.y += speed*deltaTime;
+		movement.y += speed*deltaTime * 2;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 		row = 1;
@@ -102,7 +102,7 @@ void Player::Update(sf::Event event)
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
 		row = 3;
-		movement.y -= speed*deltaTime;
+		movement.y -= speed*deltaTime * 2;
 	}
 	else {
 		if (row == 0 || row == 4)row = 8;
@@ -119,17 +119,30 @@ void Player::Update(sf::Event event)
 	body.move(movement);
 }
 
-void Player::Draw(sf::RenderWindow& window)
-{
-	camera = window.getDefaultView();
-	camera.setSize(camera.getSize().x, camera.getSize().y * 3);
-	camera.setCenter(body.getPosition());
-	camera.setViewport(sf::FloatRect(0, 0, 1, 1));
-	window.setView(camera);
+void Player::Draw(sf::RenderWindow& window, bool gamePause)
+{	
 	window.draw(body);
 }
 
 void Player::RestartClock()
 {
 	deltaTime = clock.restart().asSeconds();
+}
+
+void Player::CameraY(sf::RenderWindow& window)
+{
+
+	camera = window.getDefaultView();
+	camera.setSize(camera.getSize().x, camera.getSize().y * 3);
+	camera.setCenter(body.getPosition());
+	camera.setViewport(sf::FloatRect(0, 0, 1, 1));
+	window.setView(camera);
+}
+
+void Player::NormalCameraY(sf::RenderWindow & window)
+{
+	camera = window.getDefaultView();
+	camera.setSize(camera.getSize().x, camera.getSize().y);
+	camera.setViewport(sf::FloatRect(0, 0, 1, 1));
+	window.setView(camera);
 }

@@ -51,8 +51,10 @@ int main()
 		if (!gamePause && !newGame && !inCharacterSelection) {
 		newMap.drawMap(window);
 		player.Update(event);
-		player.Draw(window);
+		player.CameraY(window);
+		player.Draw(window, gamePause);
 		}
+		else player.NormalCameraY(window);
 		window.display();
 	}
 	return 0;

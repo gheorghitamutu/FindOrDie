@@ -9,8 +9,10 @@ public:
 	Player(sf::Texture* texture, sf::RenderWindow& window);
 	~Player();
 	void Update(sf::Event event);
-	void Draw(sf::RenderWindow& window);
+	void Draw(sf::RenderWindow& window, bool gamePause);
 	void RestartClock();
+	void CameraY(sf::RenderWindow& window);
+	void NormalCameraY(sf::RenderWindow& window);
 private:
 	sf::Texture texture;
 	sf::RectangleShape body;
