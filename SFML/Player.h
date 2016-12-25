@@ -2,8 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include "Animation.h"
 #include "CharacterSelectionMenu.h"
+#include "Camera.h"
 #include "math.h"
-class Player
+class Player : public Camera
 {
 public:
 	Player(sf::Texture* texture, sf::RenderWindow& window);
@@ -11,15 +12,15 @@ public:
 	void Update(sf::Event event);
 	void Draw(sf::RenderWindow& window, bool gamePause);
 	void RestartClock();
-	void CameraY(sf::RenderWindow& window);
-	void NormalCameraY(sf::RenderWindow& window);
+	void StartingPosition(bool newGame, sf::RenderWindow& window);
+	
 private:
 	sf::Texture texture;
 	sf::RectangleShape body;
-	sf::View camera;
 	sf::Clock clock;
 	sf::Vector2f movement;
 	Animation animation;
+	Camera camera;
 	unsigned int row = 0;
 	unsigned int shiftIncreaseSpeed;
 	float speed = 100.0f; // movement speed

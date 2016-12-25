@@ -7,6 +7,7 @@ Player::Player(sf::Texture* texture, sf::RenderWindow& window):
 	body.setSize(sf::Vector2f(100.0f, 100.0f));
 	body.setPosition(window.getSize().x / 2.0f, window.getSize().y / 1.0f);
 	body.setTexture(texture);
+	
 }
 
 
@@ -18,6 +19,7 @@ void Player::Update(sf::Event event)
 {
 	movement.x = 0.0f;
 	movement.y = 0.0f;
+	
 	shiftIncreaseSpeed = 1;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))shiftIncreaseSpeed = 3;
 	diagRunSpeed = sqrt(speed*deltaTime*shiftIncreaseSpeed + speed*deltaTime*shiftIncreaseSpeed);
@@ -121,6 +123,7 @@ void Player::Update(sf::Event event)
 
 void Player::Draw(sf::RenderWindow& window, bool gamePause)
 {	
+	CameraPerspective(window, body.getPosition());
 	window.draw(body);
 }
 
@@ -129,20 +132,7 @@ void Player::RestartClock()
 	deltaTime = clock.restart().asSeconds();
 }
 
-void Player::CameraY(sf::RenderWindow& window)
+void Player::StartingPosition(bool newGame, sf::RenderWindow& window)
 {
-
-	camera = window.getDefaultView();
-	camera.setSize(camera.getSize().x, camera.getSize().y * 3);
-	camera.setCenter(body.getPosition());
-	camera.setViewport(sf::FloatRect(0, 0, 1, 1));
-	window.setView(camera);
-}
-
-void Player::NormalCameraY(sf::RenderWindow & window)
-{
-	camera = window.getDefaultView();
-	camera.setSize(camera.getSize().x, camera.getSize().y);
-	camera.setViewport(sf::FloatRect(0, 0, 1, 1));
-	window.setView(camera);
+	if(newGame)body.setPosition(window.getSize().x / 2.0f, window.getSize().y / 1.0f);
 }

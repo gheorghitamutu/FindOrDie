@@ -4,6 +4,7 @@
 #include "MainMenu.h"
 #include "PauseMenu.h"
 #include "Map.h"
+#include "Camera.h"
 int main()
 {
 	sf::ContextSettings settings;
@@ -23,6 +24,8 @@ int main()
 	Player player(&playerTexture, window);
 
 	Map newMap;
+
+	Camera camera;
 
 	bool newGame = true;
 	bool gamePause = false;
@@ -48,13 +51,13 @@ int main()
 		if (!gamePause && !newGame && inCharacterSelection) characterSelectionMenu.draw(window);
 		if (!gamePause && newGame && !inCharacterSelection) menu.draw(window);
 		if (gamePause && !newGame && !inCharacterSelection) pauseMenu.draw(window);
+		player.StartingPosition(newGame, window);
 		if (!gamePause && !newGame && !inCharacterSelection) {
 		newMap.drawMap(window);
 		player.Update(event);
-		player.CameraY(window);
 		player.Draw(window, gamePause);
 		}
-		else player.NormalCameraY(window);
+		else camera.CameraNormal(window); // just changing between cameras
 		window.display();
 	}
 	return 0;
