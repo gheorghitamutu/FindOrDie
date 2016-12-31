@@ -2,9 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Animation.h"
 #include "CharacterSelectionMenu.h"
-#include "Camera.h"
 #include "math.h"
-class Player : public Camera
+class Player
 {
 public:
 	Player(sf::Texture* texture, sf::RenderWindow& window);
@@ -13,6 +12,7 @@ public:
 	void Draw(sf::RenderWindow& window, bool gamePause);
 	void RestartClock();
 	void StartingPosition(bool newGame, sf::RenderWindow& window);
+	sf::Vector2f returnPlayerPosition(); 
 	
 private:
 	sf::Texture texture;
@@ -20,10 +20,10 @@ private:
 	sf::Clock clock;
 	sf::Vector2f movement;
 	Animation animation;
-	Camera camera;
+	bool cameraPerspective = true;
 	unsigned int row = 0;
 	unsigned int shiftIncreaseSpeed;
-	float speed = 100.0f; // movement speed
+	float speed = 50.0f; // movement speed
 	float deltaTime = 0.0f;
 	float diagRunSpeed;
 	float normalRunSpeed;

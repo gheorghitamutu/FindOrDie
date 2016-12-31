@@ -5,60 +5,119 @@
 #include "PauseMenu.h"
 #include "Map.h"
 #include "Camera.h"
+#include "ResolutionMenu.h"
+#include <iostream>
 int main()
 {
+	
+
+	sf::RenderWindow widow(sf::VideoMode(800, 600), "Find Or Die!", sf::Style::None | sf::Style::Close);
+	widow.setVerticalSyncEnabled(true);
+	widow.setFramerateLimit(30);
+	ResolutionMenu resolutionMenu(widow.getSize().x, widow.getSize().y);
+	while (widow.isOpen())
+	{
+		sf::Event eva;
+		while (widow.pollEvent(eva))
+		{
+			resolutionMenu.options(eva, widow);
+			if (eva.type == sf::Event::Closed) return 0;
+		}
+		widow.clear(sf::Color::Black);
+		resolutionMenu.draw(widow);
+		widow.display();
+	}
+
+/*	sf::Clock clock;
+	sf::Time timeElapsed;
+	clock.restart().asSeconds();
+	while (timeElapsed.asSeconds() <= 1) {
+		std::cout << timeElapsed.asSeconds() << std::endl;
+		timeElapsed = clock.getElapsedTime();
+	}*/
+
+
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
+	sf::RenderWindow mainWindow(sf::VideoMode(resolutionMenu.returnWindowWidth(), resolutionMenu.returnWindowHeight()), "Find Or Die!", sf::Style::Resize | sf::Style::Close, settings);
+	mainWindow.setFramerateLimit(60);
 
-	
-	sf::RenderWindow window(sf::VideoMode(1920, 1080), "Find Or Die!", sf::Style::Resize | sf::Style::Close, settings);
-
-	
-
-	MainMenu menu(window.getSize().x, window.getSize().y);
-	PauseMenu pauseMenu(window.getSize().x, window.getSize().y);
-	CharacterSelectionMenu characterSelectionMenu(window.getSize().x, window.getSize().y);
+	MainMenu menu(mainWindow.getSize().x, mainWindow.getSize().y);
+	PauseMenu pauseMenu(mainWindow.getSize().x, mainWindow.getSize().y);
+	CharacterSelectionMenu characterSelectionMenu(mainWindow.getSize().x, mainWindow.getSize().y);
 
 	sf::Texture playerTexture;
-	playerTexture.loadFromFile("Animation/Man/fullPlayerAnimations.png");
-	Player player(&playerTexture, window);
+	playerTexture.loadFromFile("Animation/Man/fullPlayerAnimations.png"); //sort of init variable; doesn t work without this
+	Player player(&playerTexture, mainWindow);
 
 	Map newMap;
 
 	Camera camera;
+	sf::View cam = mainWindow.getDefaultView();
 
 	bool newGame = true;
 	bool gamePause = false;
 	bool inCharacterSelection = false;
+	bool centerCameraOnPlayer = false;
+	
 
-	while (window.isOpen())
+	
+
+	while (mainWindow.isOpen())
 	{
 		player.RestartClock();
-		sf::View cam = window.getDefaultView();
+		
 		sf::Event event;
-		while (window.pollEvent(event))
+		while (mainWindow.pollEvent(event))
 		{
-			menu.options(newGame, gamePause, inCharacterSelection, event, window);
-			characterSelectionMenu.options(newGame, gamePause, inCharacterSelection, event, window, playerTexture);		
-			pauseMenu.options(newGame, gamePause, inCharacterSelection, event, window);
-			if (event.type == sf::Event::Closed) window.close();
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) cam.zoom(1.05f);
-	     	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) cam.zoom(0.95f);
+			menu.options(newGame, gamePause, inCharacterSelection, event, mainWindow);
+			characterSelectionMenu.options(newGame, gamePause, inCharacterSelection, event, mainWindow, playerTexture);
+			pauseMenu.options(newGame, gamePause, inCharacterSelection, event, mainWindow);
 
+			if (event.type == sf::Event::Closed) mainWindow.close();
+
+			if (!gamePause && !newGame && !inCharacterSelection) { // if in game
+				switch (event.type) {
+				case sf::Event::KeyReleased:
+					switch (event.key.code) {
+					case sf::Keyboard::Space:
+						centerCameraOnPlayer = !centerCameraOnPlayer;
+						break;
+					}
+				case sf::Event::Resized:
+					    camera.getAspectRatio(mainWindow);
+					    break;
+				}
+			}
+
+			
+			
+
+			if(event.type == sf::Event::MouseWheelMoved) // Zomm in or out if the mouse wheel moves
+	           {
+	              cam.zoom(1.f + event.mouseWheel.delta*0.1f);
+	           }
 		}
+		
+		if (!gamePause && !newGame && inCharacterSelection) characterSelectionMenu.draw(mainWindow);
+		if (!gamePause && newGame && !inCharacterSelection) menu.draw(mainWindow);
+		if (gamePause && !newGame && !inCharacterSelection) pauseMenu.draw(mainWindow);
 
-		window.clear(sf::Color::Black);
-		if (!gamePause && !newGame && inCharacterSelection) characterSelectionMenu.draw(window);
-		if (!gamePause && newGame && !inCharacterSelection) menu.draw(window);
-		if (gamePause && !newGame && !inCharacterSelection) pauseMenu.draw(window);
-		player.StartingPosition(newGame, window);
+		player.StartingPosition(newGame, mainWindow);
+
 		if (!gamePause && !newGame && !inCharacterSelection) {
-		newMap.drawMap(window);
+
+		newMap.drawMap(mainWindow);
 		player.Update(event);
-		player.Draw(window, gamePause);
+		
+		camera.CameraPerspective(mainWindow, player.returnPlayerPosition(), cam, centerCameraOnPlayer);
+		player.Draw(mainWindow, gamePause);
+		camera.draggableCamera(mainWindow, event, centerCameraOnPlayer, cam);
 		}
-		else camera.CameraNormal(window); // just changing between cameras
-		window.display();
+		else camera.CameraNormal(mainWindow); // just changing between cameras
+
+		mainWindow.display();
+		mainWindow.clear(sf::Color::Black);
 	}
 	return 0;
 }

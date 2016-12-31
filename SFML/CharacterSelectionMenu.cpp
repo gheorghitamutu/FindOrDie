@@ -56,7 +56,7 @@ void CharacterSelectionMenu::MoveDown()
 
 void CharacterSelectionMenu::options(bool &newGame, bool &gamePause, bool &inCharacterSelection, sf::Event event, sf::RenderWindow &window, sf::Texture &texture)
 {
-	if (!gamePause && !newGame && inCharacterSelection) {
+//	if (!gamePause && !newGame && inCharacterSelection) {
 		switch (event.type) {
 		case sf::Event::KeyReleased:
 			switch (event.key.code) {
@@ -84,9 +84,10 @@ void CharacterSelectionMenu::options(bool &newGame, bool &gamePause, bool &inCha
 			}
 
 		}
-		//no idea why this works
-		//later edit: small idea why this works
-		Player player(&texture, window);
-	}
+//	}
 }
 
+int CharacterSelectionMenu::GetPressedItem()
+{
+	return selectedItemIndex;
+}

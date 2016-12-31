@@ -6,6 +6,7 @@ Player::Player(sf::Texture* texture, sf::RenderWindow& window):
 
 	body.setSize(sf::Vector2f(100.0f, 100.0f));
 	body.setPosition(window.getSize().x / 2.0f, window.getSize().y / 1.0f);
+	body.setOrigin(body.getSize() / 2.0f);
 	body.setTexture(texture);
 	
 }
@@ -123,7 +124,6 @@ void Player::Update(sf::Event event)
 
 void Player::Draw(sf::RenderWindow& window, bool gamePause)
 {	
-	CameraPerspective(window, body.getPosition());
 	window.draw(body);
 }
 
@@ -136,3 +136,8 @@ void Player::StartingPosition(bool newGame, sf::RenderWindow& window)
 {
 	if(newGame)body.setPosition(window.getSize().x / 2.0f, window.getSize().y / 1.0f);
 }
+
+sf::Vector2f Player::returnPlayerPosition()
+{
+	return body.getPosition();
+};
