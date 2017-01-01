@@ -54,9 +54,8 @@ void CharacterSelectionMenu::MoveDown()
 	}
 }
 
-void CharacterSelectionMenu::options(bool &newGame, bool &gamePause, bool &inCharacterSelection, sf::Event event, sf::RenderWindow &window, sf::Texture &texture)
+void CharacterSelectionMenu::options(bool &newGame, bool &gamePause, bool &inCharacterSelection, sf::Event event, sf::RenderWindow &window, bool &setTexture)
 {
-//	if (!gamePause && !newGame && inCharacterSelection) {
 		switch (event.type) {
 		case sf::Event::KeyReleased:
 			switch (event.key.code) {
@@ -72,22 +71,28 @@ void CharacterSelectionMenu::options(bool &newGame, bool &gamePause, bool &inCha
 				switch (this->GetPressedItem())
 				{
 				case 0:
-					texture.loadFromFile("Animation/Man/fullPlayerAnimations.png");
+					character = false;
+					setTexture = true;
 					inCharacterSelection = false;
 					break;
 
 				case 1:
-					texture.loadFromFile("Animation/Woman/fullPlayerAnimations.png");
-					inCharacterSelection = false;
+					character = true;
+					setTexture = true;
+					inCharacterSelection = false;				
 					break;
 				}
 			}
 
 		}
-//	}
 }
 
 int CharacterSelectionMenu::GetPressedItem()
 {
 	return selectedItemIndex;
+}
+
+bool CharacterSelectionMenu::returnTexture()
+{
+	return character;
 }

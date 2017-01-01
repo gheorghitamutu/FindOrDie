@@ -28,15 +28,6 @@ int main()
 		widow.display();
 	}
 
-/*	sf::Clock clock;
-	sf::Time timeElapsed;
-	clock.restart().asSeconds();
-	while (timeElapsed.asSeconds() <= 1) {
-		std::cout << timeElapsed.asSeconds() << std::endl;
-		timeElapsed = clock.getElapsedTime();
-	}*/
-
-
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
 	sf::RenderWindow mainWindow(sf::VideoMode(resolutionMenu.returnWindowWidth(), resolutionMenu.returnWindowHeight()), "Find Or Die!", sf::Style::Resize | sf::Style::Close, settings);
@@ -46,10 +37,7 @@ int main()
 	PauseMenu pauseMenu(mainWindow.getSize().x, mainWindow.getSize().y);
 	CharacterSelectionMenu characterSelectionMenu(mainWindow.getSize().x, mainWindow.getSize().y);
 
-	sf::Texture playerTexture;
-	playerTexture.loadFromFile("Animation/Man/fullPlayerAnimations.png"); //sort of init variable; doesn t work without this
-	Player player(&playerTexture, mainWindow);
-
+	Player player(mainWindow);
 	Map newMap;
 
 	Camera camera;
@@ -59,9 +47,7 @@ int main()
 	bool gamePause = false;
 	bool inCharacterSelection = false;
 	bool centerCameraOnPlayer = false;
-	
-
-	
+	bool setTexture = false;
 
 	while (mainWindow.isOpen())
 	{
@@ -71,7 +57,13 @@ int main()
 		while (mainWindow.pollEvent(event))
 		{
 			menu.options(newGame, gamePause, inCharacterSelection, event, mainWindow);
-			characterSelectionMenu.options(newGame, gamePause, inCharacterSelection, event, mainWindow, playerTexture);
+
+			characterSelectionMenu.options(newGame, gamePause, inCharacterSelection, event, mainWindow, setTexture);
+			if (setTexture) {
+				player.getTexture(characterSelectionMenu.returnTexture());
+				setTexture = false;
+			}
+
 			pauseMenu.options(newGame, gamePause, inCharacterSelection, event, mainWindow);
 
 			if (event.type == sf::Event::Closed) mainWindow.close();
@@ -88,10 +80,7 @@ int main()
 					    camera.getAspectRatio(mainWindow);
 					    break;
 				}
-			}
-
-			
-			
+			}	
 
 			if(event.type == sf::Event::MouseWheelMoved) // Zomm in or out if the mouse wheel moves
 	           {
@@ -106,10 +95,8 @@ int main()
 		player.StartingPosition(newGame, mainWindow);
 
 		if (!gamePause && !newGame && !inCharacterSelection) {
-
 		newMap.drawMap(mainWindow);
 		player.Update(event);
-		
 		camera.CameraPerspective(mainWindow, player.returnPlayerPosition(), cam, centerCameraOnPlayer);
 		player.Draw(mainWindow, gamePause);
 		camera.draggableCamera(mainWindow, event, centerCameraOnPlayer, cam);

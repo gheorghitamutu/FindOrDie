@@ -157,7 +157,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CharacterSelectionMenu.cpp" />
     <ClCompile Include="main.cpp" />
@@ -168,7 +167,6 @@
     <ClCompile Include="ResolutionMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CharacterSelectionMenu.h" />
     <ClInclude Include="MainMenu.h" />

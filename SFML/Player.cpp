@@ -1,19 +1,13 @@
 #include "Player.h"
 
-Player::Player(sf::Texture* texture, sf::RenderWindow& window):
-	animation(texture)
+Player::Player(sf::RenderWindow& window)
 {
-
+	setTexture();
+	Animation();
 	body.setSize(sf::Vector2f(100.0f, 100.0f));
 	body.setPosition(window.getSize().x / 2.0f, window.getSize().y / 1.0f);
 	body.setOrigin(body.getSize() / 2.0f);
-	body.setTexture(texture);
-	
-}
-
-
-Player::~Player()
-{
+	body.setTexture(&texture);
 }
 
 void Player::Update(sf::Event event)
@@ -69,7 +63,7 @@ void Player::Update(sf::Event event)
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 4;
-		movement.y += normalRunSpeed * 2;
+		movement.y += normalRunSpeed ;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 5;
@@ -81,11 +75,11 @@ void Player::Update(sf::Event event)
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 7;
-		movement.y -= normalRunSpeed * 2;
+		movement.y -= normalRunSpeed ;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
 		row = 0;
-		movement.y += speed*deltaTime * 2;
+		movement.y += speed*deltaTime ;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 		row = 1;
@@ -105,7 +99,7 @@ void Player::Update(sf::Event event)
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
 		row = 3;
-		movement.y -= speed*deltaTime * 2;
+		movement.y -= speed*deltaTime ;
 	}
 	else {
 		if (row == 0 || row == 4)row = 8;
@@ -117,8 +111,8 @@ void Player::Update(sf::Event event)
 		else if (row == 14 || row == 18)row = 22;
 		else if (row == 15 || row == 19)row = 23;
 	}
-	animation.Update(row, deltaTime*shiftIncreaseSpeed);
-	body.setTextureRect(animation.uvRect);
+	Update(row, deltaTime*shiftIncreaseSpeed);
+	body.setTextureRect(uvRect);
 	body.move(movement);
 }
 
@@ -137,7 +131,47 @@ void Player::StartingPosition(bool newGame, sf::RenderWindow& window)
 	if(newGame)body.setPosition(window.getSize().x / 2.0f, window.getSize().y / 1.0f);
 }
 
+void Player::getTexture(bool woman)
+{	
+	if (woman)texture.loadFromFile("Animation/Woman/fullPlayerAnimations.png");
+}
+
+void Player::setTexture()
+{
+	this->texture.loadFromFile("Animation/Man/fullPlayerAnimations.png");
+}
+
 sf::Vector2f Player::returnPlayerPosition()
 {
 	return body.getPosition();
 };
+
+void Player::Animation()
+{
+	currentImage.x = 0;
+	uvRect.width = texture.getSize().x / float(imageCount.x);
+	uvRect.height = texture.getSize().y / float(imageCount.y);
+	
+}
+
+void Player::Update(int row, float deltaTime)
+{
+	currentImage.y = row;
+	totalTime += deltaTime;
+
+	if (totalTime >= switchTime) {
+		totalTime -= switchTime;
+		currentImage.x++;
+
+		if (currentImage.x >= imageCount.x) {
+			currentImage.x = 0;
+		}
+	}
+
+	uvRect.left = currentImage.x*uvRect.width;
+	uvRect.top = currentImage.y*uvRect.height;
+}
+
+Player::~Player()
+{
+}
