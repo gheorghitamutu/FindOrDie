@@ -65,56 +65,17 @@ void Camera::draggableCamera(sf::RenderWindow & window, sf::Event event, bool& c
 		}
 	if (event.type == sf::Event::MouseMoved)
 		{
-			
-		//	std::cout << window.getSize().x << " " << window.getSize().x << std::endl;
-		//	std::cout <<sf::Mouse::getPosition(window).x << " " <<sf::Mouse::getPosition(window).y << std::endl;
-			// left click...
-			// get global mouse position
-			//clock.restart().asSeconds();
-			//timeElapsed = clock.getElapsedTime();
-			//while (timeElapsed.asSeconds() <= 0.1) {
-			//	//std::cout << timeElapsed.asSeconds() << std::endl;
-			//	timeElapsed = clock.getElapsedTime();
-			//}
-			//std::cout << "AICI" << std::endl;
-
-		/*	std::cout << position.x << " " << position.y << std::endl;*/
-
-		//	std::cout << position.x - sf::Mouse::getPosition(window).x << " " << position.y - sf::Mouse::getPosition(window).y << std::endl;
-		
 		deltaPosition.x = (position.x - sf::Mouse::getPosition(window).x);// *8;
 		deltaPosition.y = (position.y - sf::Mouse::getPosition(window).y)*2;// *8 * 2;
 		//		std::cout << position.x << " " << sf::Mouse::getPosition(window).x << std::endl;
-
-
 			if (initialPosition) {
 
 				initialPosition = !initialPosition;
 				centerCameraOnPlayer = false;
 				camera.setCenter(lastKnownPosition.x, lastKnownPosition.y);
 			}
-			//	else if (x != 0 && y != 0) {
-		//	if (position.x != sf::Mouse::getPosition(window).x&&position.y != sf::Mouse::getPosition(window).y)camera.setCenter(camera.getCenter().x + x, camera.getCenter().y + y);
-			//	if(position.x!= sf::Mouse::getPosition(window).x&&position.y != sf::Mouse::getPosition(window).y)camera.setCenter(camera.getCenter().x + sf::Mouse::getPosition(window).x, camera.getCenter().x + sf::Mouse::getPosition(window).y);
-			//	camera.setCenter(camera.getCenter().x+sf::Mouse::getPosition(window).x, camera.getCenter().y+sf::Mouse::getPosition(window).y);
-				//window.setView(camera);
-	//		if (x <  position.x/2)camera.move((camera.getCenter().x + x)*0.1, 0);
-		//	if (y <  position.y/2)camera.move(0, (camera.getCenter().y + y)*0.1);
-		//	if (x >  position.x/2)camera.move((camera.getCenter().x - x)*0.1, 0);
-			/*if (y > position.y / 2) {
-				camera.setCenter(0, (camera.getCenter().y - y));
-				position.y -= y;
-			}*/
+
 			camera.setCenter(cameraCenter.x + deltaPosition.x, cameraCenter.y + deltaPosition.y);
-			//}
-
-
-		/*if (x == 0)camera.move(0, 0);
-		if (y == 0)camera.move(0, 0);*/
-
-
-		//	std::cout << camera.getCenter().x << " " << camera.getCenter().y<<std::endl;
-			//window.setView(camera);
 		}
 
 
@@ -124,6 +85,4 @@ void Camera::draggableCamera(sf::RenderWindow & window, sf::Event event, bool& c
 		camera.setCenter(lastKnownPosition.x, lastKnownPosition.y);
 		window.setMouseCursorVisible(true);
 	}
-//	initialPosition = true;
-
 }

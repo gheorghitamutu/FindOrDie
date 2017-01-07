@@ -16,7 +16,6 @@ public:
 
 	bool returnTexture();
 	bool character = false;
-	sf::Texture texture;
 
 	~CharacterSelectionMenu();
 private:

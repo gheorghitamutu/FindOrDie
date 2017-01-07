@@ -17,10 +17,10 @@ void Player::Update(sf::Event event)
 	
 	shiftIncreaseSpeed = 1;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))shiftIncreaseSpeed = 3;
-	diagRunSpeed = sqrt(speed*deltaTime*shiftIncreaseSpeed + speed*deltaTime*shiftIncreaseSpeed);
+	diagRunSpeed = speed*deltaTime*shiftIncreaseSpeed;
 	normalRunSpeed = speed*deltaTime * shiftIncreaseSpeed;
-	diagSpeed = sqrt(speed*deltaTime + speed*deltaTime);
-
+	diagSpeed = speed*deltaTime;
+	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 16;
 		movement.x -= diagRunSpeed;
@@ -111,6 +111,7 @@ void Player::Update(sf::Event event)
 		else if (row == 14 || row == 18)row = 22;
 		else if (row == 15 || row == 19)row = 23;
 	}
+	//std::cout << diagRunSpeed << " " << normalRunSpeed << " " << diagSpeed << std::endl;
 	Update(row, deltaTime*shiftIncreaseSpeed);
 	body.setTextureRect(uvRect);
 	body.move(movement);
