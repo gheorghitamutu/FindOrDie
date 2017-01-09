@@ -25,8 +25,8 @@ public:
 	sf::Time timeElapsed;
 
 	int numberOfMonsters = 0;
-	float spawnTimeMonsters = 0.1;
+	float spawnTimeMonsters = 1.0f;
 
-	float speed = 10.0f;
+	float speed = 01.0f;
 };
 

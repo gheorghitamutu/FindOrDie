@@ -84,5 +84,8 @@
     <Image Include="tilesRock.png">
       <Filter>Resource Files\Map</Filter>
     </Image>
+    <Image Include="Animation\Terrain\iso-64x64-building.png">
+      <Filter>Resource Files\Map</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -181,6 +181,7 @@
     <Text Include="map.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Animation\Terrain\iso-64x64-building.png" />
     <Image Include="tiles.png" />
     <Image Include="tilesRock.png" />
   </ItemGroup>
