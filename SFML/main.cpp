@@ -57,7 +57,7 @@ int main()
 	while (mainWindow.isOpen())
 	{
 		player.RestartClock();
-		
+		enemies.RestartClock();
 		sf::Event event;
 		while (mainWindow.pollEvent(event))
 		{
@@ -98,23 +98,24 @@ int main()
 		if (gamePause && !newGame && !inCharacterSelection) pauseMenu.draw(mainWindow);
 		if (newGame)
 		{
-			enemies.setNumberOfMonsters(0);
+			enemies.setNumberOfMonsters(1);
 		}
 		if (inCharacterSelection)
 		{
-			
+		//	std::cout << "set 0" << std::endl;
+			enemies.setNumberOfMonsters(1);
 			
 		}
 		player.StartingPosition(newGame, mainWindow);
 
 		if (!gamePause && !newGame && !inCharacterSelection) {
 		newMap.drawMap(mainWindow);
-		enemies.createEnemy(mainWindow);
+		//enemies.createEnemy(mainWindow);
 		player.Update(event);
-		enemies.goToPlayer(player.returnPlayerPosition());
+		//enemies.goToPlayer(player.returnPlayerPosition());
 		camera.CameraPerspective(mainWindow, player.returnPlayerPosition(), cam, centerCameraOnPlayer);
 		player.Draw(mainWindow, gamePause);
-		enemies.Draw(mainWindow);
+	//	enemies.Draw(mainWindow);
 		camera.draggableCamera(mainWindow, event, centerCameraOnPlayer, cam);
 		}
 		else camera.CameraNormal(mainWindow); // just changing between cameras

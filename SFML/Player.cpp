@@ -4,7 +4,7 @@ Player::Player(sf::RenderWindow& window)
 {
 	setTexture();
 	Animation();
-	body.setSize(sf::Vector2f(100.0f, 100.0f));
+	body.setSize(sf::Vector2f(50.0f, 50.0f));
 	body.setPosition(window.getSize().x / 2.0f, window.getSize().y / 1.0f);
 	body.setOrigin(body.getSize() / 2.0f);
 	body.setTexture(&texture);
@@ -139,7 +139,7 @@ void Player::getTexture(bool woman)
 
 void Player::setTexture()
 {
-	this->texture.loadFromFile("Animation/Man/fullPlayerAnimations.png");
+	texture.loadFromFile("Animation/Man/fullPlayerAnimations.png");
 }
 
 sf::Vector2f Player::returnPlayerPosition()
