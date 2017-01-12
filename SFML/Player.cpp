@@ -4,7 +4,7 @@ Player::Player(sf::RenderWindow& window)
 {
 	setTexture();
 	Animation();
-	body.setSize(sf::Vector2f(50.0f, 50.0f));
+	body.setSize(sf::Vector2f(25.0f, 25.0f));
 	body.setPosition(window.getSize().x / 2.0f, window.getSize().y / 1.0f);
 	body.setOrigin(body.getSize() / 2.0f);
 	body.setTexture(&texture);
@@ -84,14 +84,6 @@ void Player::Update(sf::Event event)
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 		row = 1;
 		movement.x -= speed*deltaTime;
-		/*switch (event.type) {
-		case sf::Event::KeyReleased:
-			switch (event.key.code) {
-			case sf::Keyboard::Space:
-				body.setPosition(body.getPosition().x - 10, body.getPosition().y);
-				break;
-			}
-		}*/
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		row = 2;
@@ -101,7 +93,7 @@ void Player::Update(sf::Event event)
 		row = 3;
 		movement.y -= speed*deltaTime ;
 	}
-	else {
+	else { // idle animation
 		if (row == 0 || row == 4)row = 8;
 		else if (row == 1 || row == 5)row = 9;
 		else if (row == 2 || row == 6)row = 10;
@@ -111,7 +103,6 @@ void Player::Update(sf::Event event)
 		else if (row == 14 || row == 18)row = 22;
 		else if (row == 15 || row == 19)row = 23;
 	}
-	//std::cout << diagRunSpeed << " " << normalRunSpeed << " " << diagSpeed << std::endl;
 	Update(row, deltaTime*shiftIncreaseSpeed);
 	body.setTextureRect(uvRect);
 	body.move(movement);

@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Collider.h"
 #include <vector>
+#include "Player.h"
 class Enemy
 {
 public:
@@ -14,12 +16,18 @@ public:
 	void Animation();
 	void Update(int row, float deltaTime);
 	void RestartClock();
+	std::vector <sf::RectangleShape> returnMonsterVector() { return body; }
+
+	void CheckMonsterVectorCollision(Player& player);
+
+	Collider GetCollider() { return Collider(body[monstersIterator]); }
+	Collider GetColliderBetweenMonsters() { return Collider(body[secondMonstersIterator]); }
 
 	int returnNumberOfMonsters();
 	
 	sf::Texture texture;
 
-	sf::Vector2u imageCount = sf::Vector2u(6, 8);
+	sf::Vector2u imageCount = sf::Vector2u(8, 8);
 	sf::Vector2u currentImage;
 
 	sf::IntRect uvRect;
@@ -35,12 +43,14 @@ public:
 
 	sf::Time timeElapsed;
 
+	int monstersIterator = 0;
+	int secondMonstersIterator = 0;
 	unsigned int row = 0;
 	int numberOfMonsters = 0;
 	float deltaTime = 0.0f;
 	float totalTime = 0.0f;
-	float spawnTimeMonsters = 0.10f;
-	float speed = 0.10f;
+	float spawnTimeMonsters = 01.0f;
+	float speed = 2.0f; // * 60 frames/second = 60.0f
 	float switchTime = 0.1f;
 };
 

@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "math.h"
 #include<iostream>
+#include "Collider.h"
 class Player
 {
 public:
@@ -20,6 +21,8 @@ public:
 	sf::Vector2f returnPlayerPosition(); 
 	sf::Texture texture;
 
+	Collider GetCollider() { return Collider(body); }
+
 private:
 	sf::RectangleShape body;
 	sf::Clock clock;
@@ -31,7 +34,7 @@ private:
 	bool cameraPerspective = true;
 	unsigned int row = 0;
 	unsigned int shiftIncreaseSpeed;
-	float speed = 80.0f; // movement speed
+	float speed = 50.0f; // movement speed
 	float deltaTime = 0.0f;
 	float diagRunSpeed;
 	float normalRunSpeed;

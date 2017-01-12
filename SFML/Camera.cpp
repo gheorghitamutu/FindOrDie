@@ -1,7 +1,4 @@
 #include "Camera.h"
-
-
-
 Camera::Camera()
 {
 }
@@ -24,7 +21,7 @@ void Camera::CameraNormal(sf::RenderWindow& window)
 void Camera::CameraPerspective(sf::RenderWindow& window, sf::Vector2f offset, sf::View camera, bool &centerCameraOnPlayer)
 {
 	//	*camera = window.getDefaultView();  this crap keeps resetting the camera
-	//camera.setSize(camera.getSize().x * aspectRatio*2, camera.getSize().y );
+//	camera.setSize(camera.getSize().x * aspectRatio, camera.getSize().y*2 );
 	if (centerCameraOnPlayer) {
 		camera.setCenter(offset);
 		lastKnownPosition = offset;
@@ -74,11 +71,8 @@ void Camera::draggableCamera(sf::RenderWindow & window, sf::Event event, bool& c
 				centerCameraOnPlayer = false;
 				camera.setCenter(lastKnownPosition.x, lastKnownPosition.y);
 			}
-
 			camera.setCenter(cameraCenter.x + deltaPosition.x, cameraCenter.y + deltaPosition.y);
 		}
-
-
 	}
 	else {
 		initialPosition = true;

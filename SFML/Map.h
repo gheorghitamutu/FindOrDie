@@ -17,7 +17,7 @@ public:
 private:
 	sf::Texture tileTexture;
 	sf::Sprite tiles;
-	sf::Vector2i map[300][300];
+	sf::Vector2i map[320][320];
 	sf::Vector2i loadcounter = sf::Vector2i(0, 0);
 //	sf::View camera;
 	std::string tileLocation;

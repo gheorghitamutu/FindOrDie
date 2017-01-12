@@ -33,7 +33,7 @@ int main()
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
 	sf::RenderWindow mainWindow(sf::VideoMode(resolutionMenu.returnWindowWidth(), resolutionMenu.returnWindowHeight()), "Find Or Die!", sf::Style::Resize | sf::Style::Close, settings);
-	//mainWindow.setFramerateLimit(60);
+	mainWindow.setFramerateLimit(60);
 
 	MainMenu menu(mainWindow.getSize().x, mainWindow.getSize().y);
 	PauseMenu pauseMenu(mainWindow.getSize().x, mainWindow.getSize().y);
@@ -110,12 +110,17 @@ int main()
 
 		if (!gamePause && !newGame && !inCharacterSelection) {
 		newMap.drawMap(mainWindow);
-		//enemies.createEnemy(mainWindow);
+		enemies.createEnemy(mainWindow);
 		player.Update(event);
-		//enemies.goToPlayer(player.returnPlayerPosition());
+
+		//check collision
+		enemies.CheckMonsterVectorCollision(player);
+
+
+		enemies.goToPlayer(player.returnPlayerPosition());
 		camera.CameraPerspective(mainWindow, player.returnPlayerPosition(), cam, centerCameraOnPlayer);
 		player.Draw(mainWindow, gamePause);
-	//	enemies.Draw(mainWindow);
+		enemies.Draw(mainWindow);
 		camera.draggableCamera(mainWindow, event, centerCameraOnPlayer, cam);
 		}
 		else camera.CameraNormal(mainWindow); // just changing between cameras

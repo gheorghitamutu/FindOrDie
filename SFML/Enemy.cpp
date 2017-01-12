@@ -20,29 +20,53 @@ void Enemy::Draw(sf::RenderWindow & window)
 
 void Enemy::goToPlayer(sf::Vector2f returnPlayerPosition)
 {
+	// 0 - LEFT
+	// 1 - LEFT UP
+	// 2 - UP
+	// 3 - RIGHT UP
+	// 4 - RIGHT 
+	// 5 - DOWN RIGHT
+	// 6 - DOWN 
+	// 7 - DOWN LEFT
+	bool right = false;
+	bool left = false;
 	deltaTime /= (numberOfMonsters*speed); // fixing deltaTime divisions
 	for (int j = 0; j <= numberOfMonsters; j++) {
 		if (body[j].getPosition().x - returnPlayerPosition.x > speed || body[j].getPosition().x - returnPlayerPosition.x < -speed)
 		{
 			if (round(body[j].getPosition().x) < round(returnPlayerPosition.x)) {
 				body[j].move(speed, 0.0f);
-				//	row = 1;
+				if (body[j].getPosition().x < returnPlayerPosition.x) {
+					right = true;
+					row = 4;
+				}
 			}
 			else if (round(body[j].getPosition().x) > round(returnPlayerPosition.x)) {
 				body[j].move(-speed, 0.0f);
-			//	row = 1;
+				if (body[j].getPosition().x > returnPlayerPosition.x) {
+					left = true;
+					row = 0;
+				}
 			}
 		}
 		if (body[j].getPosition().y - returnPlayerPosition.y > speed || body[j].getPosition().y - returnPlayerPosition.y < -speed)
 		{
 			if (round(body[j].getPosition().y) < round(returnPlayerPosition.y)) {
 				body[j].move(0.0f, speed);
-				//	row = 1;
+				if (body[j].getPosition().y < returnPlayerPosition.y) {
+					if (right) row = 5;
+					else if (left) row = 7;
+					else row = 6;
+				}
 			}
 			else if (round(body[j].getPosition().y) > round(returnPlayerPosition.y))
 			{
 				body[j].move(0.0f, -speed);
-				//	row = 1;
+				if (body[j].getPosition().x < returnPlayerPosition.x) {
+					if (right) row = 3;
+					else if (left) row = 1;
+					else row = 2;
+				}
 			}
 		}
 		Update(row, deltaTime*speed);
@@ -61,7 +85,7 @@ void Enemy::createEnemy(sf::RenderWindow & window)
 	if (timer().asSeconds() >= numberOfMonsters*spawnTimeMonsters)
 	{
 		body.push_back(singleBody);
-		body[numberOfMonsters].setSize(sf::Vector2f(50.0f, 50.0f));
+		body[numberOfMonsters].setSize(sf::Vector2f(25.0f, 25.0f));
 		body[numberOfMonsters].setTexture(&texture);
 		body[numberOfMonsters].setPosition((rand() % window.getSize().x) * 10, (rand() % +window.getSize().y) * 10);
 		body[numberOfMonsters].setOrigin(body[numberOfMonsters].getSize() / 2.0f);
@@ -84,8 +108,8 @@ void Enemy::setNumberOfMonsters(int number)
 
 void Enemy::setTexture()
 {
-	texture.loadFromFile("Animation/Monsters/worm.png");
-	if (!texture.loadFromFile("Animation/Monsters/worm.png"))std::cout << "NO!" << std::endl;
+	texture.loadFromFile("Animation/Monsters/zombie.png");
+	if (!texture.loadFromFile("Animation/Monsters/zombie.png"))std::cout << "NO!" << std::endl;
 	else std::cout << "YES!" << std::endl;
 }
 
@@ -117,4 +141,21 @@ void Enemy::Update(int row, float deltaTime)
 void Enemy::RestartClock()
 {
 	deltaTime = clock2.restart().asSeconds();
+}
+
+void Enemy::CheckMonsterVectorCollision(Player& player)
+{
+	//collision player with monster
+	for (monstersIterator = 0; monstersIterator < numberOfMonsters; monstersIterator++)
+	{
+		player.GetCollider().CheckCollision(GetCollider(), 80.0f);
+	}
+	//colision monster with monster
+	for (monstersIterator = 0; monstersIterator < numberOfMonsters; monstersIterator++)
+	{
+		for (secondMonstersIterator = 0; secondMonstersIterator < numberOfMonsters; secondMonstersIterator++) 
+		{
+			if(monstersIterator!=secondMonstersIterator)GetCollider().CheckCollision(GetColliderBetweenMonsters(), 40.0f);
+		}
+	}
 }
