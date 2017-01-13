@@ -8,7 +8,7 @@ Map::Map()
 	if (openfile.is_open())
 	{		
 		std::getline(openfile, tileLocation);
-		std::cout << tileLocation << std::endl;
+	//	std::cout << tileLocation << std::endl;
 		tileTexture.loadFromFile(tileLocation);
 		tiles.setTexture(tileTexture); // textures file
 		std::string str;

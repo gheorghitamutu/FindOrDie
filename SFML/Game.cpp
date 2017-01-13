@@ -58,6 +58,8 @@ void Game::GameRun()
 	bool setTexture = false;
 	bool endGame = false;
 
+	int score = 0;
+
 	while (mainWindow.isOpen())
 	{
 		player.RestartClock();
@@ -94,6 +96,20 @@ void Game::GameRun()
 				}
 			}
 
+			if (endGame) {
+				switch (event.type)
+				{
+				case sf::Event::KeyReleased:
+					switch (event.key.code)
+					{
+					case sf::Keyboard::Return:
+						newGame = true;
+						endGame = false;
+						break;
+					}
+				}
+			}
+
 			if (event.type == sf::Event::MouseWheelMoved) // Zomm in or out if the mouse wheel moves
 			{
 				cam.zoom(1.f + event.mouseWheel.delta*0.1f);
@@ -106,6 +122,7 @@ void Game::GameRun()
 		if (newGame)
 		{
 			enemies.setNumberOfMonsters(1);
+			score = 0;
 		}
 		if (inCharacterSelection)
 		{
@@ -128,13 +145,19 @@ void Game::GameRun()
 				newMap.CheckPlayerCollisionWithStaticObjects(player);
 
 				enemies.goToPlayer(player.returnPlayerPosition());
+
 				camera.CameraPerspective(mainWindow, player.returnPlayerPosition(), cam, centerCameraOnPlayer);
+
 				player.Draw(mainWindow, gamePause);
+
 				enemies.Draw(mainWindow);
+
+				chest.DrawChest(mainWindow);
+
 				camera.draggableCamera(mainWindow, event, centerCameraOnPlayer, cam);
 			}
 			else {
-
+				
 			}
 		}
 
