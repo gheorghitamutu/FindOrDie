@@ -160,7 +160,7 @@ void Game::GameRun()
 				camera.draggableCamera(mainWindow, event, centerCameraOnPlayer, cam);
 			}
 			else {
-				score.DrawScore(mainWindow);
+				score.DrawScore(mainWindow, yourScore);
 			}
 		}
 
