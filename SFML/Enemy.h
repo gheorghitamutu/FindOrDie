@@ -3,6 +3,7 @@
 #include "Collider.h"
 #include <vector>
 #include "Player.h"
+#include "Map.h"
 class Enemy
 {
 public:
@@ -16,9 +17,14 @@ public:
 	void Animation();
 	void Update(int row, float deltaTime);
 	void RestartClock();
+
+	int ReturnMonsterVectorSize() { return body.size(); }
+
+	float ReturnMonsterSpeed() { return speed; }
+
 	std::vector <sf::RectangleShape> returnMonsterVector() { return body; }
 
-	void CheckMonsterVectorCollision(Player& player);
+	void CheckMonsterVectorCollision(Player& player, Map& map, bool& endGame);
 
 	Collider GetCollider() { return Collider(body[monstersIterator]); }
 	Collider GetColliderBetweenMonsters() { return Collider(body[secondMonstersIterator]); }
@@ -43,6 +49,7 @@ public:
 
 	sf::Time timeElapsed;
 
+	int objectIterator = 0;
 	int monstersIterator = 0;
 	int secondMonstersIterator = 0;
 	unsigned int row = 0;

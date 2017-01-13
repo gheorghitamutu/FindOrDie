@@ -2,6 +2,7 @@
 #include <math.h> 
 #include <iostream>
 #include <stdlib.h>
+#include "Map.h"
 Enemy::Enemy()
 {
 	setTexture();
@@ -89,7 +90,7 @@ void Enemy::createEnemy(sf::RenderWindow & window)
 		body[numberOfMonsters].setTexture(&texture);
 		body[numberOfMonsters].setPosition((rand() % window.getSize().x) * 10, (rand() % +window.getSize().y) * 10);
 		body[numberOfMonsters].setOrigin(body[numberOfMonsters].getSize() / 2.0f);
-		std::cout << numberOfMonsters << std::endl; // !!!
+	//	std::cout << numberOfMonsters << std::endl; // !!!
 		numberOfMonsters++;
 	}
 }
@@ -109,8 +110,8 @@ void Enemy::setNumberOfMonsters(int number)
 void Enemy::setTexture()
 {
 	texture.loadFromFile("Animation/Monsters/zombie.png");
-	if (!texture.loadFromFile("Animation/Monsters/zombie.png"))std::cout << "NO!" << std::endl;
-	else std::cout << "YES!" << std::endl;
+	//if (!texture.loadFromFile("Animation/Monsters/zombie.png"))std::cout << "NO!" << std::endl;
+	//else std::cout << "YES!" << std::endl;
 }
 
 void Enemy::Animation()
@@ -143,12 +144,12 @@ void Enemy::RestartClock()
 	deltaTime = clock2.restart().asSeconds();
 }
 
-void Enemy::CheckMonsterVectorCollision(Player& player)
+void Enemy::CheckMonsterVectorCollision(Player& player, Map& map, bool& endGame)
 {
 	//collision player with monster
 	for (monstersIterator = 0; monstersIterator < numberOfMonsters; monstersIterator++)
 	{
-		player.GetCollider().CheckCollision(GetCollider(), 80.0f);
+		if (player.GetCollider().CheckPlayerCollision(GetCollider()))endGame = true;
 	}
 	//colision monster with monster
 	for (monstersIterator = 0; monstersIterator < numberOfMonsters; monstersIterator++)
@@ -156,6 +157,14 @@ void Enemy::CheckMonsterVectorCollision(Player& player)
 		for (secondMonstersIterator = 0; secondMonstersIterator < numberOfMonsters; secondMonstersIterator++) 
 		{
 			if(monstersIterator!=secondMonstersIterator)GetCollider().CheckCollision(GetColliderBetweenMonsters(), 40.0f);
+		}
+	}
+    //collision monster with walls
+	for (objectIterator = 0; objectIterator < map.ReturnBlocksPositionSize(); objectIterator++)
+	{
+		for (monstersIterator = 0; monstersIterator < numberOfMonsters; monstersIterator++)
+		{
+			GetCollider().CheckCollision(map.GetMapCollider(objectIterator), -100 * speed); //????
 		}
 	}
 }
