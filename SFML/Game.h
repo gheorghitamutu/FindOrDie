@@ -10,6 +10,7 @@
 #include "Enemy.h"
 #include <iostream>
 #include <vector>
+#include "Chests.h"
 class Game
 {
 public:

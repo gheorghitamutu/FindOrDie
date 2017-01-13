@@ -49,6 +49,8 @@ void Game::GameRun()
 	Camera camera;
 	sf::View cam = mainWindow.getDefaultView();
 
+	Chests chest;
+
 	bool newGame = true;
 	bool gamePause = false;
 	bool inCharacterSelection = false;
@@ -115,23 +117,25 @@ void Game::GameRun()
 
 		if (!gamePause && !newGame && !inCharacterSelection)
 		{
-			newMap.drawMap(mainWindow);
-			enemies.createEnemy(mainWindow);
-			player.Update(event);
+			if (!endGame) {
+				newMap.drawMap(mainWindow);
+				enemies.createEnemy(mainWindow);
+				player.Update(event);
 
-			//check collisions: player and enemy; enemy and enemy
-		if(enemies.ReturnMonsterVectorSize()<30)	enemies.CheckMonsterVectorCollision(player, newMap);
-			//check collision: walls with player and enemies
-			newMap.CheckPlayerCollisionWithStaticObjects(player);
+				//check collisions: player and enemy; enemy and enemy
+				enemies.CheckMonsterVectorCollision(player, newMap, endGame);
+				//check collision: walls with player and enemies
+				newMap.CheckPlayerCollisionWithStaticObjects(player);
 
-			enemies.goToPlayer(player.returnPlayerPosition());
-			camera.CameraPerspective(mainWindow, player.returnPlayerPosition(), cam, centerCameraOnPlayer);
-			player.Draw(mainWindow, gamePause);
-			enemies.Draw(mainWindow);
-			camera.draggableCamera(mainWindow, event, centerCameraOnPlayer, cam);
-		}
-		else {
-			camera.CameraNormal(mainWindow); // just changing between cameras
+				enemies.goToPlayer(player.returnPlayerPosition());
+				camera.CameraPerspective(mainWindow, player.returnPlayerPosition(), cam, centerCameraOnPlayer);
+				player.Draw(mainWindow, gamePause);
+				enemies.Draw(mainWindow);
+				camera.draggableCamera(mainWindow, event, centerCameraOnPlayer, cam);
+			}
+			else {
+
+			}
 		}
 
 		mainWindow.display();

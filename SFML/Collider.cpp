@@ -27,7 +27,7 @@ bool Collider::CheckCollision(Collider & other, float push)
 
 	if (intersectX < 0.0f && intersectY < 0.0f)
 	{
-	//	std::cout << "COLLISION!!!" << std::endl;
+		//std::cout << "COLLISION!!!" << std::endl;
 		push = std::min(std::max(push, 0.0f), 1.0f);
 		if (intersectX > intersectY)
 		{
@@ -72,7 +72,7 @@ bool Collider::CheckPlayerCollision(Collider & other)
 
 	float intersectX = abs(deltaX) - (otherHalfSize.x + thisHalfSize.x);
 	float intersectY = abs(deltaY) - (otherHalfSize.y + thisHalfSize.y);
-	if (intersectX < 0.0f || intersectY < 0.0f)
+	if (intersectX < 0.0f && intersectY < 0.0f)
 	{
 			std::cout << "MONSTER COLLISION!!!" << std::endl;
 		return true;

@@ -88,7 +88,8 @@ void Enemy::createEnemy(sf::RenderWindow & window)
 		body.push_back(singleBody);
 		body[numberOfMonsters].setSize(sf::Vector2f(25.0f, 25.0f));
 		body[numberOfMonsters].setTexture(&texture);
-		body[numberOfMonsters].setPosition((rand() % window.getSize().x) * 10, (rand() % +window.getSize().y) * 10);
+		//body[numberOfMonsters].setPosition((rand() % window.getSize().x) * 10, (rand() % +window.getSize().y) * 10);
+		body[numberOfMonsters].setPosition(250.0f, 550.0f);
 		body[numberOfMonsters].setOrigin(body[numberOfMonsters].getSize() / 2.0f);
 	//	std::cout << numberOfMonsters << std::endl; // !!!
 		numberOfMonsters++;
