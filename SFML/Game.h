@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include "Chests.h"
+#include "Score.h"
 class Game
 {
 public:

@@ -8,8 +8,11 @@ public:
 	void DrawChest(sf::RenderWindow& window);
 	void GetNumberOfChest(int& number);
 	void LoadTexture();
+	
+	void CheckCollision(Player& player);
 
 	Collider GetChestCollider() { return Collider(body); }
+
 
 	sf::RectangleShape body;
 	sf::Texture texture;

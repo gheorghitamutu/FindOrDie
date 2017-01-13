@@ -58,7 +58,8 @@ void Game::GameRun()
 	bool setTexture = false;
 	bool endGame = false;
 
-	int score = 0;
+	char yourScore = 0;
+	Score score;
 
 	while (mainWindow.isOpen())
 	{
@@ -122,7 +123,7 @@ void Game::GameRun()
 		if (newGame)
 		{
 			enemies.setNumberOfMonsters(1);
-			score = 0;
+			yourScore = '0';
 		}
 		if (inCharacterSelection)
 		{
@@ -143,6 +144,8 @@ void Game::GameRun()
 				enemies.CheckMonsterVectorCollision(player, newMap, endGame);
 				//check collision: walls with player and enemies
 				newMap.CheckPlayerCollisionWithStaticObjects(player);
+				//check collision: chests with player
+				chest.CheckCollision(player);
 
 				enemies.goToPlayer(player.returnPlayerPosition());
 
@@ -157,7 +160,7 @@ void Game::GameRun()
 				camera.draggableCamera(mainWindow, event, centerCameraOnPlayer, cam);
 			}
 			else {
-				
+				score.DrawScore(mainWindow);
 			}
 		}
 

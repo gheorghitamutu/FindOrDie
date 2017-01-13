@@ -7,8 +7,9 @@ Chests::Chests()
 {
 	body.setSize(sf::Vector2f(25.0f, 25.0f));
 	//	body.setPosition(window.getSize().x / 2.0f, window.getSize().y / 1.0f);
-	body.setPosition(chestNumber*250.0f, 50.0f);
+	body.setPosition(chestNumber*350.0f, 850.0f);
 	body.setOrigin(body.getSize() / 2.0f);
+	texture.loadFromFile("Animation/Chest/chest.png");
 	body.setTexture(&texture);
 }
 
@@ -20,12 +21,22 @@ void Chests::DrawChest(sf::RenderWindow & window)
 void Chests::GetNumberOfChest(int & number)
 {
 	chestNumber = number;
+	body.setPosition(chestNumber*250.0f, 550.0f);
 }
 
 void Chests::LoadTexture()
 {
 	texture.loadFromFile("Animation/Chest/chest.png");
 	if (!texture.loadFromFile("Animation/Chest/chest.png")) std::cout << "Can t load" << std::endl;
+}
+
+void Chests::CheckCollision(Player & player)
+{
+	if (player.GetCollider().CheckPlayerCollision(GetChestCollider())) {
+		chestNumber++;
+		if (chestNumber > 6) chestNumber = 1;
+		body.setPosition(chestNumber*250.0f, 550.0f);
+	}
 }
 
 
