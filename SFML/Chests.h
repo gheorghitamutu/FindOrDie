@@ -9,7 +9,7 @@ public:
 	void GetNumberOfChest(int& number);
 	void LoadTexture();
 	
-	void CheckCollision(Player& player);
+	bool CheckCollision(Player& player);
 
 	Collider GetChestCollider() { return Collider(body); }
 
@@ -18,6 +18,7 @@ public:
 	sf::Texture texture;
 
 	int chestNumber = 1;
+	int score = 0;
 	~Chests();
 };
 

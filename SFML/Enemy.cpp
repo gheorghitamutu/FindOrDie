@@ -103,9 +103,11 @@ int Enemy::returnNumberOfMonsters()
 
 void Enemy::setNumberOfMonsters(int number)
 {
-	this->numberOfMonsters = number;
-	body.resize(numberOfMonsters);
-	body.resize(500);
+	//std::cout << body.size() << std::endl;
+	numberOfMonsters = 1;
+	body.clear();
+//	body.resize(numberOfMonsters);
+	body.resize(2);
 }
 
 void Enemy::setTexture()

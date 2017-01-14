@@ -30,13 +30,15 @@ void Chests::LoadTexture()
 	if (!texture.loadFromFile("Animation/Chest/chest.png")) std::cout << "Can t load" << std::endl;
 }
 
-void Chests::CheckCollision(Player & player)
+bool Chests::CheckCollision(Player & player)
 {
 	if (player.GetCollider().CheckPlayerCollision(GetChestCollider())) {
 		chestNumber++;
 		if (chestNumber > 6) chestNumber = 1;
 		body.setPosition(chestNumber*250.0f, 550.0f);
+		return true;
 	}
+	return false;
 }
 
 

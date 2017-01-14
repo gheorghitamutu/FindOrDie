@@ -58,7 +58,7 @@ void Game::GameRun()
 	bool setTexture = false;
 	bool endGame = false;
 
-	char yourScore = 0;
+	int yourScore = 0;
 	Score score;
 
 	while (mainWindow.isOpen())
@@ -123,14 +123,9 @@ void Game::GameRun()
 		if (newGame)
 		{
 			enemies.setNumberOfMonsters(1);
-			yourScore = '0';
+			yourScore = 0;
 		}
-		if (inCharacterSelection)
-		{
-			//	std::cout << "set 0" << std::endl;
-			enemies.setNumberOfMonsters(1);
 
-		}
 		player.StartingPosition(newGame, mainWindow);
 
 		if (!gamePause && !newGame && !inCharacterSelection)
@@ -145,7 +140,7 @@ void Game::GameRun()
 				//check collision: walls with player and enemies
 				newMap.CheckPlayerCollisionWithStaticObjects(player);
 				//check collision: chests with player
-				chest.CheckCollision(player);
+				if(chest.CheckCollision(player)) yourScore++;
 
 				enemies.goToPlayer(player.returnPlayerPosition());
 
@@ -160,7 +155,9 @@ void Game::GameRun()
 				camera.draggableCamera(mainWindow, event, centerCameraOnPlayer, cam);
 			}
 			else {
-				score.DrawScore(mainWindow, yourScore);
+				score.DrawScore(mainWindow, std::to_string(yourScore));
+				cam.setCenter(mainWindow.getSize().x / 2.0f, mainWindow.getSize().y / 2.0f);
+				mainWindow.setView(cam);
 			}
 		}
 
