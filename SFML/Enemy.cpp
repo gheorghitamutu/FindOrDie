@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include <math.h> 
 #include <iostream>
-#include <stdlib.h>
+//#include <stdlib.h>
 #include "Map.h"
 Enemy::Enemy()
 {

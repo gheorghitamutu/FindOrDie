@@ -104,6 +104,7 @@ void Game::GameRun()
 					switch (event.key.code)
 					{
 					case sf::Keyboard::Return:
+						score.WriteScoreInFile(std::to_string(yourScore));
 						newGame = true;
 						endGame = false;
 						break;

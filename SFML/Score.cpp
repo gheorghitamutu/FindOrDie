@@ -19,8 +19,17 @@ void Score::DrawScore(sf::RenderWindow & window, std::string score)
 //	std::cout << score << std::endl;
 	yourScore.setString("Your score is " + score);
 	yourScore.setPosition(window.getSize().x / 8.0f, window.getSize().y / 2.0f);
-	//yourScore.setPosition(position.x, position.y);
+
 //	camera.setCenter(yourScore.getPosition().x, yourScore.getPosition().y);
 	yourScore.setScale(sf::Vector2f(2.0f, 2.0f));
 	window.draw(yourScore);
+}
+
+void Score::WriteScoreInFile(std::string score)
+{
+	std::ofstream scoreFile("score.txt");
+	if (scoreFile.is_open())
+	{
+		scoreFile << score + "\n";
+	}
 }

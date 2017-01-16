@@ -56,8 +56,8 @@ public:
 	int numberOfMonsters = 0;
 	float deltaTime = 0.0f;
 	float totalTime = 0.0f;
-	float spawnTimeMonsters = 01.0f;
-	float speed = 1.0f; // * 60 frames/second = 60.0f
+	float spawnTimeMonsters = 07.0f;
+	float speed = 01.0f; // * 60 frames/second = 60.0f
 	float switchTime = 0.1f;
 };
 
