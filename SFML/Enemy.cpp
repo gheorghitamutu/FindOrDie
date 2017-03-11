@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include <math.h> 
 #include <iostream>
-//#include <stdlib.h>
+#include <algorithm>
 #include "Map.h"
 Enemy::Enemy()
 {
@@ -16,7 +16,7 @@ Enemy::~Enemy()
 
 void Enemy::Draw(sf::RenderWindow & window)
 {
-	for (int j = 0; j <= numberOfMonsters; j++)window.draw(body[j]);
+	for (auto &monster : body)window.draw(monster);
 }
 
 void Enemy::goToPlayer(sf::Vector2f returnPlayerPosition)
@@ -31,39 +31,39 @@ void Enemy::goToPlayer(sf::Vector2f returnPlayerPosition)
 	// 7 - DOWN LEFT
 	bool right = false;
 	bool left = false;
-	deltaTime /= (numberOfMonsters*speed); // fixing deltaTime divisions
-	for (int j = 0; j <= numberOfMonsters; j++) {
-		if (body[j].getPosition().x - returnPlayerPosition.x > speed || body[j].getPosition().x - returnPlayerPosition.x < -speed)
+	deltaTime /= (body.size()*speed); // fixing deltaTime divisions
+	for (auto &monster : body) {
+		if (monster.getPosition().x - returnPlayerPosition.x > speed || monster.getPosition().x - returnPlayerPosition.x < -speed)
 		{
-			if (round(body[j].getPosition().x) < round(returnPlayerPosition.x)) {
-				body[j].move(speed, 0.0f);
-				if (body[j].getPosition().x < returnPlayerPosition.x) {
+			if (round(monster.getPosition().x) < round(returnPlayerPosition.x)) {
+				monster.move(speed, 0.0f);
+				if (monster.getPosition().x < returnPlayerPosition.x) {
 					right = true;
 					row = 4;
 				}
 			}
-			else if (round(body[j].getPosition().x) > round(returnPlayerPosition.x)) {
-				body[j].move(-speed, 0.0f);
-				if (body[j].getPosition().x > returnPlayerPosition.x) {
+			else if (round(monster.getPosition().x) > round(returnPlayerPosition.x)) {
+				monster.move(-speed, 0.0f);
+				if (monster.getPosition().x > returnPlayerPosition.x) {
 					left = true;
 					row = 0;
 				}
 			}
 		}
-		if (body[j].getPosition().y - returnPlayerPosition.y > speed || body[j].getPosition().y - returnPlayerPosition.y < -speed)
+		if (monster.getPosition().y - returnPlayerPosition.y > speed || monster.getPosition().y - returnPlayerPosition.y < -speed)
 		{
-			if (round(body[j].getPosition().y) < round(returnPlayerPosition.y)) {
-				body[j].move(0.0f, speed);
-				if (body[j].getPosition().y < returnPlayerPosition.y) {
+			if (round(monster.getPosition().y) < round(returnPlayerPosition.y)) {
+				monster.move(0.0f, speed);
+				if (monster.getPosition().y < returnPlayerPosition.y) {
 					if (right) row = 5;
 					else if (left) row = 7;
 					else row = 6;
 				}
 			}
-			else if (round(body[j].getPosition().y) > round(returnPlayerPosition.y))
+			else if (round(monster.getPosition().y) > round(returnPlayerPosition.y))
 			{
-				body[j].move(0.0f, -speed);
-				if (body[j].getPosition().x < returnPlayerPosition.x) {
+				monster.move(0.0f, -speed);
+				if (monster.getPosition().x < returnPlayerPosition.x) {
 					if (right) row = 3;
 					else if (left) row = 1;
 					else row = 2;
@@ -71,43 +71,38 @@ void Enemy::goToPlayer(sf::Vector2f returnPlayerPosition)
 			}
 		}
 		Update(row, deltaTime*speed);
-		body[j].setTextureRect(uvRect);
+		monster.setTextureRect(uvRect);
 	}
 }
 
-sf::Time Enemy::timer()
-{
-     return	timeElapsed = clock.getElapsedTime();
-}
 
 void Enemy::createEnemy(sf::RenderWindow & window)
 {
-	
-	if (timer().asSeconds() >= numberOfMonsters*spawnTimeMonsters)
-	{
+	if (spawnTime/countSpawnTime == 1) {
+		countSpawnTime = 1;
 		body.push_back(singleBody);
-		body[numberOfMonsters].setSize(sf::Vector2f(25.0f, 25.0f));
-		body[numberOfMonsters].setTexture(&texture);
+		body.back().setSize(sf::Vector2f(25.0f, 25.0f));
+		body.back().setTexture(&texture);
 		//body[numberOfMonsters].setPosition((rand() % window.getSize().x) * 10, (rand() % +window.getSize().y) * 10);
-		body[numberOfMonsters].setPosition(250.0f, 550.0f);
-		body[numberOfMonsters].setOrigin(body[numberOfMonsters].getSize() / 2.0f);
-	//	std::cout << numberOfMonsters << std::endl; // !!!
-		numberOfMonsters++;
+		body.back().setPosition(250.0f, 550.0f);
+		body.back().setOrigin(body.back().getSize() / 2.0f);
+		//	std::cout << body.size() << std::endl; // !!!
+	}
+	else
+	{
+		countSpawnTime++;
 	}
 }
 
 int Enemy::returnNumberOfMonsters()
 {
-	return numberOfMonsters;
+	return this->body.size();
 }
 
-void Enemy::setNumberOfMonsters(int number)
+void Enemy::clearMonsterVector()
 {
-	//std::cout << body.size() << std::endl;
-	numberOfMonsters = 1;
-	body.clear();
-//	body.resize(numberOfMonsters);
-	body.resize(2);
+		this->body.erase(body.begin(), body.end());
+		this->body.resize(0);
 }
 
 void Enemy::setTexture()
@@ -142,32 +137,27 @@ void Enemy::Update(int row, float deltaTime)
 	uvRect.top = currentImage.y*uvRect.height;
 }
 
-void Enemy::RestartClock()
-{
-	deltaTime = clock2.restart().asSeconds();
-}
-
 void Enemy::CheckMonsterVectorCollision(Player& player, Map& map, bool& endGame)
 {
 	//collision player with monster
-	for (monstersIterator = 0; monstersIterator < numberOfMonsters; monstersIterator++)
+	for (auto &monster : body)
 	{
-		if (player.GetCollider().CheckPlayerCollision(GetCollider()))endGame = true;
+		if (player.GetCollider().CheckPlayerCollision(GetCollider(monster)))endGame = true;
 	}
 	//colision monster with monster
-	for (monstersIterator = 0; monstersIterator < numberOfMonsters; monstersIterator++)
+	for (auto &monster : body)
 	{
-		for (secondMonstersIterator = 0; secondMonstersIterator < numberOfMonsters; secondMonstersIterator++) 
+		for (auto &secondMonster : body)
 		{
-			if(monstersIterator!=secondMonstersIterator)GetCollider().CheckCollision(GetColliderBetweenMonsters(), 40.0f);
+			if(&monster!=&secondMonster)GetCollider(monster).CheckCollision(GetColliderBetweenMonsters(secondMonster), 40.0f);
 		}
 	}
     //collision monster with walls
 	for (objectIterator = 0; objectIterator < map.ReturnBlocksPositionSize(); objectIterator++)
 	{
-		for (monstersIterator = 0; monstersIterator < numberOfMonsters; monstersIterator++)
+		for (auto &monster : body)
 		{
-			GetCollider().CheckCollision(map.GetMapCollider(objectIterator), -100 * speed); //????
+			GetCollider(monster).CheckCollision(map.GetMapCollider(objectIterator), -100 * speed); //????
 		}
 	}
 }

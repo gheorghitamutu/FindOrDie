@@ -41,11 +41,8 @@ void Game::GameRun()
 	CharacterSelectionMenu characterSelectionMenu(mainWindow.getSize().x, mainWindow.getSize().y);
 
 	Player player(mainWindow);
-
 	Enemy enemies;
-
 	Map newMap;
-
 	Camera camera;
 	sf::View cam = mainWindow.getDefaultView();
 
@@ -64,7 +61,6 @@ void Game::GameRun()
 	while (mainWindow.isOpen())
 	{
 		player.RestartClock();
-		enemies.RestartClock();
 		sf::Event event;
 		while (mainWindow.pollEvent(event))
 		{
@@ -121,9 +117,9 @@ void Game::GameRun()
 		if (!gamePause && !newGame && inCharacterSelection) characterSelectionMenu.draw(mainWindow);
 		if (!gamePause && newGame && !inCharacterSelection) menu.draw(mainWindow);
 		if (gamePause && !newGame && !inCharacterSelection) pauseMenu.draw(mainWindow);
-		if (newGame)
+		if (endGame)
 		{
-			enemies.setNumberOfMonsters(1);
+			enemies.clearMonsterVector();
 			yourScore = 0;
 		}
 

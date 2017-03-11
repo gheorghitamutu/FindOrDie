@@ -12,11 +12,10 @@ public:
 	void Draw(sf::RenderWindow& window);
 	void goToPlayer(sf::Vector2f returnPlayerPosition);
 	void createEnemy(sf::RenderWindow& window);
-	void setNumberOfMonsters(int number);
+	void clearMonsterVector();
 	void setTexture();
 	void Animation();
 	void Update(int row, float deltaTime);
-	void RestartClock();
 
 	int ReturnMonsterVectorSize() { return body.size(); }
 
@@ -26,8 +25,8 @@ public:
 
 	void CheckMonsterVectorCollision(Player& player, Map& map, bool& endGame);
 
-	Collider GetCollider() { return Collider(body[monstersIterator]); }
-	Collider GetColliderBetweenMonsters() { return Collider(body[secondMonstersIterator]); }
+	Collider GetCollider(sf::RectangleShape &monster) { return Collider(monster); }
+	Collider GetColliderBetweenMonsters(sf::RectangleShape &monster) { return Collider(monster); }
 
 	int returnNumberOfMonsters();
 	
@@ -38,26 +37,16 @@ public:
 
 	sf::IntRect uvRect;
 
-	sf::Time timer();
-
-
 	std::vector <sf::RectangleShape> body;
 	sf::RectangleShape singleBody;
 
-	sf::Clock clock;
-	sf::Clock clock2;
-
-	sf::Time timeElapsed;
-
 	int objectIterator = 0;
-	int monstersIterator = 0;
-	int secondMonstersIterator = 0;
 	unsigned int row = 0;
-	int numberOfMonsters = 0;
 	float deltaTime = 0.0f;
 	float totalTime = 0.0f;
-	float spawnTimeMonsters = 07.0f;
-	float speed = 01.0f; // * 60 frames/second = 60.0f
+	int countSpawnTime = 1;
+	int spawnTime = 360;
+	float speed = 1.0f; // * 60 frames/second = 60.0f
 	float switchTime = 0.1f;
 };
 

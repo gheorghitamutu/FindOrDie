@@ -24,7 +24,6 @@ public:
 	Collider GetMapCollider(int objectIterator) { return Collider(blocksPosition[objectIterator]); }
 
 	int objectIterator = 0;
-	int monstersIterator = 0;
 	
 private:
 	sf::Texture tileTexture;
