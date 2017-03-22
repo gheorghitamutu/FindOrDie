@@ -31,7 +31,7 @@ void Enemy::goToPlayer(sf::Vector2f returnPlayerPosition)
 	// 7 - DOWN LEFT
 	bool right = false;
 	bool left = false;
-	deltaTime /= (body.size()*speed); // fixing deltaTime divisions
+	//deltaTime /= (body.size()*speed); // fixing deltaTime divisions
 	for (auto &monster : body) {
 		if (monster.getPosition().x - returnPlayerPosition.x > speed || monster.getPosition().x - returnPlayerPosition.x < -speed)
 		{
@@ -70,7 +70,7 @@ void Enemy::goToPlayer(sf::Vector2f returnPlayerPosition)
 				}
 			}
 		}
-		Update(row, deltaTime*speed);
+		Update();
 		monster.setTextureRect(uvRect);
 	}
 }
@@ -79,37 +79,14 @@ void Enemy::goToPlayer(sf::Vector2f returnPlayerPosition)
 void Enemy::createEnemy(sf::RenderWindow & window)
 {
 	if (spawnTime/countSpawnTime == 1) {
-		countSpawnTime = 1;
+		countSpawnTime = 0;
 		body.push_back(singleBody);
 		body.back().setSize(sf::Vector2f(25.0f, 25.0f));
 		body.back().setTexture(&texture);
-		//body[numberOfMonsters].setPosition((rand() % window.getSize().x) * 10, (rand() % +window.getSize().y) * 10);
 		body.back().setPosition(250.0f, 550.0f);
 		body.back().setOrigin(body.back().getSize() / 2.0f);
-		//	std::cout << body.size() << std::endl; // !!!
 	}
-	else
-	{
 		countSpawnTime++;
-	}
-}
-
-int Enemy::returnNumberOfMonsters()
-{
-	return this->body.size();
-}
-
-void Enemy::clearMonsterVector()
-{
-		this->body.erase(body.begin(), body.end());
-		this->body.resize(0);
-}
-
-void Enemy::setTexture()
-{
-	texture.loadFromFile("Animation/Monsters/zombie.png");
-	//if (!texture.loadFromFile("Animation/Monsters/zombie.png"))std::cout << "NO!" << std::endl;
-	//else std::cout << "YES!" << std::endl;
 }
 
 void Enemy::Animation()
@@ -119,19 +96,12 @@ void Enemy::Animation()
 	uvRect.height = texture.getSize().y / float(imageCount.y);
 }
 
-void Enemy::Update(int row, float deltaTime)
+void Enemy::Update()
 {
 	currentImage.y = row;
-	totalTime += deltaTime;
 
-	if (totalTime >= switchTime) {
-		totalTime -= switchTime;
-		currentImage.x++;
-
-		if (currentImage.x >= imageCount.x) {
-			currentImage.x = 0;
-		}
-	}
+	if (countSpawnTime % 10 == 0)currentImage.x++;
+	if (currentImage.x >= imageCount.x)currentImage.x = 0;
 
 	uvRect.left = currentImage.x*uvRect.width;
 	uvRect.top = currentImage.y*uvRect.height;
@@ -153,11 +123,11 @@ void Enemy::CheckMonsterVectorCollision(Player& player, Map& map, bool& endGame)
 		}
 	}
     //collision monster with walls
-	for (objectIterator = 0; objectIterator < map.ReturnBlocksPositionSize(); objectIterator++)
-	{
-		for (auto &monster : body)
-		{
-			GetCollider(monster).CheckCollision(map.GetMapCollider(objectIterator), -100 * speed); //????
-		}
-	}
+	//for (int objectIterator = 0; objectIterator < map.ReturnBlocksPositionSize(); objectIterator++)
+	//{
+	//	for (auto &monster : body)
+	//	{
+	//		GetCollider(monster).CheckCollision(map.GetMapCollider(objectIterator), -100 * speed); //????
+	//	}
+	//}
 }

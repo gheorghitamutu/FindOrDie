@@ -12,10 +12,10 @@ public:
 	void Draw(sf::RenderWindow& window);
 	void goToPlayer(sf::Vector2f returnPlayerPosition);
 	void createEnemy(sf::RenderWindow& window);
-	void clearMonsterVector();
-	void setTexture();
+	void clearMonsterVector() { this->body.erase(body.begin(), body.end()); };
+	void setTexture() { texture.loadFromFile("Animation/Monsters/zombie.png"); };
 	void Animation();
-	void Update(int row, float deltaTime);
+	void Update();
 
 	int ReturnMonsterVectorSize() { return body.size(); }
 
@@ -28,7 +28,7 @@ public:
 	Collider GetCollider(sf::RectangleShape &monster) { return Collider(monster); }
 	Collider GetColliderBetweenMonsters(sf::RectangleShape &monster) { return Collider(monster); }
 
-	int returnNumberOfMonsters();
+	int returnNumberOfMonsters() { return this->body.size(); };
 	
 	sf::Texture texture;
 
@@ -40,13 +40,10 @@ public:
 	std::vector <sf::RectangleShape> body;
 	sf::RectangleShape singleBody;
 
-	int objectIterator = 0;
 	unsigned int row = 0;
-	float deltaTime = 0.0f;
-	float totalTime = 0.0f;
 	int countSpawnTime = 1;
-	int spawnTime = 360;
-	float speed = 1.0f; // * 60 frames/second = 60.0f
-	float switchTime = 0.1f;
+	int spawnTime = 3600;
+	float speed = 0.30f; // * 60 frames/second = 60.0f
+	float switchTime = 0.6f;
 };
 

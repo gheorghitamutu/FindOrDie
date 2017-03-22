@@ -9,11 +9,15 @@ class Score
 public:
 	Score();
 	~Score();
-	void DrawScore(sf::RenderWindow &window, std::string score);
-	void WriteScoreInFile(std::string score);
+	void DrawScore(sf::RenderWindow &window);
+	void WriteScoreInFile();
+	void updateScore() { score++; }
+	void resetScore() { score = 0; }
+	unsigned int getScore() { return score; }
 	sf::Vector2f ReturnScorePosition() { return yourScore.getPosition(); }
 
 	sf::Font font;
 	sf::Text yourScore;
+	unsigned int score;
 };
 

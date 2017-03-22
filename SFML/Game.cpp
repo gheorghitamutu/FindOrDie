@@ -55,7 +55,6 @@ void Game::GameRun()
 	bool setTexture = false;
 	bool endGame = false;
 
-	int yourScore = 0;
 	Score score;
 
 	while (mainWindow.isOpen())
@@ -78,6 +77,10 @@ void Game::GameRun()
 			if (event.type == sf::Event::Closed) mainWindow.close();
 
 			if (!gamePause && !newGame && !inCharacterSelection) { // if in game
+				if (event.type == sf::Event::MouseWheelMoved) // Zomm in or out if the mouse wheel moves
+				{
+					cam.zoom(1.f + event.mouseWheel.delta*0.1f);
+				}
 				switch (event.type)
 				{
 				case sf::Event::KeyReleased:
@@ -100,44 +103,37 @@ void Game::GameRun()
 					switch (event.key.code)
 					{
 					case sf::Keyboard::Return:
-						score.WriteScoreInFile(std::to_string(yourScore));
+						score.WriteScoreInFile();
+						score.resetScore();
+						enemies.clearMonsterVector();
 						newGame = true;
 						endGame = false;
 						break;
 					}
 				}
 			}
-
-			if (event.type == sf::Event::MouseWheelMoved) // Zomm in or out if the mouse wheel moves
-			{
-				cam.zoom(1.f + event.mouseWheel.delta*0.1f);
-			}
 		}
 
 		if (!gamePause && !newGame && inCharacterSelection) characterSelectionMenu.draw(mainWindow);
 		if (!gamePause && newGame && !inCharacterSelection) menu.draw(mainWindow);
 		if (gamePause && !newGame && !inCharacterSelection) pauseMenu.draw(mainWindow);
-		if (endGame)
-		{
-			enemies.clearMonsterVector();
-			yourScore = 0;
-		}
 
 		player.StartingPosition(newGame, mainWindow);
 
 		if (!gamePause && !newGame && !inCharacterSelection)
 		{
 			if (!endGame) {
+				player.Update(event);
 				newMap.drawMap(mainWindow);
 				enemies.createEnemy(mainWindow);
-				player.Update(event);
+
 
 				//check collisions: player and enemy; enemy and enemy
 				enemies.CheckMonsterVectorCollision(player, newMap, endGame);
 				//check collision: walls with player and enemies
-				newMap.CheckPlayerCollisionWithStaticObjects(player);
+			/*	newMap.CheckPlayerCollisionWithStaticObjects(player);*/
 				//check collision: chests with player
-				if(chest.CheckCollision(player)) yourScore++;
+				if(chest.CheckCollision(player)) score.updateScore();
 
 				enemies.goToPlayer(player.returnPlayerPosition());
 
@@ -152,7 +148,7 @@ void Game::GameRun()
 				camera.draggableCamera(mainWindow, event, centerCameraOnPlayer, cam);
 			}
 			else {
-				score.DrawScore(mainWindow, std::to_string(yourScore));
+				score.DrawScore(mainWindow);
 				cam.setCenter(mainWindow.getSize().x / 2.0f, mainWindow.getSize().y / 2.0f);
 				mainWindow.setView(cam);
 			}
