@@ -1,12 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include "Chests.h"
 
-
-
 Chests::Chests()
 {
 	body.setSize(sf::Vector2f(25.0f, 25.0f));
-	//	body.setPosition(window.getSize().x / 2.0f, window.getSize().y / 1.0f);
 	body.setPosition(chestNumber*350.0f, 850.0f);
 	body.setOrigin(body.getSize() / 2.0f);
 	texture.loadFromFile("Animation/Chest/chest.png");
@@ -29,18 +26,6 @@ void Chests::LoadTexture()
 	texture.loadFromFile("Animation/Chest/chest.png");
 	if (!texture.loadFromFile("Animation/Chest/chest.png")) std::cout << "Can t load" << std::endl;
 }
-
-bool Chests::CheckCollision(Player & player)
-{
-	if (player.GetCollider().CheckPlayerCollision(GetChestCollider())) {
-		chestNumber++;
-		if (chestNumber > 6) chestNumber = 1;
-		body.setPosition(chestNumber*250.0f, 550.0f);
-		return true;
-	}
-	return false;
-}
-
 
 Chests::~Chests()
 {

@@ -4,7 +4,7 @@ Player::Player(sf::RenderWindow& window)
 {
 	setTexture();
 	Animation();
-	body.setSize(sf::Vector2f(25.0f, 25.0f));
+	body.setSize(sf::Vector2f(12.25f, 12.25f));
 	body.setPosition(50.0f, 50.0f);
 	body.setOrigin(body.getSize() / 2.0f);
 	body.setTexture(&texture);
@@ -16,7 +16,7 @@ void Player::Update(sf::Event event)
 	movement.y = 0.0f;
 	
 	shiftIncreaseSpeed = 1;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))shiftIncreaseSpeed = 3;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))shiftIncreaseSpeed = 2;
 	diagRunSpeed = speed*deltaTime*shiftIncreaseSpeed;
 	normalRunSpeed = speed*deltaTime * shiftIncreaseSpeed;
 	diagSpeed = speed*deltaTime;
@@ -133,7 +133,7 @@ void Player::setTexture()
 	texture.loadFromFile("Animation/Man/fullPlayerAnimations.png");
 }
 
-sf::Vector2f Player::returnPlayerPosition()
+sf::Vector2f Player::returnPlayer2DPosition()
 {
 	return body.getPosition();
 };

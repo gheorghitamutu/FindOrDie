@@ -1,7 +1,6 @@
 #include "Map.h"
 
 
-
 Map::Map()
 {
 	ifstream openfile("map.txt");
@@ -14,7 +13,7 @@ Map::Map()
 		while (getline(openfile, line)) {
 			mapSizes.first = 0;
 			while (mapSizes.first < line.size()) {
-				tilesCoords.push_back({ line[mapSizes.first++] - '0', line[mapSizes.first++] - '0' });
+				tilesCoords.push_back({ { line[mapSizes.first++] - '0', line[mapSizes.first++] - '0' }, isWalkable(line[mapSizes.first - 2],line[mapSizes.first - 1]) });
 			}
 			mapSizes.second++;
 		}
@@ -25,23 +24,15 @@ Map::Map()
 
 		bool secondRow = false;
 		for (auto &pair : tilesCoords) {
-			if (posX == mapSizes.first * SIZE || posX == mapSizes.first * SIZE + 32) {
-				if (secondRow) {
-					posX = 0;
-					secondRow = false;
-				}
-				else {
-					posX = SIZE / 2;
-					secondRow = true;
-				}
-				posY += SIZE / 4;
-			}
-
-			tile.setPosition(posX, posY);
-			posX += SIZE;
-
-			tile.setTextureRect(sf::IntRect(pair.first *  SIZE, pair.second *  SIZE, SIZE, SIZE));
+			tile.setPosition(convert2DToIso({ posX*SIZE / 2, posY*SIZE / 2 }).first, convert2DToIso({ posX*SIZE / 2, posY*SIZE / 2 }).second);
+			tile.setTextureRect(sf::IntRect(pair.first.first *  SIZE, pair.first.second *  SIZE, SIZE, SIZE));
 			tiles.push_back(tile);
+
+			posX++;
+			if (posX >= mapSizes.first) {
+				posX = 0;
+				posY++;
+			}
 		}
 	}
 	else {
@@ -56,16 +47,21 @@ Map::~Map()
 
 void Map::drawMap(sf::RenderWindow& window)
 {
-		for (auto &tile : tiles) window.draw(tile);
+	for (auto &tile : tiles) window.draw(tile);
 }
 
-//void Map::CheckPlayerCollisionWithStaticObjects(Player & player)
-//{
-//	//collision player with walls
-//	//std::cout << blocksPosition.size() << std::endl;
-//	for (objectIterator = 0; objectIterator < blocksPosition.size(); objectIterator++)
-//	{
-//		player.GetCollider().CheckCollision(GetMapCollider(objectIterator), 0.0f);
-//	}
-//	
-//}
+pair<float, float> Map::convert2DToIso(pair<float, float> pair)
+{
+	return{ pair.first - pair.second, (pair.first + pair.second) / 2 };
+}
+
+pair<float, float> Map::convertIsoTo2D(pair<float, float> pair)
+{
+	return{ (2 * pair.second + pair.first) / 2, (2 * pair.second - pair.first) / 2 };
+}
+
+bool Map::isWalkable(char x, char y)
+{
+	if (x == '0' && y == '0') return false;
+	if (x == '0' && y == '3') return true;
+}

@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Collider.h"
 #include <vector>
 #include "Player.h"
 #include "Map.h"
@@ -23,11 +22,6 @@ public:
 
 	std::vector <sf::RectangleShape> returnMonsterVector() { return body; }
 
-	void CheckMonsterVectorCollision(Player& player, Map& map, bool& endGame);
-
-	Collider GetCollider(sf::RectangleShape &monster) { return Collider(monster); }
-	Collider GetColliderBetweenMonsters(sf::RectangleShape &monster) { return Collider(monster); }
-
 	int returnNumberOfMonsters() { return this->body.size(); };
 	
 	sf::Texture texture;
@@ -43,7 +37,7 @@ public:
 	unsigned int row = 0;
 	int countSpawnTime = 1;
 	int spawnTime = 3600;
-	float speed = 0.30f; // * 60 frames/second = 60.0f
-	float switchTime = 0.6f;
+	float speed = 0.20f; // * 60 frames/second = 60.0f
+	float switchTime = 0.4f;
 };
 

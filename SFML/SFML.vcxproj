@@ -160,7 +160,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CharacterSelectionMenu.cpp" />
     <ClCompile Include="Chests.cpp" />
-    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
@@ -175,7 +174,6 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CharacterSelectionMenu.h" />
     <ClInclude Include="Chests.h" />
-    <ClInclude Include="Collider.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="MainMenu.h" />

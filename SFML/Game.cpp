@@ -4,7 +4,6 @@
 
 Game::Game()
 {
-	
 }
 
 
@@ -24,7 +23,6 @@ void Game::GameRun()
 		while (widow.pollEvent(eva))
 		{
 			resolutionMenu.options(eva, widow);
-			//if (eva.type == sf::Event::Closed) return 0;
 		}
 		widow.clear(sf::Color::Black);
 		resolutionMenu.draw(widow);
@@ -66,6 +64,19 @@ void Game::GameRun()
 			menu.options(newGame, gamePause, inCharacterSelection, event, mainWindow);
 
 			characterSelectionMenu.options(newGame, gamePause, inCharacterSelection, event, mainWindow, setTexture);
+
+			switch (event.type)
+			{
+			case sf::Event::KeyReleased:
+				switch (event.key.code)
+				{
+				case sf::Keyboard::P:
+					cout << player.returnPlayer2DPosition().x << " " << player.returnPlayer2DPosition().y << endl;
+					cout << (player.returnPlayer2DPosition().x - player.returnPlayer2DPosition().y + SIZE) << " " << (player.returnPlayer2DPosition().x + player.returnPlayer2DPosition().y) / 2 << endl;
+					break;
+				}
+			}
+
 			if (setTexture)
 			{
 				player.getTexture(characterSelectionMenu.returnTexture());
@@ -94,26 +105,26 @@ void Game::GameRun()
 					camera.getAspectRatio(mainWindow);
 					break;
 				}
-			}
 
-			if (endGame) {
-				switch (event.type)
-				{
-				case sf::Event::KeyReleased:
-					switch (event.key.code)
+
+				if (endGame) {
+					switch (event.type)
 					{
-					case sf::Keyboard::Return:
-						score.WriteScoreInFile();
-						score.resetScore();
-						enemies.clearMonsterVector();
-						newGame = true;
-						endGame = false;
-						break;
+					case sf::Event::KeyReleased:
+						switch (event.key.code)
+						{
+						case sf::Keyboard::Return:
+							score.WriteScoreInFile();
+							score.resetScore();
+							enemies.clearMonsterVector();
+							newGame = true;
+							endGame = false;
+							break;
+						}
 					}
 				}
 			}
 		}
-
 		if (!gamePause && !newGame && inCharacterSelection) characterSelectionMenu.draw(mainWindow);
 		if (!gamePause && newGame && !inCharacterSelection) menu.draw(mainWindow);
 		if (gamePause && !newGame && !inCharacterSelection) pauseMenu.draw(mainWindow);
@@ -127,23 +138,17 @@ void Game::GameRun()
 				newMap.drawMap(mainWindow);
 				enemies.createEnemy(mainWindow);
 
+				enemies.goToPlayer(player.returnPlayer2DPosition());
 
-				//check collisions: player and enemy; enemy and enemy
-				enemies.CheckMonsterVectorCollision(player, newMap, endGame);
-				//check collision: walls with player and enemies
-			/*	newMap.CheckPlayerCollisionWithStaticObjects(player);*/
-				//check collision: chests with player
-				if(chest.CheckCollision(player)) score.updateScore();
+				camera.CameraPerspective(mainWindow, player.returnPlayer2DPosition(), cam, centerCameraOnPlayer);
 
-				enemies.goToPlayer(player.returnPlayerPosition());
 
-				camera.CameraPerspective(mainWindow, player.returnPlayerPosition(), cam, centerCameraOnPlayer);
-
-				player.Draw(mainWindow, gamePause);
 
 				enemies.Draw(mainWindow);
 
 				chest.DrawChest(mainWindow);
+
+				player.Draw(mainWindow, gamePause);
 
 				camera.draggableCamera(mainWindow, event, centerCameraOnPlayer, cam);
 			}

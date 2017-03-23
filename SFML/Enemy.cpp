@@ -16,7 +16,7 @@ Enemy::~Enemy()
 
 void Enemy::Draw(sf::RenderWindow & window)
 {
-	for (auto &monster : body)window.draw(monster);
+	for (auto &monster : body) window.draw(monster);
 }
 
 void Enemy::goToPlayer(sf::Vector2f returnPlayerPosition)
@@ -81,7 +81,7 @@ void Enemy::createEnemy(sf::RenderWindow & window)
 	if (spawnTime/countSpawnTime == 1) {
 		countSpawnTime = 0;
 		body.push_back(singleBody);
-		body.back().setSize(sf::Vector2f(25.0f, 25.0f));
+		body.back().setSize(sf::Vector2f(12.50f, 12.50f));
 		body.back().setTexture(&texture);
 		body.back().setPosition(250.0f, 550.0f);
 		body.back().setOrigin(body.back().getSize() / 2.0f);
@@ -105,29 +105,4 @@ void Enemy::Update()
 
 	uvRect.left = currentImage.x*uvRect.width;
 	uvRect.top = currentImage.y*uvRect.height;
-}
-
-void Enemy::CheckMonsterVectorCollision(Player& player, Map& map, bool& endGame)
-{
-	//collision player with monster
-	for (auto &monster : body)
-	{
-		if (player.GetCollider().CheckPlayerCollision(GetCollider(monster)))endGame = true;
-	}
-	//colision monster with monster
-	for (auto &monster : body)
-	{
-		for (auto &secondMonster : body)
-		{
-			if(&monster!=&secondMonster)GetCollider(monster).CheckCollision(GetColliderBetweenMonsters(secondMonster), 40.0f);
-		}
-	}
-    //collision monster with walls
-	//for (int objectIterator = 0; objectIterator < map.ReturnBlocksPositionSize(); objectIterator++)
-	//{
-	//	for (auto &monster : body)
-	//	{
-	//		GetCollider(monster).CheckCollision(map.GetMapCollider(objectIterator), -100 * speed); //????
-	//	}
-	//}
 }
