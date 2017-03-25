@@ -71,8 +71,14 @@ void Game::GameRun()
 				switch (event.key.code)
 				{
 				case sf::Keyboard::P:
-					cout << player.returnPlayer2DPosition().x << " " << player.returnPlayer2DPosition().y << endl;
-					cout << (player.returnPlayer2DPosition().x - player.returnPlayer2DPosition().y + SIZE) << " " << (player.returnPlayer2DPosition().x + player.returnPlayer2DPosition().y) / 2 << endl;
+					cout << "2DTop " << player.returnPlayer2DPosition().first << " " << player.returnPlayer2DPosition().second << endl;
+					break;
+				case sf::Keyboard::T:
+					cout << "Tile " << newMap.getTileCoordinates(player.returnPlayer2DPosition()).first << " " << newMap.getTileCoordinates(player.returnPlayer2DPosition()).second << " ";
+					cout << newMap.getIsWalkable(player.returnPlayer2DPosition()) << endl;
+					cout << "2DTop " << player.returnPlayer2DPosition().first << " " << player.returnPlayer2DPosition().second << endl;
+					cout << "2DTopThroughIso " << newMap.convert2DToIso({ player.returnPlayer2DPosition()}).first << " " << newMap.convert2DToIso(player.returnPlayer2DPosition()).second << endl;
+					cout << "actual2DTop " << player.returnIsoPlayer2DPosition().first << " " << player.returnIsoPlayer2DPosition().second << endl;
 					break;
 				}
 			}
@@ -134,13 +140,13 @@ void Game::GameRun()
 		if (!gamePause && !newGame && !inCharacterSelection)
 		{
 			if (!endGame) {
-				player.Update(event);
+				player.Update(event, newMap.getIsWalkable(player.returnPlayer2DPosition()));
 				newMap.drawMap(mainWindow);
 				enemies.createEnemy(mainWindow);
 
-				enemies.goToPlayer(player.returnPlayer2DPosition());
+				enemies.goToPlayer({ player.returnPlayer2DPosition().first, player.returnPlayer2DPosition().second });
 
-				camera.CameraPerspective(mainWindow, player.returnPlayer2DPosition(), cam, centerCameraOnPlayer);
+				camera.CameraPerspective(mainWindow, { player.returnIsoPlayer2DPosition().first, player.returnIsoPlayer2DPosition().second }, cam, centerCameraOnPlayer);
 
 
 

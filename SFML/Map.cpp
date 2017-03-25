@@ -22,9 +22,9 @@ Map::Map()
 
 		float posX = 0, posY = 0;
 
-		bool secondRow = false;
+		bool secondRow = false; //  + mapSizes.first*SIZE/2
 		for (auto &pair : tilesCoords) {
-			tile.setPosition(convert2DToIso({ posX*SIZE / 2, posY*SIZE / 2 }).first, convert2DToIso({ posX*SIZE / 2, posY*SIZE / 2 }).second);
+			tile.setPosition(convert2DToIso({ posX*SIZE / 2, posY*SIZE / 2 }).first, convert2DToIso({ posX*SIZE / 2 , posY*SIZE / 2 }).second);
 			tile.setTextureRect(sf::IntRect(pair.first.first *  SIZE, pair.first.second *  SIZE, SIZE, SIZE));
 			tiles.push_back(tile);
 
@@ -64,4 +64,20 @@ bool Map::isWalkable(char x, char y)
 {
 	if (x == '0' && y == '0') return false;
 	if (x == '0' && y == '3') return true;
+	return true;
+}
+
+pair<float, float> Map::getTileCoordinates(pair<float, float> pair)
+{
+	return{ floor(pair.first / SIZE), floor(pair.second / SIZE) };
+}
+
+pair<float, float> Map::get2dFromTileCoordinates(pair<float, float> pair)
+{
+	return{ pair.first*SIZE*2, pair.second*SIZE/2 };
+}
+
+bool Map::getIsWalkable(pair<float, float> pair)
+{
+	return tilesCoords[getTileCoordinates(pair).first * mapSizes.first + getTileCoordinates(pair).second].second;
 }

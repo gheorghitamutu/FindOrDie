@@ -22,6 +22,9 @@ public:
 	pair <float, float> convert2DToIso(pair<float, float> pair);
 	pair <float, float> convertIsoTo2D(pair<float, float> pair);
 	bool isWalkable(char x, char y);
+	pair <float, float> getTileCoordinates(pair<float, float> pair);
+	pair <float, float> get2dFromTileCoordinates(pair<float, float> pair);
+	bool getIsWalkable(pair<float, float> pair);
 
 private:
 	sf::Texture tileTexture;

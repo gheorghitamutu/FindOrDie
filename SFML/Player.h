@@ -2,12 +2,15 @@
 #include <SFML/Graphics.hpp>
 #include "math.h"
 #include<iostream>
+#include "Map.h"
+using namespace std;
+
 class Player
 {
 public:
 	Player(sf::RenderWindow& window);
 	~Player();
-	void Update(sf::Event event);
+	void Update(sf::Event event, bool isWalkable);
 	void Draw(sf::RenderWindow& window, bool gamePause);
 	void RestartClock();
 	void StartingPosition(bool newGame, sf::RenderWindow& window);
@@ -16,12 +19,17 @@ public:
 	void Update(int row, float deltaTime);
 	void Animation();
 
+	pair <float, float> convert2DToIso(pair<float, float> pair);
+	pair <float, float> convertIsoTo2D(pair<float, float> pair);
+
 	sf::IntRect uvRect;
-	sf::Vector2f returnPlayer2DPosition(); 
+	pair <float, float> returnPlayer2DPosition();
+	pair <float, float> returnIsoPlayer2DPosition();
 	sf::Texture texture;
 
 private:
-	sf::RectangleShape body;
+	sf::RectangleShape isoBodyPlayer;
+	sf::RectangleShape twoDimensionTopBodyPlayer;
 	sf::Clock clock;
 	sf::Vector2f movement;
 

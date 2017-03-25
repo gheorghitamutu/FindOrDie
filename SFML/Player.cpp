@@ -4,13 +4,18 @@ Player::Player(sf::RenderWindow& window)
 {
 	setTexture();
 	Animation();
-	body.setSize(sf::Vector2f(12.25f, 12.25f));
-	body.setPosition(50.0f, 50.0f);
-	body.setOrigin(body.getSize() / 2.0f);
-	body.setTexture(&texture);
+	twoDimensionTopBodyPlayer.setSize(sf::Vector2f(12.25f, 12.25f));
+	twoDimensionTopBodyPlayer.setPosition(sf::Vector2f(200, 200));
+	twoDimensionTopBodyPlayer.setOrigin(twoDimensionTopBodyPlayer.getSize() / 2.0f);
+	twoDimensionTopBodyPlayer.setOrigin(twoDimensionTopBodyPlayer.getSize() / 2.0f);
+
+	isoBodyPlayer.setSize(sf::Vector2f(12.25f, 12.25f));
+	isoBodyPlayer.setPosition(convert2DToIso({ twoDimensionTopBodyPlayer.getPosition().x,twoDimensionTopBodyPlayer.getPosition().y }).first, convert2DToIso({ twoDimensionTopBodyPlayer.getPosition().x,twoDimensionTopBodyPlayer.getPosition().y }).second);
+	isoBodyPlayer.setOrigin(isoBodyPlayer.getSize() / 2.0f);
+	isoBodyPlayer.setTexture(&texture);
 }
 
-void Player::Update(sf::Event event)
+void Player::Update(sf::Event event, bool isWalkable)
 {
 	movement.x = 0.0f;
 	movement.y = 0.0f;
@@ -104,13 +109,16 @@ void Player::Update(sf::Event event)
 		else if (row == 15 || row == 19)row = 23;
 	}
 	Update(row, deltaTime*shiftIncreaseSpeed);
-	body.setTextureRect(uvRect);
-	body.move(movement);
+	isoBodyPlayer.setTextureRect(uvRect);
+	if (isWalkable) {
+		twoDimensionTopBodyPlayer.move(movement);
+		isoBodyPlayer.setPosition(convert2DToIso({ twoDimensionTopBodyPlayer.getPosition().x, twoDimensionTopBodyPlayer.getPosition().y/2 }).first, convert2DToIso({twoDimensionTopBodyPlayer.getPosition().x, twoDimensionTopBodyPlayer.getPosition().y/2 }).second);
+	}
 }
 
 void Player::Draw(sf::RenderWindow& window, bool gamePause)
 {	
-	window.draw(body);
+	window.draw(isoBodyPlayer);
 }
 
 void Player::RestartClock()
@@ -120,7 +128,7 @@ void Player::RestartClock()
 
 void Player::StartingPosition(bool newGame, sf::RenderWindow& window)
 {
-	if(newGame)body.setPosition(window.getSize().x / 2.0f, window.getSize().y / 1.0f);
+	if(newGame)isoBodyPlayer.setPosition(convert2DToIso({ twoDimensionTopBodyPlayer.getPosition().x,twoDimensionTopBodyPlayer.getPosition().y }).first, convert2DToIso({ twoDimensionTopBodyPlayer.getPosition().x,twoDimensionTopBodyPlayer.getPosition().y }).second);
 }
 
 void Player::getTexture(bool woman)
@@ -133,10 +141,15 @@ void Player::setTexture()
 	texture.loadFromFile("Animation/Man/fullPlayerAnimations.png");
 }
 
-sf::Vector2f Player::returnPlayer2DPosition()
+pair <float, float> Player::returnPlayer2DPosition()
 {
-	return body.getPosition();
-};
+	return{ twoDimensionTopBodyPlayer.getPosition().x, twoDimensionTopBodyPlayer.getPosition().y };
+}
+pair<float, float> Player::returnIsoPlayer2DPosition()
+{
+	return{ isoBodyPlayer.getPosition().x, isoBodyPlayer.getPosition().y };
+}
+;
 
 void Player::Animation()
 {
@@ -163,6 +176,17 @@ void Player::Update(int row, float deltaTime)
 	uvRect.left = currentImage.x*uvRect.width;
 	uvRect.top = currentImage.y*uvRect.height;
 }
+
+pair<float, float> Player::convert2DToIso(pair<float, float> pair)
+{
+	return{ pair.first - pair.second, (pair.first + pair.second) / 2 };
+}
+
+pair<float, float> Player::convertIsoTo2D(pair<float, float> pair)
+{
+	return{ (2 * pair.second + pair.first) / 2, (2 * pair.second - pair.first) / 2 };
+}
+
 
 Player::~Player()
 {
