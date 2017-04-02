@@ -55,7 +55,6 @@ void Game::GameRun()
 					cout << "2DTop " << player.returnPlayer2DPosition().first << " " << player.returnPlayer2DPosition().second << endl;
 					break;
 				case sf::Keyboard::T:
-					cout << map.getIsWalkable(player.returnPlayer2DPosition()) << endl;
 					cout << "2DTop " << player.returnPlayer2DPosition().first << " " << player.returnPlayer2DPosition().second << endl;
 					break;
 				}

@@ -6,7 +6,7 @@ Player::Player()
 	setTexture();
 	Animation();
 
-	playerBody.setSize(sf::Vector2f(12.25f, 12.25f));
+	playerBody.setSize(sf::Vector2f(25.f, 25.f));
 	playerBody.setPosition({ 100, 100 });
 	playerBody.setOrigin(playerBody.getSize() / 2.0f);
 	playerBody.setTexture(&texture);
@@ -106,24 +106,26 @@ void Player::Update(sf::Event event, Map& map)
 		else if (row == 15 || row == 19)row = 23;
 	}
 
-	/*cout << map.containsPoint(returnPlayer2DPosition(), map.getTileCenterFromTileCoordinate(
-		map.getTileCoordinates({ 32,32 }))) << endl;*/
 	int x = 0, y = 0;
+	bool roadClear = true;
 	for (auto& tile : map.tiles) {
 		x++;
 		if (x == map.mapSizes.first) {
 			x = 0;
 			y++;
-		}
-		if (map.rectContainsPoint({ tile.getPosition().x, tile.getPosition().y },
-		{ returnPlayer2DPosition().first + movement.x, returnPlayer2DPosition().second + movement.y })) {
-			cout << "HERE " << x << " " << y << endl;
+		}	
+		if (map.rectContainsPoint({ returnPlayer2DPosition().first + movement.x, returnPlayer2DPosition().second + movement.y },
+		                       { tile.first.getPosition().x, tile.first.getPosition().y })) {
+			if (!tile.second) {
+				if (map.containsPoint({ returnPlayer2DPosition().first + movement.x, returnPlayer2DPosition().second + movement.y },
+				{ tile.first.getPosition().x + SIZE / 2, tile.first.getPosition().y + SIZE / 2 })) {
+					roadClear = false;
+				}
+			}
 		}
 	}
-	if (map.getIsWalkable({ returnPlayer2DPosition().first + movement.x, returnPlayer2DPosition().second + movement.y }))
-	{
-		playerBody.move(movement);
-	}
+
+	if(roadClear)playerBody.move(movement);
 	Update(row, deltaTime*shiftIncreaseSpeed);
 	playerBody.setTextureRect(uvRect);
 }
