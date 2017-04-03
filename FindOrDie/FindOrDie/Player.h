@@ -21,15 +21,16 @@ public:
 
 	pair <float, float> convert2DToIso(pair<float, float> pair);
 	pair <float, float> convertIsoTo2D(pair<float, float> pair);
+	sf::Vector2f returnPlayerBodySize();
 
 	sf::IntRect uvRect;
 	pair <float, float> returnPlayer2DPosition();
 	sf::Texture texture;
 
-private:
+public:
 	sf::RectangleShape playerBody;
 	sf::Clock clock;
-	sf::Vector2f movement;
+	sf::Vector2f velocity;
 
 	sf::Vector2u imageCount = sf::Vector2u(8, 24);
 	sf::Vector2u currentImage;

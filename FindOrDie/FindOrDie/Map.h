@@ -6,8 +6,8 @@
 #include <sstream>
 #include <string>
 #include<math.h>
-#include "Player.h"
 #include <vector>
+#include <random>
 
 #define SIZE 64
 
@@ -25,13 +25,15 @@ public:
 	pair <float, float> getTileCenterFromTileCoordinate(pair<float, float> pair);
 	bool containsPoint(pair<float, float> point, pair<float, float> tileCenter);
 	bool rectContainsPoint(pair<float, float> point, pair<float, float> tileCoords);
+	bool isColliding(pair <float, float> returnPlayer2DPosition, sf::Vector2f bodySize, sf::Vector2f velocity);
 
 public:
+	std::random_device rd;
 	sf::Texture tileTexture;
 	pair<sf::Sprite, bool> tile;
 	sf::Vector2i loadcounter = sf::Vector2i(0, 0);
 	vector<pair<float, float>> tilesCoords;
 	vector <pair<sf::Sprite, bool>> tiles;
-	pair <int, int> mapSizes = { 0,0 };
+	pair <int, int> mapDimensions;
 };
 

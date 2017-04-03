@@ -150,7 +150,6 @@
     <Image Include="tilesRock.png" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="map.txt" />
     <Text Include="score.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

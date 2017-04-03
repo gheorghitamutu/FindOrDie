@@ -1,45 +1,43 @@
 #include "Map.h"
+#include "Player.h"
 
 Map::Map()
 {
-	ifstream openfile("map.txt");
-	if (openfile.is_open()) {
-		string line;
-		getline(openfile, line);
-		tileTexture.loadFromFile(line);
-		tile.first.setTexture(tileTexture);
+	tileTexture.loadFromFile("iso-64x64-building.png");
+	tile.first.setTexture(tileTexture);
 
-		while (getline(openfile, line)) {
-			mapSizes.first = 0;
-			while (mapSizes.first < line.size()) {
-				tilesCoords.push_back( { line[mapSizes.first++] - '0', line[mapSizes.first++] - '0' } );
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dis(10, 30);
+	mapDimensions = { dis(gen), dis(gen) };
+
+	for (int i = 0; i < mapDimensions.second; i++)
+	{
+		for (int j = 0; j < mapDimensions.first; j++) 
+		{
+			if (i == 0 || j == 0 || i == mapDimensions.second-1 || j == mapDimensions.first-1) {
+				tilesCoords.push_back({ 0,0 });
 			}
-			mapSizes.second++;
-		}
-
-		mapSizes.first = mapSizes.first / 2;
-
-		float posX = 0, posY = 0;
-
-		bool secondRow = false;
-		for (auto &pair : tilesCoords) {
-			tile.second = isWalkable({ (int)pair.first, (int)pair.second });
-			tile.first.setPosition(convert2DToIso({ posX*SIZE / 2, posY*SIZE / 2 }).first, convert2DToIso({ posX*SIZE / 2 , posY*SIZE / 2 }).second);
-			tile.first.setTextureRect(sf::IntRect(pair.first *  SIZE, pair.second *  SIZE, SIZE, SIZE));
-			tiles.push_back(tile);
-
-			posX++;
-			if (posX >= mapSizes.first) {
-				posX = 0;
-				posY++;
+			else
+			{
+				tilesCoords.push_back({ 0,3 });
 			}
 		}
 	}
-	else {
-		cout << "MAP CAN T BE LOADED!" << endl;
-	}
-	for (auto& tile : tiles) {
-		cout << tile.first.getPosition().x << " " << tile.first.getPosition().y << endl;
+
+	float posX = 0, posY = 0;
+	for (auto &pair : tilesCoords) 
+	{
+		tile.second = isWalkable({ (int)pair.first, (int)pair.second });
+		tile.first.setPosition(convert2DToIso({ posX*SIZE / 2, posY*SIZE / 2 }).first, convert2DToIso({ posX*SIZE / 2 , posY*SIZE / 2 }).second);
+		tile.first.setTextureRect(sf::IntRect(pair.first *  SIZE, pair.second *  SIZE, SIZE, SIZE));
+		tiles.push_back(tile);
+
+		posX++;
+		if (posX >= mapDimensions.first) 
+		{
+			posX = 0;
+			posY++;
+		}
 	}
 }
 
@@ -92,4 +90,48 @@ bool Map::rectContainsPoint(pair<float, float> point, pair<float, float> tileCoo
 		return true;
 
 	return false;
+}
+
+bool Map::isColliding(pair <float, float> position, sf::Vector2f bodySize, sf::Vector2f velocity)
+{
+	for (auto& tile : tiles) 
+	{
+		if ((velocity.x <= 0 && velocity.y <= 0) || (velocity.x >= 0 && velocity.y >= 0))
+		{
+			if (rectContainsPoint({ position.first + velocity.x, position.second + velocity.y + bodySize.y }, { tile.first.getPosition().x, tile.first.getPosition().y }))
+			{
+				if (!tile.second) {
+					if (containsPoint({ position.first + velocity.x, position.second + velocity.y + bodySize.y }, { tile.first.getPosition().x + SIZE / 2, tile.first.getPosition().y + SIZE / 2 }))
+					{
+						return false;
+					}
+				}
+			}
+		}
+		else if ((velocity.x <= 0 && velocity.y >= 0) || (velocity.x >= 0 && velocity.y <= 0))
+		{
+			if (rectContainsPoint({ position.first + bodySize.x + velocity.x, position.second + velocity.y + bodySize.y }, { tile.first.getPosition().x, tile.first.getPosition().y })) 
+			{
+				if (!tile.second) {
+					if ((containsPoint({ position.first + bodySize.x + velocity.x, position.second + velocity.y + bodySize.y }, { tile.first.getPosition().x + SIZE / 2, tile.first.getPosition().y + SIZE })))
+					{
+						return false;
+					}
+				}
+			}
+		}
+		/*if (rectContainsPoint({ position.first + velocity.x, position.second + velocity.y + bodySize.y }, { tile.first.getPosition().x, tile.first.getPosition().y }) ||
+			rectContainsPoint({ position.first + bodySize.x + velocity.x, position.second + velocity.y + bodySize.y }, { tile.first.getPosition().x, tile.first.getPosition().y })) {
+			if (!tile.second) {
+				if (containsPoint({ position.first + velocity.x, position.second + velocity.y + bodySize.y },
+				{ tile.first.getPosition().x + SIZE / 2, tile.first.getPosition().y + SIZE / 2 }) ||
+					(containsPoint({ position.first + bodySize.x + velocity.x, position.second + velocity.y + bodySize.y },
+					{ tile.first.getPosition().x + SIZE / 2, tile.first.getPosition().y + SIZE / 2 }))) {
+					return false;
+				}
+			}
+		}*/
+	}
+
+	return true;
 }

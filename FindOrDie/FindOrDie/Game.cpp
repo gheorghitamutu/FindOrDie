@@ -46,19 +46,6 @@ void Game::GameRun()
 		{
 			menu.options(newGame, gamePause, inCharacterSelection, event, window);
 			characterSelectionMenu.options(newGame, gamePause, inCharacterSelection, event, window, setTexture);
-			switch (event.type)
-			{
-			case sf::Event::KeyReleased:
-				switch (event.key.code)
-				{
-				case sf::Keyboard::P:
-					cout << "2DTop " << player.returnPlayer2DPosition().first << " " << player.returnPlayer2DPosition().second << endl;
-					break;
-				case sf::Keyboard::T:
-					cout << "2DTop " << player.returnPlayer2DPosition().first << " " << player.returnPlayer2DPosition().second << endl;
-					break;
-				}
-			}
 
 			if (setTexture)
 			{

@@ -1,48 +1,21 @@
-﻿  main.cpp
-c:\users\gicu\documents\github\findordie\findordie\findordie\mainmenu.h(4): warning C4005: 'MAX_NUMBER_OF_ITEMS': macro redefinition
-  c:\users\gicu\documents\github\findordie\findordie\findordie\characterselectionmenu.h(5): note: see previous definition of 'MAX_NUMBER_OF_ITEMS'
-c:\users\gicu\documents\github\findordie\findordie\findordie\resolutionmenu.h(3): warning C4005: 'MAX_NUMBER_OF_ITEMS': macro redefinition
-  c:\users\gicu\documents\github\findordie\findordie\findordie\mainmenu.h(4): note: see previous definition of 'MAX_NUMBER_OF_ITEMS'
-  Player.cpp
-c:\users\gicu\documents\github\findordie\findordie\findordie\player.cpp(166): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\findordie\player.cpp(167): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  Map.cpp
-c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(14): warning C4018: '<': signed/unsigned mismatch
-c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(28): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(81): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(81): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(82): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(82): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
+﻿  Map.cpp
+c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(71): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(122): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(122): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
+c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(123): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(123): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
 c:\program files (x86)\microsoft visual studio 14.0\vc\include\utility(172): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(15): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,int,void,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+  c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(57): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,int,void,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=int,
               _Other2=int
           ]
-  c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(15): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,int,void,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+  c:\users\gicu\documents\github\findordie\findordie\findordie\map.cpp(57): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,int,void,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=int,
               _Other2=int
           ]
-  Game.cpp
-c:\users\gicu\documents\github\findordie\findordie\findordie\mainmenu.h(4): warning C4005: 'MAX_NUMBER_OF_ITEMS': macro redefinition
-  c:\users\gicu\documents\github\findordie\findordie\findordie\characterselectionmenu.h(5): note: see previous definition of 'MAX_NUMBER_OF_ITEMS'
-c:\users\gicu\documents\github\findordie\findordie\findordie\resolutionmenu.h(3): warning C4005: 'MAX_NUMBER_OF_ITEMS': macro redefinition
-  c:\users\gicu\documents\github\findordie\findordie\findordie\mainmenu.h(4): note: see previous definition of 'MAX_NUMBER_OF_ITEMS'
-c:\users\gicu\documents\github\findordie\findordie\findordie\game.cpp(19): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\findordie\game.cpp(33): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\findordie\game.cpp(36): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\findordie\game.cpp(37): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\findordie\game.cpp(38): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-  Enemy.cpp
-c:\users\gicu\documents\github\findordie\findordie\findordie\enemy.cpp(95): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\findordie\enemy.cpp(96): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  Chests.cpp
-  CharacterSelectionMenu.cpp
-c:\users\gicu\documents\github\findordie\findordie\findordie\characterselectionmenu.cpp(13): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\findordie\characterselectionmenu.cpp(19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Generating Code...
   FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\FindOrDie\Debug\FindOrDie.exe
   FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\FindOrDie\Debug\FindOrDie.pdb (Partial PDB)

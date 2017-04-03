@@ -8,14 +8,13 @@ Player::Player()
 
 	playerBody.setSize(sf::Vector2f(25.f, 25.f));
 	playerBody.setPosition({ 100, 100 });
-	playerBody.setOrigin(playerBody.getSize() / 2.0f);
 	playerBody.setTexture(&texture);
 }
 
 void Player::Update(sf::Event event, Map& map)
 {
-	movement.x = 0.0f;
-	movement.y = 0.0f;
+	velocity.x = 0.0f;
+	velocity.y = 0.0f;
 
 	shiftIncreaseSpeed = 1;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))shiftIncreaseSpeed = 2;
@@ -25,75 +24,75 @@ void Player::Update(sf::Event event, Map& map)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 16;
-		movement.x -= diagRunSpeed;
-		movement.y += diagRunSpeed;
+		velocity.x -= diagRunSpeed;
+		velocity.y += diagRunSpeed;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 18;
-		movement.x += diagRunSpeed;
-		movement.y += diagRunSpeed;
+		velocity.x += diagRunSpeed;
+		velocity.y += diagRunSpeed;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 17;
-		movement.x -= diagRunSpeed;
-		movement.y -= diagRunSpeed;
+		velocity.x -= diagRunSpeed;
+		velocity.y -= diagRunSpeed;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 19;
-		movement.x += diagRunSpeed;
-		movement.y -= diagRunSpeed;
+		velocity.x += diagRunSpeed;
+		velocity.y -= diagRunSpeed;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 		row = 12;
-		movement.x -= diagSpeed;
-		movement.y += diagSpeed;
+		velocity.x -= diagSpeed;
+		velocity.y += diagSpeed;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		row = 14;
-		movement.x += diagSpeed;
-		movement.y += diagSpeed;
+		velocity.x += diagSpeed;
+		velocity.y += diagSpeed;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 		row = 13;
-		movement.x -= diagSpeed;
-		movement.y -= diagSpeed;
+		velocity.x -= diagSpeed;
+		velocity.y -= diagSpeed;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		row = 15;
-		movement.x += diagSpeed;
-		movement.y -= diagSpeed;
+		velocity.x += diagSpeed;
+		velocity.y -= diagSpeed;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 4;
-		movement.y += normalRunSpeed;
+		velocity.y += normalRunSpeed;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 5;
-		movement.x -= normalRunSpeed;
+		velocity.x -= normalRunSpeed;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 6;
-		movement.x += normalRunSpeed;
+		velocity.x += normalRunSpeed;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
 		row = 7;
-		movement.y -= normalRunSpeed;
+		velocity.y -= normalRunSpeed;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
 		row = 0;
-		movement.y += speed*deltaTime;
+		velocity.y += speed*deltaTime;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 		row = 1;
-		movement.x -= speed*deltaTime;
+		velocity.x -= speed*deltaTime;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		row = 2;
-		movement.x += speed*deltaTime;
+		velocity.x += speed*deltaTime;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
 		row = 3;
-		movement.y -= speed*deltaTime;
+		velocity.y -= speed*deltaTime;
 	}
 	else { // idle animation
 		if (row == 0 || row == 4)row = 8;
@@ -106,26 +105,9 @@ void Player::Update(sf::Event event, Map& map)
 		else if (row == 15 || row == 19)row = 23;
 	}
 
-	int x = 0, y = 0;
-	bool roadClear = true;
-	for (auto& tile : map.tiles) {
-		x++;
-		if (x == map.mapSizes.first) {
-			x = 0;
-			y++;
-		}	
-		if (map.rectContainsPoint({ returnPlayer2DPosition().first + movement.x, returnPlayer2DPosition().second + movement.y },
-		                       { tile.first.getPosition().x, tile.first.getPosition().y })) {
-			if (!tile.second) {
-				if (map.containsPoint({ returnPlayer2DPosition().first + movement.x, returnPlayer2DPosition().second + movement.y },
-				{ tile.first.getPosition().x + SIZE / 2, tile.first.getPosition().y + SIZE / 2 })) {
-					roadClear = false;
-				}
-			}
-		}
-	}
+	
 
-	if(roadClear)playerBody.move(movement);
+	if (map.isColliding(returnPlayer2DPosition(), returnPlayerBodySize(), velocity))playerBody.move(velocity);
 	Update(row, deltaTime*shiftIncreaseSpeed);
 	playerBody.setTextureRect(uvRect);
 }
@@ -194,6 +176,11 @@ pair<float, float> Player::convert2DToIso(pair<float, float> pair)
 pair<float, float> Player::convertIsoTo2D(pair<float, float> pair)
 {
 	return{ (2 * pair.second + pair.first) / 2, (2 * pair.second - pair.first) / 2 };
+}
+
+sf::Vector2f Player::returnPlayerBodySize()
+{
+	return playerBody.getSize();
 }
 
 
