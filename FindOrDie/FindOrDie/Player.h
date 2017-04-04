@@ -11,12 +11,12 @@ public:
 	Player();
 	~Player();
 	void Update(sf::Event event, class Map& map);
-	void Draw(sf::RenderWindow& window, bool gamePause);
-	void RestartClock();
-	void StartingPosition(bool newGame, sf::RenderWindow& window);
-	void getTexture(bool woman);
-	void setTexture();
 	void Update(int row, float deltaTime);
+	void Draw(sf::RenderWindow& window);
+	void RestartClock();
+	void StartingPosition(sf::RenderWindow& window);
+	void setTextureWoman();
+	void setTextureMan();
 	void Animation();
 
 	pair <float, float> convert2DToIso(pair<float, float> pair);

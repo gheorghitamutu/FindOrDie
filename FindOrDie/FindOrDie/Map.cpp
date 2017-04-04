@@ -5,40 +5,6 @@ Map::Map()
 {
 	tileTexture.loadFromFile("iso-64x64-building.png");
 	tile.first.setTexture(tileTexture);
-
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dis(10, 30);
-	mapDimensions = { dis(gen), dis(gen) };
-
-	for (int i = 0; i < mapDimensions.second; i++)
-	{
-		for (int j = 0; j < mapDimensions.first; j++) 
-		{
-			if (i == 0 || j == 0 || i == mapDimensions.second-1 || j == mapDimensions.first-1) {
-				tilesCoords.push_back({ 0,0 });
-			}
-			else
-			{
-				tilesCoords.push_back({ 0,3 });
-			}
-		}
-	}
-
-	float posX = 0, posY = 0;
-	for (auto &pair : tilesCoords) 
-	{
-		tile.second = isWalkable({ (int)pair.first, (int)pair.second });
-		tile.first.setPosition(convert2DToIso({ posX*SIZE / 2, posY*SIZE / 2 }).first, convert2DToIso({ posX*SIZE / 2 , posY*SIZE / 2 }).second);
-		tile.first.setTextureRect(sf::IntRect(pair.first *  SIZE, pair.second *  SIZE, SIZE, SIZE));
-		tiles.push_back(tile);
-
-		posX++;
-		if (posX >= mapDimensions.first) 
-		{
-			posX = 0;
-			posY++;
-		}
-	}
 }
 
 
@@ -134,4 +100,50 @@ bool Map::isColliding(pair <float, float> position, sf::Vector2f bodySize, sf::V
 	}
 
 	return true;
+}
+
+void Map::createMap()
+{
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dis(10, 40);
+	std::uniform_int_distribution<> dis2(1, 4);
+	mapDimensions = { dis(gen), dis(gen) };
+	tilesCoords.clear();
+	tiles.clear();
+	for (int i = 0; i < mapDimensions.second; i++)
+	{
+		for (int j = 0; j < mapDimensions.first; j++)
+		{
+			if (i == 0 || j == 0 || i == mapDimensions.second - 1 || j == mapDimensions.first - 1) {
+				tilesCoords.push_back({ 0,0 });
+			}
+			else
+			{
+				if (dis2(gen) == 1)
+				{
+					tilesCoords.push_back({ 0,0 });
+				}
+				else
+				{
+					tilesCoords.push_back({ 0,3 });
+				}
+			}
+		}
+	}
+
+	float posX = 0, posY = 0;
+	for (auto &pair : tilesCoords)
+	{
+		tile.second = isWalkable({ (int)pair.first, (int)pair.second });
+		tile.first.setPosition(convert2DToIso({ posX*SIZE / 2, posY*SIZE / 2 }).first, convert2DToIso({ posX*SIZE / 2 , posY*SIZE / 2 }).second);
+		tile.first.setTextureRect(sf::IntRect(pair.first *  SIZE, pair.second *  SIZE, SIZE, SIZE));
+		tiles.push_back(tile);
+
+		posX++;
+		if (posX >= mapDimensions.first)
+		{
+			posX = 0;
+			posY++;
+		}
+	}
 }

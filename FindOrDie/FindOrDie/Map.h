@@ -26,7 +26,7 @@ public:
 	bool containsPoint(pair<float, float> point, pair<float, float> tileCenter);
 	bool rectContainsPoint(pair<float, float> point, pair<float, float> tileCoords);
 	bool isColliding(pair <float, float> returnPlayer2DPosition, sf::Vector2f bodySize, sf::Vector2f velocity);
-
+	void createMap();
 public:
 	std::random_device rd;
 	sf::Texture tileTexture;

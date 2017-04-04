@@ -3,7 +3,7 @@
 
 Player::Player()
 {
-	setTexture();
+	setTextureMan();
 	Animation();
 
 	playerBody.setSize(sf::Vector2f(25.f, 25.f));
@@ -112,7 +112,7 @@ void Player::Update(sf::Event event, Map& map)
 	playerBody.setTextureRect(uvRect);
 }
 
-void Player::Draw(sf::RenderWindow& window, bool gamePause)
+void Player::Draw(sf::RenderWindow& window)
 {	
 	window.draw(playerBody);
 }
@@ -122,17 +122,17 @@ void Player::RestartClock()
 	deltaTime = clock.restart().asSeconds();
 }
 
-void Player::StartingPosition(bool newGame, sf::RenderWindow& window)
+void Player::StartingPosition(sf::RenderWindow& window)
 {
-	if (newGame)playerBody.setPosition({ 100, 100 });
+	playerBody.setPosition({ 100, 100 });
 }
 
-void Player::getTexture(bool woman)
+void Player::setTextureWoman()
 {	
-	if (woman)texture.loadFromFile("Animation/Woman/fullPlayerAnimations.png");
+	texture.loadFromFile("Animation/Woman/fullPlayerAnimations.png");
 }
 
-void Player::setTexture()
+void Player::setTextureMan()
 {
 	texture.loadFromFile("Animation/Man/fullPlayerAnimations.png");
 }
@@ -146,8 +146,7 @@ void Player::Animation()
 {
 	currentImage.x = 0;
 	uvRect.width = texture.getSize().x / float(imageCount.x);
-	uvRect.height = texture.getSize().y / float(imageCount.y);
-	
+	uvRect.height = texture.getSize().y / float(imageCount.y);	
 }
 
 void Player::Update(int row, float deltaTime)

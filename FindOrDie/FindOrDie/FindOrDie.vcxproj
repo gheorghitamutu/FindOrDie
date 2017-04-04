@@ -116,29 +116,23 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="CharacterSelectionMenu.h" />
     <ClInclude Include="Chests.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Map.h" />
-    <ClInclude Include="PauseMenu.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="ResolutionMenu.h" />
     <ClInclude Include="Score.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CharacterSelectionMenu.cpp" />
     <ClCompile Include="Chests.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="PauseMenu.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="ResolutionMenu.cpp" />
     <ClCompile Include="Score.cpp" />
   </ItemGroup>
   <ItemGroup>

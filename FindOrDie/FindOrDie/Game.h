@@ -1,41 +1,48 @@
 #pragma once
 #include "SFML\Graphics.hpp"
 #include "Player.h"
-#include "CharacterSelectionMenu.h"
-#include "MainMenu.h"
-#include "PauseMenu.h"
 #include "Map.h"
 #include "Camera.h"
-#include "ResolutionMenu.h"
 #include "Enemy.h"
 #include <iostream>
 #include <vector>
 #include "Chests.h"
 #include "Score.h"
+#include "Menu.h"
 class Game
 {
 public:
-	Game();
+	enum GameState {
+		SetResolution,
+		MainMenu,
+		CharacterSelection,
+		Running,
+		Pause, 
+		End,
+		Exit
+	};
+
 	~Game();
 
 	void GameRun();
+	void setGameState(int gameStateNumber);
+	void processEvents(sf::RenderWindow& window);
 
+	GameState gameState = SetResolution;
 
 	Chests chest;
 	Score score;
-	sf::Event event;
-
 	Enemy enemies;
 	Map map;
 	Camera camera;
-
 	Player player;
+	Menu menu;
 
-	bool newGame = true;
-	bool gamePause = false;
-	bool inCharacterSelection = false;
+	sf::Event event;
+	sf::View view;
+	sf::ContextSettings settings;
+
 	bool centerCameraOnPlayer = false;
-	bool setTexture = false;
-	bool endGame = false;
+	int gameStateNo = 0;
 };
 
