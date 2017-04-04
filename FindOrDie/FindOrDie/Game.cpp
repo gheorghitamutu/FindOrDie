@@ -17,19 +17,19 @@ void Game::GameRun()
 
 		if (gameState == GameState::SetResolution)
 		{
-			menu.draw(window);
+			menu.draw(window, { view.getCenter().x, view.getCenter().y }, textScale);
 		}
 		if (gameState == GameState::MainMenu)
 		{
-			menu.draw(window);
+			menu.draw(window, { view.getCenter().x, view.getCenter().y }, textScale);
 		}
 		if (gameState == GameState::CharacterSelection)
 		{
-			menu.draw(window);
+			menu.draw(window, { view.getCenter().x, view.getCenter().y }, textScale);
 		}
 		if (gameState == GameState::Pause)
 		{
-			menu.draw(window);
+			menu.draw(window, { view.getCenter().x, view.getCenter().y }, textScale);
 		}
 		if (gameState == GameState::Running)
 		{
@@ -97,6 +97,7 @@ void Game::processEvents(sf::RenderWindow& window)
 		int returnedState = menu.options(event, window, 0, player, map);
 		if (gameStateNo != returnedState && returnedState < 6 && returnedState >= 0)
 		{
+			view = window.getDefaultView();
 			setGameState(returnedState);
 		}
 
@@ -104,7 +105,7 @@ void Game::processEvents(sf::RenderWindow& window)
 	else if (gameState == GameState::MainMenu)
 	{
 		int returnedState = menu.options(event, window, 1, player, map);
-		if (gameStateNo != returnedState && returnedState < 6 && returnedState >= 0)
+		if (gameStateNo != returnedState && returnedState <= 6 && returnedState >= 0)
 		{
 			setGameState(returnedState);
 		}
@@ -123,6 +124,8 @@ void Game::processEvents(sf::RenderWindow& window)
 		if (event.type == sf::Event::MouseWheelMoved) // Zomm in or out if the mouse wheel moves
 		{
 			view.zoom(1.f + event.mouseWheel.delta*0.1f);
+			textScale += event.mouseWheel.delta*0.1f;
+			cout << textScale << endl;
 		}
 		switch (event.type)
 		{
@@ -149,6 +152,7 @@ void Game::processEvents(sf::RenderWindow& window)
 		int returnedState = menu.options(event, window, 3, player, map);
 		if (gameStateNo != returnedState && returnedState < 6 && returnedState >= 0)
 		{
+			view.zoom(1.f - textScale/10);
 			setGameState(returnedState);
 		}
 	}
@@ -168,6 +172,10 @@ void Game::processEvents(sf::RenderWindow& window)
 			}
 		}
 		view.setCenter(window.getSize().x / 2.0f, window.getSize().y / 2.0f);
+	}
+	else if (gameState == GameState::Exit)
+	{
+		window.close();
 	}
 }
 

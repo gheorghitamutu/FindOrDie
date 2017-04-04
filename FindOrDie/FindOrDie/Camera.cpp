@@ -21,8 +21,6 @@ void Camera::CameraNormal(sf::RenderWindow& window)
 
 void Camera::CameraPerspective(sf::RenderWindow& window, sf::Vector2f offset, sf::View camera, bool &centerCameraOnPlayer)
 {
-	//	*camera = window.getDefaultView();  this crap keeps resetting the camera
-//	camera.setSize(camera.getSize().x * aspectRatio, camera.getSize().y*2 );
 	if (centerCameraOnPlayer) {
 		camera.setCenter(offset);
 		lastKnownPosition = offset;

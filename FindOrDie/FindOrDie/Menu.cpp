@@ -55,8 +55,9 @@ Menu::Menu()
 	menu = selectResolution;
 }
 
-void Menu::draw(sf::RenderWindow & window)
+void Menu::draw(sf::RenderWindow& window, pair <float, float> position, float& textScale)
 {
+	setMenuPosition(position, textScale);
 	for (auto& lines : menu) {
 		window.draw(lines);
 	}
@@ -266,6 +267,16 @@ void Menu::resizeWindow(sf::RenderWindow & window)
 {
 	window.create(sf::VideoMode((unsigned int)width, (unsigned int)height, 32), "Find or Die", sf::Style::Resize | sf::Style::Close);
 	window.setPosition({ 0,0 });
+}
+
+void Menu::setMenuPosition(pair <float, float>& position, float& textScale)
+{
+	int i = 0;
+	for (auto& lines : menu) {
+		lines.setPosition(position.first - width/3, position.second + i - height/3);
+		lines.setScale({ 1.f + textScale, 1.f + textScale });
+		i += 100;
+	}
 }
 
 

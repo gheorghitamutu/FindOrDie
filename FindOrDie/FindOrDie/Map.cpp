@@ -105,7 +105,7 @@ bool Map::isColliding(pair <float, float> position, sf::Vector2f bodySize, sf::V
 void Map::createMap()
 {
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dis(10, 40);
+	std::uniform_int_distribution<> dis(10, 200);
 	std::uniform_int_distribution<> dis2(1, 4);
 	mapDimensions = { dis(gen), dis(gen) };
 	tilesCoords.clear();

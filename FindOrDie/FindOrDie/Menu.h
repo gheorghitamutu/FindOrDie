@@ -7,7 +7,7 @@ class Menu
 {
 public:
 	Menu();
-	void draw(sf::RenderWindow & window);
+	void draw(sf::RenderWindow & window, pair <float, float> position, float& textScale);
 
 	void MoveUp();
 	void MoveDown();
@@ -15,6 +15,7 @@ public:
 	void pickMenu(int menuNumber);
 	void setMenus();
 	void resizeWindow(sf::RenderWindow &window);
+	void setMenuPosition(pair <float, float>& position, float& textScale);
 
 public:
 	int selectedItemIndex = 0;

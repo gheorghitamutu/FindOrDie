@@ -44,5 +44,6 @@ public:
 
 	bool centerCameraOnPlayer = false;
 	int gameStateNo = 0;
+	float textScale = 0.f;
 };
 
