@@ -2,36 +2,31 @@
 
 void Game::GameRun()
 {
-	settings.antialiasingLevel = 8;
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Find Or Die!", sf::Style::Resize | sf::Style::Close, settings);
+	sf::RenderWindow window(videoMode, "Find Or Die!", sf::Style::Fullscreen, settings);
+	window.setMouseCursorVisible(false);
 	window.setFramerateLimit(60);
 	view = window.getDefaultView();
-
 	while (window.isOpen())
 	{
+		
 		player.RestartClock();
 		while (window.pollEvent(event))
 		{
 			processEvents(window);
 		}
-
-		if (gameState == GameState::SetResolution)
-		{
-			menu.draw(window, { view.getCenter().x, view.getCenter().y }, textScale);
-		}
 		if (gameState == GameState::MainMenu)
 		{
 			menu.draw(window, { view.getCenter().x, view.getCenter().y }, textScale);
 		}
-		if (gameState == GameState::CharacterSelection)
+		else if (gameState == GameState::CharacterSelection)
 		{
 			menu.draw(window, { view.getCenter().x, view.getCenter().y }, textScale);
 		}
-		if (gameState == GameState::Pause)
+		else if (gameState == GameState::Pause)
 		{
 			menu.draw(window, { view.getCenter().x, view.getCenter().y }, textScale);
 		}
-		if (gameState == GameState::Running)
+		else if (gameState == GameState::Running)
 		{
 			player.Update(event, map);
 			camera.CameraPerspective(window, { player.returnPlayer2DPosition().first, player.returnPlayer2DPosition().second }, view, centerCameraOnPlayer);
@@ -41,7 +36,7 @@ void Game::GameRun()
 			chest.DrawChest(window);
 			player.Draw(window);
 		}
-		if(gameState == GameState::End)
+		else if(gameState == GameState::End)
 		{
 				score.DrawScore(window);
 				window.setView(view);
@@ -56,64 +51,49 @@ void Game::setGameState(int gameStateNumber)
 	switch (gameStateNumber)
 	{
 	case 0:
-		gameState = SetResolution;
+		gameState = MainMenu;
 		gameStateNo = 0;
 		break;
 	case 1:
-		gameState = MainMenu;
+		gameState = CharacterSelection;
 		gameStateNo = 1;
 		break;
 	case 2:
-		gameState = CharacterSelection;
+		gameState = Running;
 		gameStateNo = 2;
 		break;
 	case 3:
-		gameState = Running;
+		gameState = Pause;
 		gameStateNo = 3;
 		break;
 	case 4:
-		gameState = Pause;
+		gameState = End;
 		gameStateNo = 4;
 		break;
 	case 5:
-		gameState = End;
-		gameStateNo = 5;
-		break;
-	case 6:
 		gameState = Exit;
-		gameStateNo = 6;
+		gameStateNo = 5;
 	    break;
 	}
 }
 
 void Game::processEvents(sf::RenderWindow& window)
 {
-
-	if (event.type == sf::Event::Closed) {
+	if (event.type == sf::Event::Closed || gameState == GameState::Exit) {
 		window.close();
 	}
-	if (gameState == GameState::SetResolution)
+	if (gameState == GameState::MainMenu)
 	{
 		int returnedState = menu.options(event, window, 0, player, map);
-		if (gameStateNo != returnedState && returnedState < 6 && returnedState >= 0)
-		{
-			view = window.getDefaultView();
-			setGameState(returnedState);
-		}
-
-	}
-	else if (gameState == GameState::MainMenu)
-	{
-		int returnedState = menu.options(event, window, 1, player, map);
-		if (gameStateNo != returnedState && returnedState <= 6 && returnedState >= 0)
+		if (gameStateNo != returnedState && returnedState <= 5 && returnedState >= 0)
 		{
 			setGameState(returnedState);
 		}
 	}
 	else if (gameState == GameState::CharacterSelection)
 	{
-		int returnedState = menu.options(event, window, 2, player, map);
-		if (gameStateNo != returnedState && returnedState < 6 && returnedState >= 0)
+		int returnedState = menu.options(event, window, 1, player, map);
+		if (gameStateNo != returnedState && returnedState < 5 && returnedState >= 0)
 		{
 			setGameState(returnedState);
 		}
@@ -136,7 +116,7 @@ void Game::processEvents(sf::RenderWindow& window)
 				centerCameraOnPlayer = !centerCameraOnPlayer;
 				break;
 			case sf::Keyboard::Escape:
-				setGameState(4);
+				setGameState(3);
 				break;
 			}
 		case sf::Event::Resized:
@@ -149,8 +129,8 @@ void Game::processEvents(sf::RenderWindow& window)
 	}
 	else if (gameState == GameState::Pause)
 	{
-		int returnedState = menu.options(event, window, 3, player, map);
-		if (gameStateNo != returnedState && returnedState < 6 && returnedState >= 0)
+		int returnedState = menu.options(event, window, 2, player, map);
+		if (gameStateNo != returnedState && returnedState < 5 && returnedState >= 0)
 		{
 			view.zoom(1.f - textScale/10);
 			setGameState(returnedState);
@@ -173,10 +153,21 @@ void Game::processEvents(sf::RenderWindow& window)
 		}
 		view.setCenter(window.getSize().x / 2.0f, window.getSize().y / 2.0f);
 	}
-	else if (gameState == GameState::Exit)
-	{
-		window.close();
-	}
+}
+
+void Game::getScreenResolution()
+{
+	videoMode = sf::VideoMode::getDesktopMode();
+}
+
+Game::Game()
+{
+	getScreenResolution();
+	menu.setDimensions(videoMode.width, videoMode.height);
+	menu.setMenus();
+	settings.antialiasingLevel = 2;
+
+	GameRun();
 }
 
 Game::~Game()

@@ -7,7 +7,6 @@ Map::Map()
 	tile.first.setTexture(tileTexture);
 }
 
-
 Map::~Map()
 {
 }
@@ -65,8 +64,8 @@ bool Map::isColliding(pair <float, float> position, sf::Vector2f bodySize, sf::V
 void Map::createMap()
 {
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dis(2, 50);
-	std::uniform_int_distribution<> dis2(1, 20);
+	std::uniform_int_distribution<> dis(30, 80);
+	std::uniform_int_distribution<> dis2(1, 8);
 	mapDimensions = { dis(gen), dis(gen) };
 	tilesCoords.clear();
 	tiles.clear();

@@ -4,7 +4,7 @@
 
 Menu::Menu()
 {
-	if (!font.loadFromFile("Fonts/texgyreheroscn-regular.otf"))
+	if (!font.loadFromFile("Fonts/neuropol.ttf"))
 	{
 		printf("Can't load font!\n");
 	}
@@ -15,7 +15,7 @@ Menu::Menu()
 		text.setFillColor(sf::Color::Red);
 	}
 
-	for (int i = 0; i < std::max(std::max(std::max(itemsMainMenu, itemsPauseMenu), itemsResMenu), itemsSelectCharacterMenu); i++)
+	for (int i = 0; i < std::max(std::max(itemsMainMenu, itemsPauseMenu), itemsSelectCharacterMenu); i++)
 	{
 		if (i == 1)
 		{
@@ -25,34 +25,7 @@ Menu::Menu()
 		if (i < itemsMainMenu)main.push_back(text);
 		if (i < itemsPauseMenu)pause.push_back(text);
 		if (i < itemsSelectCharacterMenu)selectCharacter.push_back(text);
-		if (i<itemsResMenu)selectResolution.push_back(text);
 	}
-
-	for (int i = 0; i < itemsResMenu; i++)
-	{
-		switch (i)
-		{
-		case 0:
-			selectResolution[i].setString("800x600");
-			break;
-		case 1:
-			selectResolution[i].setString("1024x768");
-			break;
-		case 2:
-			selectResolution[i].setString("1366x768");
-			break;
-		case 3:
-			selectResolution[i].setString("1600x900");
-			break;
-		case 4:
-			selectResolution[i].setString("1920x1080");
-			break;
-		}
-		selectResolution[i].setPosition({ (float)(width / 3), (float)(height / (itemsResMenu / (i / 1.4 + 1))) });
-		selectResolution[i].setScale({ 1.f, 1.f });
-	}
-
-	menu = selectResolution;
 }
 
 void Menu::draw(sf::RenderWindow& window, pair <float, float> position, float& textScale)
@@ -107,59 +80,26 @@ int Menu::options(sf::Event& event, sf::RenderWindow &window, int menuNumber, cl
 			{
 				if (menuNumber == 0)
 				{
-					this->gameStateNumber = 1;
 					if (selectedItemIndex == 0)
 					{
-						height = 600;
-						width = 800;
-					}
-					if (selectedItemIndex == 1)
-					{
-						height = 768;
-						width = 1024;
-					}
-					if (selectedItemIndex == 2)
-					{
-						height = 768;
-						width = 1366;
-					}
-					if (selectedItemIndex == 3)
-					{
-						height = 900;
-						width = 1600;
-					}
-					if (selectedItemIndex == 4)
-					{
-						height = 1080;
-						width = 1920;
-					}
-					setMenus();
-					resizeWindow(window);
-					pickMenu(1);
-					return this->gameStateNumber;
-				}
-				else if (menuNumber == 1)
-				{
-					if (selectedItemIndex == 0)
-					{
-						this->gameStateNumber = 2;
+						this->gameStateNumber = 1;
 						map.createMap();
-						pickMenu(2);
+						pickMenu(1);
 					}
 					if (selectedItemIndex == 1)
 					{
 						// load game
+						return 1000;
 					}
 					if (selectedItemIndex == 2)
 					{
-						this->gameStateNumber = 6;
+						this->gameStateNumber = 5;
 					}
 					return this->gameStateNumber;
 				}
-
-				else if (menuNumber == 2)
+				else if (menuNumber == 1)
 				{
-					gameStateNumber = 3;
+					gameStateNumber = 2;
 					if (selectedItemIndex == 0)
 					{
 						player.setTextureMan();
@@ -168,23 +108,25 @@ int Menu::options(sf::Event& event, sf::RenderWindow &window, int menuNumber, cl
 					{
 						player.setTextureWoman();
 					}
-					pickMenu(3);
+					pickMenu(2);
 					return this->gameStateNumber;
 				}
-				else if (menuNumber == 3)
+
+				else if (menuNumber == 2)
 				{
 					if (selectedItemIndex == 0)
 					{
-						this->gameStateNumber = 3;
+						this->gameStateNumber = 2;
 					}
 					if (selectedItemIndex == 1)
 					{
 						// save game
+						return 1000;
 					}
 					if (selectedItemIndex == 2)
 					{
-						this->gameStateNumber = 1;
-						pickMenu(1);
+						this->gameStateNumber = 0;
+						pickMenu(0);
 					}
 					return this->gameStateNumber;
 				}
@@ -198,15 +140,12 @@ void Menu::pickMenu(int menuNumber)
 	selectedItemIndex = 0;
 	switch (menuNumber) {
 	case 0:
-		menu = selectResolution;
-		break;
-	case 1:
 		menu = main;
 		break;
-	case 2:
+	case 1:
 		menu = selectCharacter;
 		break;
-	case 3:
+	case 2:
 		menu = pause;
 		break;
 	}
@@ -228,9 +167,9 @@ void Menu::setMenus()
 			main[i].setString("Exit Game");
 			break;
 		}
-		main[i].setPosition({ (float)(width / 3), (float)(height / (itemsMainMenu / (i / 1.4 + 0.4))) });
+		main[i].setPosition({ (float)(width / 3), (float)(height / (itemsSelectCharacterMenu / (i / 1.4 + 0.4))) });
 	}
-
+	menu = main;
 	for (int i = 0; i < itemsSelectCharacterMenu; i++)
 	{
 		switch (i)
@@ -263,12 +202,6 @@ void Menu::setMenus()
 	}
 }
 
-void Menu::resizeWindow(sf::RenderWindow & window)
-{
-	window.create(sf::VideoMode((unsigned int)width, (unsigned int)height, 32), "Find or Die", sf::Style::Resize | sf::Style::Close);
-	window.setPosition({ 0,0 });
-}
-
 void Menu::setMenuPosition(pair <float, float>& position, float& textScale)
 {
 	int i = 0;
@@ -277,6 +210,12 @@ void Menu::setMenuPosition(pair <float, float>& position, float& textScale)
 		lines.setScale({ 1.f + textScale, 1.f + textScale });
 		i += 100;
 	}
+}
+
+void Menu::setDimensions(float widthD, float heightD)
+{
+	this->width = widthD;
+	this->height = heightD;
 }
 
 

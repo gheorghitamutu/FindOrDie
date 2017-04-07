@@ -13,7 +13,6 @@ class Game
 {
 public:
 	enum GameState {
-		SetResolution,
 		MainMenu,
 		CharacterSelection,
 		Running,
@@ -22,13 +21,15 @@ public:
 		Exit
 	};
 
+	 Game();
 	~Game();
 
 	void GameRun();
 	void setGameState(int gameStateNumber);
 	void processEvents(sf::RenderWindow& window);
+	void getScreenResolution();
 
-	GameState gameState = SetResolution;
+	GameState gameState = MainMenu;
 
 	Chests chest;
 	Score score;
@@ -41,6 +42,9 @@ public:
 	sf::Event event;
 	sf::View view;
 	sf::ContextSettings settings;
+
+	sf::VideoMode videoMode;
+
 
 	bool centerCameraOnPlayer = false;
 	int gameStateNo = 0;
