@@ -1,7 +1,6 @@
 #include "Menu.h"
 #include "Player.h"
 #include "Map.h"
-
 Menu::Menu()
 {
 	if (!font.loadFromFile("Fonts/neuropol.ttf"))
@@ -63,7 +62,7 @@ void Menu::MoveDown()
 	}
 }
 
-int Menu::options(sf::Event& event, sf::RenderWindow &window, int menuNumber, class Player& player, class Map& map)
+void Menu::options(sf::Event& event, int menuNumber, class Player& player, class Map& map, GameStates& gameState)
 {
 		if (event.type == sf::Event::KeyReleased)
 		{
@@ -82,24 +81,22 @@ int Menu::options(sf::Event& event, sf::RenderWindow &window, int menuNumber, cl
 				{
 					if (selectedItemIndex == 0)
 					{
-						this->gameStateNumber = 1;
+						gameState.setCurrentState(GameStates::GameState::CharacterSelection);
 						map.createMap();
 						pickMenu(1);
 					}
 					if (selectedItemIndex == 1)
 					{
 						// load game
-						return 1000;
 					}
 					if (selectedItemIndex == 2)
 					{
-						this->gameStateNumber = 5;
+						gameState.setCurrentState(GameStates::GameState::Exit);
 					}
-					return this->gameStateNumber;
 				}
 				else if (menuNumber == 1)
 				{
-					gameStateNumber = 2;
+					gameState.setCurrentState(GameStates::GameState::Running);
 					if (selectedItemIndex == 0)
 					{
 						player.setTextureMan();
@@ -109,30 +106,26 @@ int Menu::options(sf::Event& event, sf::RenderWindow &window, int menuNumber, cl
 						player.setTextureWoman();
 					}
 					pickMenu(2);
-					return this->gameStateNumber;
 				}
 
 				else if (menuNumber == 2)
 				{
 					if (selectedItemIndex == 0)
 					{
-						this->gameStateNumber = 2;
+						gameState.setCurrentState(GameStates::GameState::Running);
 					}
 					if (selectedItemIndex == 1)
 					{
 						// save game
-						return 1000;
 					}
 					if (selectedItemIndex == 2)
 					{
-						this->gameStateNumber = 0;
+						gameState.setCurrentState(GameStates::GameState::MainMenu);
 						pickMenu(0);
 					}
-					return this->gameStateNumber;
 				}
 			}
 		}
-		return 1000;
 }
 
 void Menu::pickMenu(int menuNumber)

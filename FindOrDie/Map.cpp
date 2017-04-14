@@ -69,6 +69,7 @@ void Map::createMap()
 	mapDimensions = { dis(gen), dis(gen) };
 	tilesCoords.clear();
 	tiles.clear();
+	nonWalkableObjects.clear();
 	for (int i = 0; i < mapDimensions.second; i++)
 	{
 		for (int j = 0; j < mapDimensions.first; j++)
@@ -117,7 +118,6 @@ void Map::createMap()
 			posY++;
 		}
 	}
-	int i;
 }
 
 bool Map::onSegment(Point p, Point q, Point r)

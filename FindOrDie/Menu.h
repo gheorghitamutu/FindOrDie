@@ -2,7 +2,7 @@
 #include "SFML\Graphics.hpp"
 #include "Player.h"
 #include <vector>
-
+#include "GameStates.h"
 class Menu
 {
 public:
@@ -11,7 +11,7 @@ public:
 
 	void MoveUp();
 	void MoveDown();
-	int options(sf::Event& event, sf::RenderWindow &window, int menuNumber, class Player& player, class Map& map);
+	void options(sf::Event& event, int menuNumber, class Player& player, class Map& map, GameStates& gameState);
 	void pickMenu(int menuNumber);
 	void setMenus();
 	void setMenuPosition(pair <float, float>& position, float& textScale);
@@ -32,7 +32,6 @@ public:
 	int itemsSelectCharacterMenu = 2;
 	int itemsPauseMenu = 3;
 	int menuNumber = 0;
-	int gameStateNumber = 0;
 
 	float width;
 	float height;

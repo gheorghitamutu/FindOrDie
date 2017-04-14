@@ -1,2 +1,9 @@
-﻿  FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\Debug\FindOrDie.exe
+﻿  Menu.cpp
+c:\users\gicu\documents\github\findordie\findordie\menu.cpp(53): warning C4018: '<': signed/unsigned mismatch
+  Game.cpp
+c:\users\gicu\documents\github\findordie\findordie\game.cpp(102): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  main.cpp
+  FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\Debug\FindOrDie.exe
   FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\Debug\FindOrDie.pdb (Partial PDB)

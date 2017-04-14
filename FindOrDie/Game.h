@@ -7,32 +7,20 @@
 #include <iostream>
 #include <vector>
 #include "Chests.h"
-#include "Score.h"
 #include "Menu.h"
+#include "GameStates.h"
 class Game
 {
 public:
-	enum GameState {
-		MainMenu,
-		CharacterSelection,
-		Running,
-		Pause, 
-		End,
-		Exit
-	};
 
 	 Game();
 	~Game();
 
 	void GameRun();
-	void setGameState(int gameStateNumber);
 	void processEvents(sf::RenderWindow& window);
 	void getScreenResolution();
 
-	GameState gameState = MainMenu;
-
 	Chests chest;
-	Score score;
 	Enemy enemies;
 	Map map;
 	Camera camera;
@@ -45,6 +33,7 @@ public:
 
 	sf::VideoMode videoMode;
 
+	GameStates gameState;
 
 	bool centerCameraOnPlayer = false;
 	int gameStateNo = 0;
