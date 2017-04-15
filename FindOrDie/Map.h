@@ -19,6 +19,7 @@ public:
 	Map();
 	~Map();
 	void drawMap(sf::RenderWindow& window);
+	void drawOnlyViewedTiles(sf::View view);
 	pair <float, float> convert2DToIso(pair<float, float> pair);
 	pair <float, float> convertIsoTo2D(pair<float, float> pair);
 	bool isWalkable(pair<int, int> pair);

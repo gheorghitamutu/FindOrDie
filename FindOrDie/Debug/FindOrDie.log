@@ -1,9 +1,45 @@
-﻿  Menu.cpp
+﻿  main.cpp
+  Player.cpp
+c:\users\gicu\documents\github\findordie\findordie\player.cpp(145): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\gicu\documents\github\findordie\findordie\player.cpp(146): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  Menu.cpp
 c:\users\gicu\documents\github\findordie\findordie\menu.cpp(53): warning C4018: '<': signed/unsigned mismatch
+  Map.cpp
+c:\users\gicu\documents\github\findordie\findordie\map.cpp(99): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\gicu\documents\github\findordie\findordie\map.cpp(134): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\utility(172): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  c:\users\gicu\documents\github\findordie\findordie\map.cpp(78): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,int,void,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=int
+          ]
+  c:\users\gicu\documents\github\findordie\findordie\map.cpp(78): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,int,void,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=int
+          ]
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\utility(172): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  c:\users\gicu\documents\github\findordie\findordie\map.cpp(108): note: see reference to function template instantiation 'std::pair<float,float>::pair<_Ty1&,double,void,0>(_Other1,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Ty1=float,
+              _Other1=float &,
+              _Other2=double
+          ]
+  c:\users\gicu\documents\github\findordie\findordie\map.cpp(108): note: see reference to function template instantiation 'std::pair<float,float>::pair<_Ty1&,double,void,0>(_Other1,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Ty1=float,
+              _Other1=float &,
+              _Other2=double
+          ]
   Game.cpp
-c:\users\gicu\documents\github\findordie\findordie\game.cpp(102): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  Enemy.cpp
+c:\users\gicu\documents\github\findordie\findordie\enemy.cpp(95): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\gicu\documents\github\findordie\findordie\enemy.cpp(96): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  Chests.cpp
   Generating Code...
-  Skipping... (no relevant changes detected)
-  main.cpp
   FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\Debug\FindOrDie.exe
   FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\Debug\FindOrDie.pdb (Partial PDB)

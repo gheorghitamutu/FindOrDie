@@ -7,18 +7,24 @@ class Menu
 {
 public:
 	Menu();
-	void draw(sf::RenderWindow & window, pair <float, float> position, float& textScale);
-
+	void draw(sf::RenderWindow& window);
 	void MoveUp();
 	void MoveDown();
-	void options(sf::Event& event, int menuNumber, class Player& player, class Map& map, GameStates& gameState);
-	void pickMenu(int menuNumber);
+	void options(sf::Event& event, class Player& player, class Map& map, GameStates& gameState);
+	void pickMenu();
 	void setMenus();
-	void setMenuPosition(pair <float, float>& position, float& textScale);
 	void setDimensions(float widthD, float heightD);
 
 public:
 	int selectedItemIndex = 0;
+
+	enum class MenuState {
+		Main,
+		SelectCharacter,
+		Pause
+	};
+
+	MenuState menuState = Menu::MenuState::Main;
 
 	sf::Font font;
 	sf::Text text;
@@ -31,7 +37,6 @@ public:
 	int itemsMainMenu = 3;
 	int itemsSelectCharacterMenu = 2;
 	int itemsPauseMenu = 3;
-	int menuNumber = 0;
 
 	float width;
 	float height;

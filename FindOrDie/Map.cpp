@@ -16,6 +16,10 @@ void Map::drawMap(sf::RenderWindow& window)
 	for (auto &tile : tiles) window.draw(tile.first);
 }
 
+void Map::drawOnlyViewedTiles(sf::View view)
+{
+}
+
 pair<float, float> Map::convert2DToIso(pair<float, float> pair)
 {
 	return{ pair.first - pair.second, (pair.first + pair.second) / 2 };

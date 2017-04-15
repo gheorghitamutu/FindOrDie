@@ -28,15 +28,11 @@ public:
 	Menu menu;
 
 	sf::Event event;
-	sf::View view;
+
 	sf::ContextSettings settings;
 
 	sf::VideoMode videoMode;
 
 	GameStates gameState;
-
-	bool centerCameraOnPlayer = false;
-	int gameStateNo = 0;
-	float textScale = 0.f;
 };
 

@@ -10,7 +10,7 @@ Menu::Menu()
 	else
 	{
 		text.setFont(font);
-		text.setScale({ 2.f, 2.f });
+		text.setScale({ 1.5f, 1.5f });
 		text.setFillColor(sf::Color::Red);
 	}
 
@@ -27,9 +27,8 @@ Menu::Menu()
 	}
 }
 
-void Menu::draw(sf::RenderWindow& window, pair <float, float> position, float& textScale)
+void Menu::draw(sf::RenderWindow& window)
 {
-	setMenuPosition(position, textScale);
 	for (auto& lines : menu) {
 		window.draw(lines);
 	}
@@ -62,7 +61,7 @@ void Menu::MoveDown()
 	}
 }
 
-void Menu::options(sf::Event& event, int menuNumber, class Player& player, class Map& map, GameStates& gameState)
+void Menu::options(sf::Event& event, class Player& player, class Map& map, GameStates& gameState)
 {
 		if (event.type == sf::Event::KeyReleased)
 		{
@@ -77,13 +76,13 @@ void Menu::options(sf::Event& event, int menuNumber, class Player& player, class
 			
 			if (event.key.code == sf::Keyboard::Return)
 			{
-				if (menuNumber == 0)
+				if (menuState == Menu::MenuState::Main)
 				{
 					if (selectedItemIndex == 0)
 					{
 						gameState.setCurrentState(GameStates::GameState::CharacterSelection);
+						menuState = Menu::MenuState::SelectCharacter;
 						map.createMap();
-						pickMenu(1);
 					}
 					if (selectedItemIndex == 1)
 					{
@@ -94,9 +93,10 @@ void Menu::options(sf::Event& event, int menuNumber, class Player& player, class
 						gameState.setCurrentState(GameStates::GameState::Exit);
 					}
 				}
-				else if (menuNumber == 1)
+				else if (menuState == Menu::MenuState::SelectCharacter)
 				{
 					gameState.setCurrentState(GameStates::GameState::Running);
+					menuState = Menu::MenuState::Pause;
 					if (selectedItemIndex == 0)
 					{
 						player.setTextureMan();
@@ -105,10 +105,9 @@ void Menu::options(sf::Event& event, int menuNumber, class Player& player, class
 					{
 						player.setTextureWoman();
 					}
-					pickMenu(2);
 				}
 
-				else if (menuNumber == 2)
+				else if (menuState == Menu::MenuState::Pause)
 				{
 					if (selectedItemIndex == 0)
 					{
@@ -121,24 +120,25 @@ void Menu::options(sf::Event& event, int menuNumber, class Player& player, class
 					if (selectedItemIndex == 2)
 					{
 						gameState.setCurrentState(GameStates::GameState::MainMenu);
-						pickMenu(0);
+						menuState = Menu::MenuState::Main;
 					}
 				}
+				pickMenu();
 			}
 		}
 }
 
-void Menu::pickMenu(int menuNumber)
+void Menu::pickMenu()
 {
 	selectedItemIndex = 0;
-	switch (menuNumber) {
-	case 0:
+	switch (menuState) {
+	case Menu::MenuState::Main:
 		menu = main;
 		break;
-	case 1:
+	case Menu::MenuState::SelectCharacter:
 		menu = selectCharacter;
 		break;
-	case 2:
+	case Menu::MenuState::Pause:
 		menu = pause;
 		break;
 	}
@@ -160,7 +160,7 @@ void Menu::setMenus()
 			main[i].setString("Exit Game");
 			break;
 		}
-		main[i].setPosition({ (float)(width / 3), (float)(height / (itemsSelectCharacterMenu / (i / 1.4 + 0.4))) });
+		main[i].setPosition({ (float)(width / 3), (float)(height / (itemsSelectCharacterMenu / (i / 1.9 + 0.4))) });
 	}
 	menu = main;
 	for (int i = 0; i < itemsSelectCharacterMenu; i++)
@@ -174,7 +174,7 @@ void Menu::setMenus()
 			selectCharacter[i].setString("Female");
 			break;
 		}
-		selectCharacter[i].setPosition({ (float)(width / 3), (float)(height / (itemsSelectCharacterMenu / (i / 1.4 + 0.4))) });
+		selectCharacter[i].setPosition({ (float)(width / 3), (float)(height / (itemsSelectCharacterMenu / (i / 1.9 + 0.4))) });
 	}
 
 	for (int i = 0; i < itemsPauseMenu; i++)
@@ -191,17 +191,7 @@ void Menu::setMenus()
 			pause[i].setString("Exit Game to Main Menu");
 			break;
 		}
-		pause[i].setPosition({ (float)(width / 3), (float)(height / (itemsPauseMenu / (i / 1.4 + 0.4))) });
-	}
-}
-
-void Menu::setMenuPosition(pair <float, float>& position, float& textScale)
-{
-	int i = 0;
-	for (auto& lines : menu) {
-		lines.setPosition(position.first - width/3, position.second + i - height/3);
-		lines.setScale({ 1.f + textScale, 1.f + textScale });
-		i += 100;
+		pause[i].setPosition({ (float)(width / 3), (float)(height / (itemsPauseMenu / (i / 1.9 + 0.4))) });
 	}
 }
 
@@ -210,7 +200,6 @@ void Menu::setDimensions(float widthD, float heightD)
 	this->width = widthD;
 	this->height = heightD;
 }
-
 
 Menu::~Menu()
 {

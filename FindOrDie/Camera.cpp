@@ -4,78 +4,93 @@ Camera::Camera()
 {
 }
 
-
-
 Camera::~Camera()
 {
 }
 
-void Camera::CameraNormal(sf::RenderWindow& window)
+void Camera::setMenuView(sf::RenderWindow& window)
 {
-	camera = window.getDefaultView();
-	camera.setSize(camera.getSize().x, camera.getSize().y);
-	camera.setViewport(sf::FloatRect(0, 0, 1, 1));
-	window.setView(camera);
+	menuView = window.getDefaultView();
+	window.setView(menuView);
 }
 
 
-void Camera::CameraPerspective(sf::RenderWindow& window, sf::Vector2f offset, sf::View camera, bool &centerCameraOnPlayer)
+void Camera::CameraPerspective(sf::RenderWindow& window, std::pair<float,float> offset)
 {
-	if (centerCameraOnPlayer) {
-		camera.setCenter(offset);
+	if (centerCameraOnPlayer)
+	{
+		playerView.setCenter(offset.first, offset.second);
 		lastKnownPosition = offset;
 	}
-	else {
-		if (initialPosition) camera.setCenter(lastKnownPosition);
-		else {
-			lastKnownPosition = camera.getCenter();
+	else
+	{
+		if (initialPosition)
+		{
+			playerView.setCenter(lastKnownPosition.first, lastKnownPosition.second);
+		}
+		else
+		{
+			lastKnownPosition.first = playerView.getCenter().x;
+			lastKnownPosition.second = playerView.getCenter().y;
 		}
 	}
-	camera.setViewport(sf::FloatRect(0, 0, 1, 1));
-	window.setView(camera);
+	window.setView(playerView);
 }
 
 void Camera::centerOnPlayer(sf::RenderWindow& window, sf::Vector2f(playerPosition))
 {
-	camera.setCenter(playerPosition);
-	window.setView(camera);
+	playerView.setCenter(playerPosition);
+	window.setView(playerView);
 }
 
-void Camera::getAspectRatio(sf::RenderWindow & window)
+float Camera::getAspectRatio(std::pair<unsigned int, unsigned int> dimensions)
 {
-	aspectRatio = float(window.getSize().x) / float(window.getSize().y);
+	return float(dimensions.first) / float(dimensions.second);
 }
 
-void Camera::draggableCamera(sf::RenderWindow & window, sf::Event event, bool& centerCameraOnPlayer, sf::View &camera)
+void Camera::draggableCamera(sf::RenderWindow & window, sf::Event event)
 {
 	position = sf::Mouse::getPosition(window);
-	cameraCenter = camera.getCenter();
+	cameraCenter = playerView.getCenter();
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 	{
-		window.setMouseCursorVisible(false);
-		clock.restart().asSeconds(); // Mos Craciun si prietenii sai
+		clock.restart().asSeconds();
 		timeElapsed = clock.getElapsedTime();
-		while (timeElapsed.asSeconds() <= 0.05) {
-			//std::cout << timeElapsed.asSeconds() << std::endl;
+		while (timeElapsed.asSeconds() <= 0.05)
+		{
 			timeElapsed = clock.getElapsedTime();
 		}
 	if (event.type == sf::Event::MouseMoved)
 		{
-		deltaPosition.x = (position.x - sf::Mouse::getPosition(window).x);// *8;
-		deltaPosition.y = (position.y - sf::Mouse::getPosition(window).y)*2;// *8 * 2;
-		//		std::cout << position.x << " " << sf::Mouse::getPosition(window).x << std::endl;
-			if (initialPosition) {
-
+		deltaPosition.x = (position.x - sf::Mouse::getPosition(window).x);
+		deltaPosition.y = (position.y - sf::Mouse::getPosition(window).y) * 2;
+			if (initialPosition) 
+			{
 				initialPosition = !initialPosition;
 				centerCameraOnPlayer = false;
-				camera.setCenter(lastKnownPosition.x, lastKnownPosition.y);
+				playerView.setCenter(lastKnownPosition.first, lastKnownPosition.second);
 			}
-			camera.setCenter(cameraCenter.x + deltaPosition.x, cameraCenter.y + deltaPosition.y);
+			playerView.setCenter(cameraCenter.x + deltaPosition.x, cameraCenter.y + deltaPosition.y);
 		}
 	}
-	else {
+	else
+	{
 		initialPosition = true;
-		camera.setCenter(lastKnownPosition.x, lastKnownPosition.y);
-		window.setMouseCursorVisible(true);
+		playerView.setCenter(lastKnownPosition.first, lastKnownPosition.second);
 	}
+}
+
+void Camera::zoomPlayerView(sf::Event event)
+{
+	playerView.zoom(1.f + event.mouseWheel.delta*0.1f);
+}
+
+void Camera::centerCameraOnPlayerBool()
+{
+	centerCameraOnPlayer = !centerCameraOnPlayer;
+}
+
+void Camera::playerViewSetSize(std::pair<unsigned int, unsigned int> dimensions)
+{
+	playerView.setSize(dimensions.second * getAspectRatio(dimensions), dimensions.second);
 }

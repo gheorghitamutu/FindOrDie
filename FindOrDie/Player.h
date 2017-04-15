@@ -10,8 +10,8 @@ class Player
 public:
 	Player();
 	~Player();
-	void Update(sf::Event event, class Map& map);
-	void Update(int row, float deltaTime);
+	void Update(sf::Event& event, class Map& map);
+	void UpdateAnimation(int row, float deltaTime);
 	void Draw(sf::RenderWindow& window);
 	void RestartClock();
 	void StartingPosition(sf::RenderWindow& window);

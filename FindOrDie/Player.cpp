@@ -10,7 +10,7 @@ Player::Player()
 	playerBody.setTexture(&texture);
 }
 
-void Player::Update(sf::Event event, Map& map)
+void Player::Update(sf::Event& event, Map& map)
 {
 	velocity.x = 0.0f;
 	velocity.y = 0.0f;
@@ -105,7 +105,7 @@ void Player::Update(sf::Event event, Map& map)
 	}
 
 	if (map.isColliding(returnPlayer2DPosition(), returnPlayerBodySize(), velocity))playerBody.move(velocity);
-	Update(row, deltaTime*shiftIncreaseSpeed);
+	UpdateAnimation(row, deltaTime*shiftIncreaseSpeed);
 	playerBody.setTextureRect(uvRect);
 }
 
@@ -146,7 +146,7 @@ void Player::Animation()
 	uvRect.height = texture.getSize().y / float(imageCount.y);	
 }
 
-void Player::Update(int row, float deltaTime)
+void Player::UpdateAnimation(int row, float deltaTime)
 {
 	currentImage.y = row;
 	totalTime += deltaTime;
