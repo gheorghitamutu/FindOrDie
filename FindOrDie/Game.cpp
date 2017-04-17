@@ -1,8 +1,8 @@
 #include "Game.h"
 void Game::GameRun()
 {
-	sf::RenderWindow window(videoMode, "Find Or Die!", sf::Style::Fullscreen, settings);
-	window.setMouseCursorVisible(false);
+	sf::RenderWindow window(videoMode, "Find Or Die!", sf::Style::Resize, settings);
+	window.setMouseCursorVisible(true);
 	window.setFramerateLimit(60);
 	while (window.isOpen())
 	{

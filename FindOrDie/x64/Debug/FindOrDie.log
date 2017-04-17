@@ -1,2 +1,4 @@
-﻿  FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\x64\Debug\FindOrDie.exe
+﻿  Camera.cpp
+c:\users\gicu\documents\github\findordie\findordie\camera.cpp(92): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\x64\Debug\FindOrDie.exe
   FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\x64\Debug\FindOrDie.pdb (Partial PDB)

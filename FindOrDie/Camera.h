@@ -27,6 +27,7 @@ private:
 
 	sf::View playerView, menuView;
 
+	bool rightClickWasPressed = false;
 	bool initialPosition = true;
 	bool centerCameraOnPlayer = true;
 };

@@ -50,33 +50,26 @@ float Camera::getAspectRatio(std::pair<unsigned int, unsigned int> dimensions)
 
 void Camera::draggableCamera(sf::RenderWindow & window, sf::Event event)
 {
-	position = sf::Mouse::getPosition(window);
-	cameraCenter = playerView.getCenter();
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && !rightClickWasPressed)
 	{
-		clock.restart().asSeconds();
-		timeElapsed = clock.getElapsedTime();
-		while (timeElapsed.asSeconds() <= 0.05)
-		{
-			timeElapsed = clock.getElapsedTime();
-		}
-	if (event.type == sf::Event::MouseMoved)
-		{
-		deltaPosition.x = (position.x - sf::Mouse::getPosition(window).x);
-		deltaPosition.y = (position.y - sf::Mouse::getPosition(window).y) * 2;
-			if (initialPosition) 
+		position = sf::Mouse::getPosition(window);
+		rightClickWasPressed = true;
+		cameraCenter = playerView.getCenter();
+	}
+	else if (!sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	{
+		rightClickWasPressed = false;
+	}
+	if (rightClickWasPressed)
+	{
+			deltaPosition.x = (position.x - sf::Mouse::getPosition(window).x);
+			deltaPosition.y = (position.y - sf::Mouse::getPosition(window).y);
+			if (initialPosition || centerCameraOnPlayer)
 			{
-				initialPosition = !initialPosition;
+				initialPosition = false;
 				centerCameraOnPlayer = false;
-				playerView.setCenter(lastKnownPosition.first, lastKnownPosition.second);
 			}
 			playerView.setCenter(cameraCenter.x + deltaPosition.x, cameraCenter.y + deltaPosition.y);
-		}
-	}
-	else
-	{
-		initialPosition = true;
-		playerView.setCenter(lastKnownPosition.first, lastKnownPosition.second);
 	}
 }
 
