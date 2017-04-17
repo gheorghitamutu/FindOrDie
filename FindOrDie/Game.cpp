@@ -1,5 +1,4 @@
 #include "Game.h"
-#include<thread>
 void Game::GameRun()
 {
 	sf::RenderWindow window(videoMode, "Find Or Die!", sf::Style::Fullscreen, settings);
@@ -8,7 +7,7 @@ void Game::GameRun()
 	while (window.isOpen())
 	{
 		while (window.pollEvent(event))
-		{
+		{ 
 			processEvents(window);
 		}
 		window.clear(sf::Color::Black);
