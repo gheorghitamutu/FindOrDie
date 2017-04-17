@@ -15,29 +15,25 @@ void Camera::setMenuView(sf::RenderWindow& window)
 }
 
 
-void Camera::CameraPerspective(sf::RenderWindow& window, std::pair<float,float> offset)
+void Camera::CameraFollowPlayer(sf::RenderWindow& window, std::pair<float,float>& playerPosition)
 {
-	if (centerCameraOnPlayer)
+	if (centerCameraOnPlayer && lastKnownPosition != playerPosition )
 	{
-		playerView.setCenter(offset.first, offset.second);
-		lastKnownPosition = offset;
+		playerView.move(-(lastKnownPosition.first - playerPosition.first), -(lastKnownPosition.second - playerPosition.second));
+		lastKnownPosition = playerPosition;
+		window.setView(playerView);
 	}
 	else
 	{
 		if (initialPosition)
 		{
 			playerView.setCenter(lastKnownPosition.first, lastKnownPosition.second);
-		}
-		else
-		{
-			lastKnownPosition.first = playerView.getCenter().x;
-			lastKnownPosition.second = playerView.getCenter().y;
+			initialPosition = false;
 		}
 	}
-	window.setView(playerView);
 }
 
-void Camera::centerOnPlayer(sf::RenderWindow& window, sf::Vector2f(playerPosition))
+void Camera::centerOnPlayer(sf::RenderWindow& window, sf::Vector2f& playerPosition)
 {
 	playerView.setCenter(playerPosition);
 	window.setView(playerView);
@@ -70,6 +66,7 @@ void Camera::draggableCamera(sf::RenderWindow & window, sf::Event event)
 				centerCameraOnPlayer = false;
 			}
 			playerView.setCenter(cameraCenter.x + deltaPosition.x, cameraCenter.y + deltaPosition.y);
+			window.setView(playerView);
 	}
 }
 

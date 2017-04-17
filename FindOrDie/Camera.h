@@ -7,8 +7,8 @@ public:
 	Camera();
 	~Camera();
 	void setMenuView(sf::RenderWindow & window);
-	void CameraPerspective(sf::RenderWindow& window, std::pair<float, float>);
-	void centerOnPlayer(sf::RenderWindow& window, sf::Vector2f(playerPosition));
+	void CameraFollowPlayer(sf::RenderWindow& window, std::pair<float, float>& playerPosition);
+	void centerOnPlayer(sf::RenderWindow& window, sf::Vector2f& playerPosition);
 	float getAspectRatio(std::pair<unsigned int, unsigned int> dimensions);
 	void draggableCamera(sf::RenderWindow& window, sf::Event event);
 	void zoomPlayerView(sf::Event event);

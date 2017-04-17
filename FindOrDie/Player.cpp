@@ -121,7 +121,7 @@ void Player::RestartClock()
 
 void Player::StartingPosition(sf::RenderWindow& window)
 {
-	playerBody.setPosition({ 100, 100 });
+	playerBody.setPosition({ 400, 400 });
 }
 
 void Player::setTextureWoman()

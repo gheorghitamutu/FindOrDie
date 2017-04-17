@@ -1,8 +1,8 @@
 #include "Game.h"
 void Game::GameRun()
 {
-	sf::RenderWindow window(videoMode, "Find Or Die!", sf::Style::Resize, settings);
-	window.setMouseCursorVisible(true);
+	sf::RenderWindow window(videoMode, "Find Or Die!", sf::Style::Fullscreen, settings);
+	window.setMouseCursorVisible(false);
 	window.setFramerateLimit(60);
 	while (window.isOpen())
 	{
@@ -10,7 +10,6 @@ void Game::GameRun()
 		{ 
 			processEvents(window);
 		}
-		window.clear(sf::Color::Black);
 		if (gameState.getCurrentState() == GameStates::GameState::MainMenu)
 		{
 			camera.setMenuView(window);
@@ -29,7 +28,7 @@ void Game::GameRun()
 		{
 			map.drawMap(window);
 			player.Update(event, map);
-			camera.CameraPerspective(window, player.returnPlayer2DPosition());
+			camera.CameraFollowPlayer(window, player.returnPlayer2DPosition());
 		//	enemies.Draw(window);
 		//	chest.DrawChest(window);
 			player.Draw(window);
@@ -37,7 +36,7 @@ void Game::GameRun()
 			
 		}
 		window.display();
-
+		window.clear(sf::Color::Black);
 	}
 }
 
