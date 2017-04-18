@@ -23,8 +23,8 @@ public:
 	Chests chest;
 	Enemy enemies;
 	Map map;
-	Camera camera;
 	Player player;
+	Camera camera;
 	Menu menu;
 
 	sf::Event event;

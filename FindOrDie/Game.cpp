@@ -3,7 +3,6 @@ void Game::GameRun()
 {
 	sf::RenderWindow window(videoMode, "Find Or Die!", sf::Style::Fullscreen, settings);
 	window.setMouseCursorVisible(false);
-	window.setFramerateLimit(60);
 	while (window.isOpen())
 	{
 		while (window.pollEvent(event))
@@ -58,17 +57,14 @@ void Game::processEvents(sf::RenderWindow& window)
 	else if (gameState.getCurrentState() == GameStates::GameState::Running)
 	{
 		camera.draggableCamera(window, event);
-		if (event.type == sf::Event::MouseWheelMoved)
-		{
-			camera.zoomPlayerView(event);
-		}
+		camera.zoomPlayerView(window, event);
 		switch (event.type)
 		{
 		case sf::Event::KeyReleased:
 			switch (event.key.code)
 			{
 			case sf::Keyboard::Space:
-				camera.centerCameraOnPlayerBool();
+				camera.centerOnPlayer(window, player.returnPlayer2DPosition());
 				break;
 			case sf::Keyboard::Escape:
 				gameState.setCurrentState(GameStates::GameState::Pause);
@@ -96,6 +92,8 @@ Game::Game()
 	menu.setMenus();
 	settings.antialiasingLevel = 2;
 	camera.playerViewSetSize({ videoMode.width, videoMode.height });
+	camera.playerViewSetCenter({ player.returnPlayer2DPosition() });
+	camera.setLastKnownPosition(player.returnPlayer2DPosition());
 	GameRun();
 }
 

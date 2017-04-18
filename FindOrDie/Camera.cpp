@@ -28,15 +28,15 @@ void Camera::CameraFollowPlayer(sf::RenderWindow& window, std::pair<float,float>
 		if (initialPosition)
 		{
 			playerView.setCenter(lastKnownPosition.first, lastKnownPosition.second);
+			window.setView(playerView);
 			initialPosition = false;
 		}
 	}
 }
 
-void Camera::centerOnPlayer(sf::RenderWindow& window, sf::Vector2f& playerPosition)
+void Camera::setLastKnownPosition(std::pair<float, float>& position)
 {
-	playerView.setCenter(playerPosition);
-	window.setView(playerView);
+	lastKnownPosition = position;
 }
 
 float Camera::getAspectRatio(std::pair<unsigned int, unsigned int> dimensions)
@@ -44,7 +44,7 @@ float Camera::getAspectRatio(std::pair<unsigned int, unsigned int> dimensions)
 	return float(dimensions.first) / float(dimensions.second);
 }
 
-void Camera::draggableCamera(sf::RenderWindow & window, sf::Event event)
+void Camera::draggableCamera(sf::RenderWindow& window, sf::Event event)
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && !rightClickWasPressed)
 	{
@@ -70,17 +70,34 @@ void Camera::draggableCamera(sf::RenderWindow & window, sf::Event event)
 	}
 }
 
-void Camera::zoomPlayerView(sf::Event event)
+void Camera::zoomPlayerView(sf::RenderWindow& window, sf::Event event)
 {
-	playerView.zoom(1.f + event.mouseWheel.delta*0.1f);
+	if (event.type == sf::Event::MouseWheelMoved)
+	{
+		playerView.zoom(1.f + event.mouseWheel.delta*0.1f);
+		window.setView(playerView);
+	}
 }
 
-void Camera::centerCameraOnPlayerBool()
+void Camera::centerOnPlayer(sf::RenderWindow& window, std::pair<float, float>& playerPosition)
 {
-	centerCameraOnPlayer = !centerCameraOnPlayer;
+	if (centerCameraOnPlayer) {
+		centerCameraOnPlayer = false;
+	}
+	else
+	{
+		centerCameraOnPlayer = true;
+		playerView.setCenter({ playerPosition.first, playerPosition.second });
+		window.setView(playerView);
+	}
 }
 
 void Camera::playerViewSetSize(std::pair<unsigned int, unsigned int> dimensions)
 {
 	playerView.setSize(dimensions.second * getAspectRatio(dimensions), dimensions.second);
+}
+
+void Camera::playerViewSetCenter(std::pair<float, float> center)
+{
+	 playerView.setCenter({ center.first, center.second }); 
 }

@@ -5,6 +5,7 @@ Map::Map()
 {
 	tileTexture.loadFromFile("iso-64x64-building.png");
 	tile.first.setTexture(tileTexture);
+	extreme = { 10000, 0 };
 }
 
 Map::~Map()
@@ -63,6 +64,17 @@ bool Map::isColliding(pair <float, float> position, sf::Vector2f bodySize, sf::V
 		}
 	}
 	return true;
+
+	//// for simple bounding box collision
+	//for (auto& tile : tiles)
+	//{
+	//	if (tile.first.getGlobalBounds().contains(position.first + velocity.x, position.second + velocity.y + bodySize.y) && !tile.second)
+	//	{
+
+	//		return false;
+	//	}
+	//}
+	//return true;
 }
 
 void Map::createMap()
@@ -163,7 +175,7 @@ bool Map::isInside(Point polygon[], int n, Point p)
 	{
 		return false;
 	}
-	Point extreme = { 10000, p.y };
+	extreme.y = p.y;
 	int count = 0, i = 0;
 	do
 	{
