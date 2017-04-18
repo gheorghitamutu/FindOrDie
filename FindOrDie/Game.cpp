@@ -61,6 +61,7 @@ void Game::processEvents(sf::RenderWindow& window)
 	{
 		camera.draggableCamera(window, event);
 		camera.zoomPlayerView(window, event);
+		player.increasePlayerSpeed(event);
 		switch (event.type)
 		{
 		case sf::Event::KeyReleased:

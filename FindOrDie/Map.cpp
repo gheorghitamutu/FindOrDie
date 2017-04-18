@@ -105,7 +105,7 @@ void Map::createMap()
 				}
 				else
 				{
-					tilesCoords.push_back({ { 0,3 }, true });
+					tilesCoords.push_back({ {3,0}, true });
 				}
 			}
 		}
@@ -167,8 +167,8 @@ void Map::setViewBounds(sf::FloatRect& viewBounds)
 	//this is for drawing tiles on a smaller area of a view | this can also be done with a viewport
 	this->viewBounds.left += 300;
 	this->viewBounds.top += 300;
-	this->viewBounds.height -= 600;
-	this->viewBounds.width -= 600;
+	this->viewBounds.height -= 500;
+	this->viewBounds.width -= 500;
 }
 
 bool Map::onSegment(Point p, Point q, Point r)

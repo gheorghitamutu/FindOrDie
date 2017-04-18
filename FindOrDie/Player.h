@@ -18,14 +18,41 @@ public:
 	void setTextureWoman();
 	void setTextureMan();
 	void Animation();
-
+	pair <float, float> returnPlayer2DPosition();
 	pair <float, float> convert2DToIso(pair<float, float> pair);
 	pair <float, float> convertIsoTo2D(pair<float, float> pair);
-	
 	sf::Vector2f returnPlayerBodySize();
+	void increasePlayerSpeed(sf::Event& event);
+private:
+	enum class AnimationIndex
+	{
+		RunningNorth,
+		RunningSouth,
+		RunningEast,
+		RunningWest,
+		RunningNorthEast,
+		RunningNorthWest,
+		RunningSouthEast,
+		RunningSoutWest,
+		WalkingNorth,
+		WalkingSouth,
+		WalkingEast,
+		WalkingWest, 
+		WalkingNorthEast,
+		WalkingNorthWest,
+		WalkingSouthEast,
+		WalkingSoutWest,
+		IdleNorth,
+		IdleSouth,
+		IdleEast,
+		IdleWest,
+		IdleNorthEast,
+		IdleNorthWest,
+		IdleSouthEast,
+		IdleSoutWest,
+	};
 
 	sf::IntRect uvRect;
-	pair <float, float> returnPlayer2DPosition();
 	sf::Texture texture;
 
 	sf::RectangleShape playerBody;
@@ -37,7 +64,7 @@ public:
 
 	bool cameraPerspective = true;
 	unsigned int row = 0;
-	unsigned int shiftIncreaseSpeed;
+	unsigned int increaseSpeed;
 	float speed = 25.0f; // movement speed
 	float deltaTime = 0.0f;
 	float diagRunSpeed;

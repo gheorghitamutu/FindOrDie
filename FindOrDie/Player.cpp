@@ -15,10 +15,8 @@ void Player::Update(sf::Event& event, Map& map)
 	velocity.x = 0.0f;
 	velocity.y = 0.0f;
 
-	shiftIncreaseSpeed = 1;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))shiftIncreaseSpeed = 2;
-	diagRunSpeed = speed*deltaTime*shiftIncreaseSpeed;
-	normalRunSpeed = speed*deltaTime * shiftIncreaseSpeed;
+	diagRunSpeed = speed*deltaTime*increaseSpeed;
+	normalRunSpeed = speed*deltaTime * increaseSpeed;
 	diagSpeed = speed*deltaTime;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
@@ -105,7 +103,7 @@ void Player::Update(sf::Event& event, Map& map)
 	}
 
 	if (map.isColliding(returnPlayer2DPosition(), returnPlayerBodySize(), velocity))playerBody.move(velocity);
-	UpdateAnimation(row, deltaTime*shiftIncreaseSpeed);
+	UpdateAnimation(row, deltaTime*increaseSpeed);
 	playerBody.setTextureRect(uvRect);
 }
 
@@ -177,6 +175,18 @@ pair<float, float> Player::convertIsoTo2D(pair<float, float> pair)
 sf::Vector2f Player::returnPlayerBodySize()
 {
 	return playerBody.getSize();
+}
+
+void Player::increasePlayerSpeed(sf::Event & event)
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
+	{
+		increaseSpeed = 2;
+	}
+	else
+	{
+		increaseSpeed = 1;
+	}
 }
 
 
