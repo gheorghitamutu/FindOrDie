@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <future>
 void Game::GameRun()
 {
 	sf::RenderWindow window(videoMode, "Find Or Die!", sf::Style::Fullscreen, settings);
@@ -9,6 +10,7 @@ void Game::GameRun()
 		{ 
 			processEvents(window);
 		}
+		std::future<vector<sf::Sprite>> drawTheseTiles(std::async(&Map::checkWhatToDraw, &map));
 		if (gameState.getCurrentState() == GameStates::GameState::MainMenu)
 		{
 			camera.setMenuView(window);
@@ -25,6 +27,7 @@ void Game::GameRun()
 		}
 		else if (gameState.getCurrentState() == GameStates::GameState::Running)
 		{
+			map.setWhatToDraw(drawTheseTiles.get());
 			map.drawMap(window);
 			player.Update(event, map);
 			camera.CameraFollowPlayer(window, player.returnPlayer2DPosition());
@@ -71,8 +74,9 @@ void Game::processEvents(sf::RenderWindow& window)
 				break;
 			}
 		}
-		enemies.createEnemy(window);
-		enemies.goToPlayer({ player.returnPlayer2DPosition().first, player.returnPlayer2DPosition().second });
+		map.setViewBounds(camera.getPlayerViewBounds());
+	    //enemies.createEnemy(window);
+		//enemies.goToPlayer({ player.returnPlayer2DPosition().first, player.returnPlayer2DPosition().second });
 	}
 	else if (gameState.getCurrentState() == GameStates::GameState::Pause)
 	{
@@ -94,6 +98,7 @@ Game::Game()
 	camera.playerViewSetSize({ videoMode.width, videoMode.height });
 	camera.playerViewSetCenter({ player.returnPlayer2DPosition() });
 	camera.setLastKnownPosition(player.returnPlayer2DPosition());
+	map.setViewBounds(camera.getPlayerViewBounds());
 	GameRun();
 }
 

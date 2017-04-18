@@ -8,6 +8,7 @@
 #include<math.h>
 #include <vector>
 #include <random>
+#include <thread>
 
 #define SIZE 64
 
@@ -27,6 +28,9 @@ public:
 	bool containsPoint(pair<float, float> point, vector<pair<float, float>> nonWalkableAreaCoords);
 	bool isColliding(pair <float, float> returnPlayer2DPosition, sf::Vector2f bodySize, sf::Vector2f velocity);
 	void createMap();
+	vector<sf::Sprite> checkWhatToDraw();
+	void setWhatToDraw(vector<sf::Sprite> drawTheseTiles);
+	void setViewBounds(sf::FloatRect& viewBounds);
 public:
 	std::random_device rd;
 	sf::Texture tileTexture;
@@ -48,5 +52,8 @@ public:
 	int orientation(Point p, Point q, Point r);
 	bool doIntersect(Point p1, Point q1, Point p2, Point q2);
 	bool isInside(Point polygon[], int n, Point p);
+
+	vector<sf::Sprite> drawThese;
+	sf::FloatRect viewBounds;
 };
 

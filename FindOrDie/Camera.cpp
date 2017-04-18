@@ -101,3 +101,13 @@ void Camera::playerViewSetCenter(std::pair<float, float> center)
 {
 	 playerView.setCenter({ center.first, center.second }); 
 }
+
+sf::FloatRect Camera::getPlayerViewBounds()
+{
+		sf::FloatRect rt;
+		rt.left = playerView.getCenter().x - playerView.getSize().x / 2.f;
+		rt.top = playerView.getCenter().y - playerView.getSize().y / 2.f;
+		rt.width = playerView.getSize().x;
+		rt.height = playerView.getSize().y;
+		return rt;
+}

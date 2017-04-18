@@ -15,6 +15,8 @@ public:
 	void centerOnPlayer(sf::RenderWindow& window, std::pair<float, float>& playerPosition);
 	void playerViewSetSize(std::pair<unsigned int, unsigned int> dimensions);
 	void playerViewSetCenter(std::pair<float, float> center);
+	sf::FloatRect getPlayerViewBounds();
+
 private: 
 	sf::Vector2i position;
 	sf::Vector2i deltaPosition;

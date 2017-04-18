@@ -14,7 +14,11 @@ Map::~Map()
 
 void Map::drawMap(sf::RenderWindow& window)
 {
-	for (auto &tile : tiles) window.draw(tile.first);
+	for (auto &tile : drawThese)
+	{
+			window.draw(tile);
+	}
+
 }
 
 void Map::drawOnlyViewedTiles(sf::View view)
@@ -80,7 +84,7 @@ bool Map::isColliding(pair <float, float> position, sf::Vector2f bodySize, sf::V
 void Map::createMap()
 {
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dis(30, 80);
+	std::uniform_int_distribution<> dis(100, 100);
 	std::uniform_int_distribution<> dis2(1, 8);
 	mapDimensions = { dis(gen), dis(gen) };
 	tilesCoords.clear();
@@ -134,6 +138,37 @@ void Map::createMap()
 			posY++;
 		}
 	}
+}
+
+vector<sf::Sprite> Map::checkWhatToDraw()
+{
+	std::vector<sf::Sprite> drawTheseLocal;
+	for (auto &tile : tiles)
+	{
+		if (tile.first.getGlobalBounds().intersects(viewBounds))
+		{
+			drawTheseLocal.push_back(tile.first);
+		}
+	}
+	return drawTheseLocal;
+}
+
+void Map::setWhatToDraw(vector<sf::Sprite> drawTheseTiles)
+{
+	drawThese = drawTheseTiles;
+}
+
+void Map::setViewBounds(sf::FloatRect& viewBounds)
+{
+	this->viewBounds = viewBounds;
+    //this is for drawing tiles on the entire view
+	//this->viewBounds.height += 300;
+	//this->viewBounds.width += 300;
+	//this is for drawing tiles on a smaller area of a view | this can also be done with a viewport
+	this->viewBounds.left += 300;
+	this->viewBounds.top += 300;
+	this->viewBounds.height -= 600;
+	this->viewBounds.width -= 600;
 }
 
 bool Map::onSegment(Point p, Point q, Point r)
