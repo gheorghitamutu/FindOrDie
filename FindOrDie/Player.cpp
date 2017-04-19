@@ -4,107 +4,156 @@
 Player::Player()
 {
 	setTextureMan();
-	Animation();
 	playerBody.setSize(sf::Vector2f(25.f, 25.f));
 	playerBody.setPosition({ 300, 300 });
 	playerBody.setTexture(&texture);
+	for(int i = 0; i<int(AnimationIndex::Count); i++)
+	{
+		animations[i] = Animation(characterTextureSize, i*characterTextureSize, characterTextureSize, characterTextureSize, texture);
+	}
+
 }
 
-void Player::Update(sf::Event& event, Map& map)
+void Player::HandleEvents(sf::Event& event)
 {
-	velocity.x = 0.0f;
-	velocity.y = 0.0f;
+	sf::Vector2f direction = { 0.0f, 0.0f };
 
-	diagRunSpeed = speed*deltaTime*increaseSpeed;
-	normalRunSpeed = speed*deltaTime * increaseSpeed;
-	diagSpeed = speed*deltaTime;
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-		row = 16;
-		velocity.x -= diagRunSpeed;
-		velocity.y += diagRunSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
+	{
+		direction.x -= 1;
+		direction.y += 1;
+		currentAnimation = AnimationIndex::RunningSouthWest;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-		row = 18;
-		velocity.x += diagRunSpeed;
-		velocity.y += diagRunSpeed;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
+	{
+		direction.x += 1;
+		direction.y += 1;
+		currentAnimation = AnimationIndex::RunningSouthEast;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-		row = 17;
-		velocity.x -= diagRunSpeed;
-		velocity.y -= diagRunSpeed;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
+	{
+		direction.x -= 1;
+		direction.y -= 1;
+		currentAnimation = AnimationIndex::RunningNorthWest;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-		row = 19;
-		velocity.x += diagRunSpeed;
-		velocity.y -= diagRunSpeed;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
+	{
+		direction.x += 1;
+		direction.y -= 1;
+		currentAnimation = AnimationIndex::RunningNorthEast;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-		row = 12;
-		velocity.x -= diagSpeed;
-		velocity.y += diagSpeed;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+	{
+		direction.x -= 1;
+		direction.y += 1;
+		currentAnimation = AnimationIndex::WalkingSouthWest;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-		row = 14;
-		velocity.x += diagSpeed;
-		velocity.y += diagSpeed;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+	{
+		direction.x += 1;
+		direction.y += 1;
+		currentAnimation = AnimationIndex::WalkingSouthEast;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-		row = 13;
-		velocity.x -= diagSpeed;
-		velocity.y -= diagSpeed;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+	{
+		direction.x -= 1;
+		direction.y -= 1;
+		currentAnimation = AnimationIndex::WalkingNorthWest;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-		row = 15;
-		velocity.x += diagSpeed;
-		velocity.y -= diagSpeed;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+	{
+		direction.x += 1;
+		direction.y -= 1;
+		currentAnimation = AnimationIndex::WalkingNorthEast;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-		row = 4;
-		velocity.y += normalRunSpeed;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
+	{
+		direction.y += 1;
+		currentAnimation = AnimationIndex::RunningSouth;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-		row = 5;
-		velocity.x -= normalRunSpeed;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
+	{
+		direction.x -= 1;
+		currentAnimation = AnimationIndex::RunningWest;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-		row = 6;
-		velocity.x += normalRunSpeed;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
+	{
+		direction.x += 1;
+		currentAnimation = AnimationIndex::RunningEast;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-		row = 7;
-		velocity.y -= normalRunSpeed;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
+	{
+		direction.y -= 1;
+		currentAnimation = AnimationIndex::RunningNorth;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-		row = 0;
-		velocity.y += speed*deltaTime;
+		direction.y += 1;
+		currentAnimation = AnimationIndex::WalkingSouth;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-		row = 1;
-		velocity.x -= speed*deltaTime;
+		direction.x -= 1;
+		currentAnimation = AnimationIndex::WalkingWest;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-		row = 2;
-		velocity.x += speed*deltaTime;
+		direction.x += 1;
+		currentAnimation = AnimationIndex::WalkingEast;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-		row = 3;
-		velocity.y -= speed*deltaTime;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+	{
+		direction.y -= 1;
+		currentAnimation = AnimationIndex::WalkingNorth;
 	}
-	else { // idle animation
-		if (row == 0 || row == 4)row = 8;
-		else if (row == 1 || row == 5)row = 9;
-		else if (row == 2 || row == 6)row = 10;
-		else if (row == 3 || row == 7)row = 11;
-		else if (row == 13 || row == 17)row = 21;
-		else if (row == 12 || row == 16)row = 20;
-		else if (row == 14 || row == 18)row = 22;
-		else if (row == 15 || row == 19)row = 23;
+	else
+	{
+		if (currentAnimation == AnimationIndex::WalkingSouth || currentAnimation == AnimationIndex::RunningSouth)
+		{
+			currentAnimation = AnimationIndex::IdleSouth;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingNorth || currentAnimation == AnimationIndex::RunningNorth)
+		{
+			currentAnimation = AnimationIndex::IdleNorth;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingEast || currentAnimation == AnimationIndex::RunningEast)
+		{
+			currentAnimation = AnimationIndex::IdleEast;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingWest || currentAnimation == AnimationIndex::RunningWest)
+		{
+			currentAnimation = AnimationIndex::IdleWest;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingSouthEast || currentAnimation == AnimationIndex::RunningSouthEast)
+		{
+			currentAnimation = AnimationIndex::IdleSouthEast;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingNorthEast || currentAnimation == AnimationIndex::RunningNorthEast)
+		{
+			currentAnimation = AnimationIndex::IdleNorthEast;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingSouthWest || currentAnimation == AnimationIndex::RunningSouthWest)
+		{
+			currentAnimation = AnimationIndex::IdleNorthWest;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingNorthWest || currentAnimation == AnimationIndex::RunningNorthWest)
+		{
+			currentAnimation = AnimationIndex::IdleNorthWest;
+		}
 	}
+	setDirection(direction);
+}
 
-	if (map.isColliding(returnPlayer2DPosition(), returnPlayerBodySize(), velocity))playerBody.move(velocity);
-	UpdateAnimation(row, deltaTime*increaseSpeed);
-	playerBody.setTextureRect(uvRect);
+void Player::Update(float deltaTime, Map& map)
+{
+	animations[int(currentAnimation)].Update(deltaTime);
+	animations[int(currentAnimation)].ApplyToSprite(playerBody);
+	if (map.isColliding(returnPlayer2DPosition(), returnPlayerBodySize(), velocity*deltaTime))
+	{
+		playerBody.move(velocity*deltaTime);
+	}
+}
+
+void Player::setDirection(sf::Vector2f direction)
+{
+	velocity = direction * speed;
 }
 
 void Player::Draw(sf::RenderWindow& window)
@@ -137,31 +186,6 @@ pair <float, float> Player::returnPlayer2DPosition()
 	return{ playerBody.getPosition().x, playerBody.getPosition().y };
 }
 
-void Player::Animation()
-{
-	currentImage.x = 0;
-	uvRect.width = texture.getSize().x / float(imageCount.x);
-	uvRect.height = texture.getSize().y / float(imageCount.y);	
-}
-
-void Player::UpdateAnimation(int row, float deltaTime)
-{
-	currentImage.y = row;
-	totalTime += deltaTime;
-
-	if (totalTime >= switchTime) {
-		totalTime -= switchTime;
-		currentImage.x++;
-
-		if (currentImage.x >= imageCount.x) {
-			currentImage.x = 0;
-		}
-	}
-
-	uvRect.left = currentImage.x*uvRect.width;
-	uvRect.top = currentImage.y*uvRect.height;
-}
-
 pair<float, float> Player::convert2DToIso(pair<float, float> pair)
 {
 	return{ pair.first - pair.second, (pair.first + pair.second) / 2 };
@@ -176,20 +200,6 @@ sf::Vector2f Player::returnPlayerBodySize()
 {
 	return playerBody.getSize();
 }
-
-void Player::increasePlayerSpeed(sf::Event & event)
-{
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
-	{
-		increaseSpeed = 2;
-	}
-	else
-	{
-		increaseSpeed = 1;
-	}
-}
-
-
 
 Player::~Player()
 {

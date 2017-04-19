@@ -3,6 +3,7 @@
 #include "math.h"
 #include<iostream>
 #include "Map.h"
+#include "Animation.h"
 using namespace std;
 
 class Player
@@ -10,66 +11,62 @@ class Player
 public:
 	Player();
 	~Player();
-	void Update(sf::Event& event, class Map& map);
-	void UpdateAnimation(int row, float deltaTime);
+	void HandleEvents(sf::Event& event);
+	void Update(float deltaTime, class Map& map);
+	void setDirection(sf::Vector2f direction);
 	void Draw(sf::RenderWindow& window);
 	void RestartClock();
 	void StartingPosition(sf::RenderWindow& window);
 	void setTextureWoman();
 	void setTextureMan();
-	void Animation();
 	pair <float, float> returnPlayer2DPosition();
 	pair <float, float> convert2DToIso(pair<float, float> pair);
 	pair <float, float> convertIsoTo2D(pair<float, float> pair);
 	sf::Vector2f returnPlayerBodySize();
-	void increasePlayerSpeed(sf::Event& event);
 private:
 	enum class AnimationIndex
 	{
-		RunningNorth,
-		RunningSouth,
-		RunningEast,
-		RunningWest,
-		RunningNorthEast,
-		RunningNorthWest,
-		RunningSouthEast,
-		RunningSoutWest,
-		WalkingNorth,
 		WalkingSouth,
+		WalkingWest,
 		WalkingEast,
-		WalkingWest, 
-		WalkingNorthEast,
+		WalkingNorth,
+		RunningSouth,
+		RunningWest,
+		RunningEast,
+		RunningNorth,
+		IdleSouth,
+		IdleWest,
+		IdleEast,
+		IdleNorth,
+		WalkingSouthWest,
 		WalkingNorthWest,
 		WalkingSouthEast,
-		WalkingSoutWest,
-		IdleNorth,
-		IdleSouth,
-		IdleEast,
-		IdleWest,
-		IdleNorthEast,
+		WalkingNorthEast,
+		RunningSouthWest,
+		RunningNorthWest,
+		RunningSouthEast,
+		RunningNorthEast,
+		IdleSouthWest,
 		IdleNorthWest,
 		IdleSouthEast,
-		IdleSoutWest,
+		IdleNorthEast,
+		Count
 	};
 
-	sf::IntRect uvRect;
-	sf::Texture texture;
+	Animation animations[(int)AnimationIndex::Count];
+	AnimationIndex currentAnimation = AnimationIndex::IdleSouth;
 
+	sf::Texture texture;
+	sf::Sprite sprite;
 	sf::RectangleShape playerBody;
 	sf::Clock clock;
-	sf::Vector2f velocity;
-
-	sf::Vector2u imageCount = sf::Vector2u(8, 24);
-	sf::Vector2u currentImage;
+	sf::Vector2f velocity = { 0,0 };
 
 	bool cameraPerspective = true;
 	unsigned int row = 0;
-	unsigned int increaseSpeed;
-	float speed = 25.0f; // movement speed
+	static constexpr float speed = 100.0f; // movement speed
+	static constexpr float characterTextureSize = 80.0f;
 	float deltaTime = 0.0f;
-	float diagRunSpeed;
-	float normalRunSpeed;
-	float diagSpeed;
 	float totalTime = 0.0f;
 	float switchTime = 0.1f;
 };

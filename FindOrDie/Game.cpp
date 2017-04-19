@@ -29,10 +29,10 @@ void Game::GameRun()
 		{
 			map.setWhatToDraw(drawTheseTiles.get());
 			map.drawMap(window);
-			player.Update(event, map);
 			camera.CameraFollowPlayer(window, player.returnPlayer2DPosition());
 		//	enemies.Draw(window);
 		//	chest.DrawChest(window);
+			player.Update(2.0f/60.f, map);
 			player.Draw(window);
 			player.RestartClock();
 			
@@ -61,7 +61,7 @@ void Game::processEvents(sf::RenderWindow& window)
 	{
 		camera.draggableCamera(window, event);
 		camera.zoomPlayerView(window, event);
-		player.increasePlayerSpeed(event);
+		player.HandleEvents(event);
 		switch (event.type)
 		{
 		case sf::Event::KeyReleased:
