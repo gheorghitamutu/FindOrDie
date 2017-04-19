@@ -3,15 +3,9 @@
 
 Player::Player()
 {
-	setTextureMan();
 	playerBody.setSize(sf::Vector2f(25.f, 25.f));
 	playerBody.setPosition({ 300, 300 });
-	playerBody.setTexture(&texture);
-	for(int i = 0; i<int(AnimationIndex::Count); i++)
-	{
-		animations[i] = Animation(characterTextureSize, i*characterTextureSize, characterTextureSize, characterTextureSize, texture);
-	}
-
+	playerBody.setOrigin(4, 0);
 }
 
 void Player::HandleEvents(sf::Event& event)
@@ -20,26 +14,26 @@ void Player::HandleEvents(sf::Event& event)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
 	{
-		direction.x -= 1;
-		direction.y += 1;
+		direction.x -= 2;
+		direction.y += 2;
 		currentAnimation = AnimationIndex::RunningSouthWest;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
 	{
-		direction.x += 1;
-		direction.y += 1;
+		direction.x += 2;
+		direction.y += 2;
 		currentAnimation = AnimationIndex::RunningSouthEast;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
 	{
-		direction.x -= 1;
-		direction.y -= 1;
+		direction.x -= 2;
+		direction.y -= 2;
 		currentAnimation = AnimationIndex::RunningNorthWest;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
 	{
-		direction.x += 1;
-		direction.y -= 1;
+		direction.x += 2;
+		direction.y -= 2;
 		currentAnimation = AnimationIndex::RunningNorthEast;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
@@ -68,22 +62,22 @@ void Player::HandleEvents(sf::Event& event)
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
 	{
-		direction.y += 1;
+		direction.y += 2;
 		currentAnimation = AnimationIndex::RunningSouth;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
 	{
-		direction.x -= 1;
+		direction.x -= 2;
 		currentAnimation = AnimationIndex::RunningWest;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
 	{
-		direction.x += 1;
+		direction.x += 2;
 		currentAnimation = AnimationIndex::RunningEast;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
 	{
-		direction.y -= 1;
+		direction.y -= 2;
 		currentAnimation = AnimationIndex::RunningNorth;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
@@ -141,14 +135,16 @@ void Player::HandleEvents(sf::Event& event)
 	setDirection(direction);
 }
 
-void Player::Update(float deltaTime, Map& map)
+void Player::Update(Map& map)
 {
+	deltaTime = time.getElapsedTime().asSeconds();
 	animations[int(currentAnimation)].Update(deltaTime);
 	animations[int(currentAnimation)].ApplyToSprite(playerBody);
 	if (map.isColliding(returnPlayer2DPosition(), returnPlayerBodySize(), velocity*deltaTime))
 	{
 		playerBody.move(velocity*deltaTime);
 	}
+	time.restart().asSeconds();
 }
 
 void Player::setDirection(sf::Vector2f direction)
@@ -161,39 +157,23 @@ void Player::Draw(sf::RenderWindow& window)
 	window.draw(playerBody);
 }
 
-void Player::RestartClock()
-{
-	deltaTime = clock.restart().asSeconds();
-}
-
 void Player::StartingPosition(sf::RenderWindow& window)
 {
-	playerBody.setPosition({ 400, 400 });
+	playerBody.setPosition({ 300, 300 });
 }
 
-void Player::setTextureWoman()
+void Player::setTexture(string textureType)
 {	
-	texture.loadFromFile("Animation/Woman/fullPlayerAnimations.png");
-}
-
-void Player::setTextureMan()
-{
-	texture.loadFromFile("Animation/Man/fullPlayerAnimations.png");
+	texture.loadFromFile("Animation/" + textureType + "/fullPlayerAnimations.png");
+	for (int i = 0; i<int(AnimationIndex::Count); i++)
+	{
+		animations[i] = Animation(characterTextureSize, i*characterTextureSize, characterTextureSize, characterTextureSize, texture);
+	}
 }
 
 pair <float, float> Player::returnPlayer2DPosition()
 {
 	return{ playerBody.getPosition().x, playerBody.getPosition().y };
-}
-
-pair<float, float> Player::convert2DToIso(pair<float, float> pair)
-{
-	return{ pair.first - pair.second, (pair.first + pair.second) / 2 };
-}
-
-pair<float, float> Player::convertIsoTo2D(pair<float, float> pair)
-{
-	return{ (2 * pair.second + pair.first) / 2, (2 * pair.second - pair.first) / 2 };
 }
 
 sf::Vector2f Player::returnPlayerBodySize()

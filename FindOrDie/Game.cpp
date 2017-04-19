@@ -10,7 +10,6 @@ void Game::GameRun()
 		{ 
 			processEvents(window);
 		}
-		std::future<vector<sf::Sprite>> drawTheseTiles(std::async(&Map::checkWhatToDraw, &map));
 		if (gameState.getCurrentState() == GameStates::GameState::MainMenu)
 		{
 			camera.setMenuView(window);
@@ -27,15 +26,15 @@ void Game::GameRun()
 		}
 		else if (gameState.getCurrentState() == GameStates::GameState::Running)
 		{
+			std::future<vector<sf::Sprite>> drawTheseTiles(std::async(&Map::checkWhatToDraw, &map));
+			map.setViewBounds(camera.getPlayerViewBounds());
 			map.setWhatToDraw(drawTheseTiles.get());
 			map.drawMap(window);
 			camera.CameraFollowPlayer(window, player.returnPlayer2DPosition());
 		//	enemies.Draw(window);
 		//	chest.DrawChest(window);
-			player.Update(2.0f/60.f, map);
+			player.Update(map);
 			player.Draw(window);
-			player.RestartClock();
-			
 		}
 		window.display();
 		window.clear(sf::Color::Black);
@@ -75,7 +74,6 @@ void Game::processEvents(sf::RenderWindow& window)
 				break;
 			}
 		}
-		map.setViewBounds(camera.getPlayerViewBounds());
 	    //enemies.createEnemy(window);
 		//enemies.goToPlayer({ player.returnPlayer2DPosition().first, player.returnPlayer2DPosition().second });
 	}

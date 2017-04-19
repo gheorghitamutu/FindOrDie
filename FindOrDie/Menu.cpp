@@ -99,11 +99,11 @@ void Menu::options(sf::Event& event, class Player& player, class Map& map, GameS
 					menuState = Menu::MenuState::Pause;
 					if (selectedItemIndex == 0)
 					{
-						player.setTextureMan();
+						player.setTexture("Man");
 					}
 					if (selectedItemIndex == 1)
 					{
-						player.setTextureWoman();
+						player.setTexture("Woman");
 					}
 				}
 

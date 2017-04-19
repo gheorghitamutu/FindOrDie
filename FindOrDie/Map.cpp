@@ -45,7 +45,7 @@ bool Map::isWalkable(pair<int, int> pair)
 
 pair<float, float> Map::getTileCenterFromTileCoordinate(pair<float, float> pair)
 {
-	return { pair.first*SIZE + SIZE / 2, pair.second*SIZE + SIZE / 2 };
+	return { pair.first*tileSize + tileSize / 2, pair.second*tileSize + tileSize / 2 };
 }
 
 
@@ -115,8 +115,8 @@ void Map::createMap()
 	for (auto &pair : tilesCoords)
 	{
 		tile.second = isWalkable({ (int)pair.first.first, (int)pair.first.second });
-		tile.first.setPosition(convert2DToIso({ posX*(SIZE / 2), posY*(SIZE / 2) }).first, convert2DToIso({ posX*(SIZE / 2) , posY*(SIZE / 2) }).second);
-		tile.first.setTextureRect(sf::IntRect(pair.first.first *  SIZE, pair.first.second *  SIZE, SIZE, SIZE));
+		tile.first.setPosition(convert2DToIso({ posX*(tileSize / 2), posY*(tileSize / 2) }).first, convert2DToIso({ posX*(tileSize / 2) , posY*(tileSize / 2) }).second);
+		tile.first.setTextureRect(sf::IntRect(pair.first.first *  tileSize, pair.first.second *  tileSize, tileSize, tileSize));
 		tiles.push_back(tile);
 
 		if (!isWalkable({ (int)pair.first.first, (int)pair.first.second }))
@@ -124,10 +124,10 @@ void Map::createMap()
 			std::vector<std::pair<float, float>> points;
 			std::pair<float, float> tileOrigin;
 			tileOrigin = { tile.first.getPosition().x, tile.first.getPosition().y };
-			points.push_back({ tileOrigin.first + SIZE / 2, tileOrigin.second + SIZE / 2    });
-			points.push_back({ tileOrigin.first           , tileOrigin.second + SIZE * 0.75 });
-			points.push_back({ tileOrigin.first + SIZE / 2, tileOrigin.second + SIZE        });
-			points.push_back({ tileOrigin.first + SIZE    , tileOrigin.second + SIZE * 0.75 });
+			points.push_back({ tileOrigin.first + tileSize / 2, tileOrigin.second + tileSize / 2    });
+			points.push_back({ tileOrigin.first           , tileOrigin.second + tileSize * 0.75 });
+			points.push_back({ tileOrigin.first + tileSize / 2, tileOrigin.second + tileSize        });
+			points.push_back({ tileOrigin.first + tileSize    , tileOrigin.second + tileSize * 0.75 });
 			nonWalkableObjects.push_back(points);
 		}
 
@@ -165,10 +165,10 @@ void Map::setViewBounds(sf::FloatRect& viewBounds)
 	//this->viewBounds.height += 300;
 	//this->viewBounds.width += 300;
 	//this is for drawing tiles on a smaller area of a view | this can also be done with a viewport
-	this->viewBounds.left += 300;
-	this->viewBounds.top += 300;
-	this->viewBounds.height -= 500;
-	this->viewBounds.width -= 500;
+	this->viewBounds.left += 150;
+	this->viewBounds.top += 150;
+	this->viewBounds.height -= 300;
+	this->viewBounds.width -= 400;
 }
 
 bool Map::onSegment(Point p, Point q, Point r)

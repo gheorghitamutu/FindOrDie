@@ -1,4 +1,7 @@
-﻿  Map.cpp
+﻿  Player.cpp
+c:\users\gicu\documents\github\findordie\findordie\player.cpp(12): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
+c:\users\gicu\documents\github\findordie\findordie\player.cpp(12): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Map.cpp
 c:\users\gicu\documents\github\findordie\findordie\map.cpp(119): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 c:\users\gicu\documents\github\findordie\findordie\map.cpp(185): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.10.25017\include\utility(189): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
@@ -29,5 +32,20 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
               _Other1=float &,
               _Other2=double
           ]
+  Game.cpp
+c:\users\gicu\documents\github\findordie\findordie\enemy.h(19): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+c:\users\gicu\documents\github\findordie\findordie\enemy.h(25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+  Compiling...
+  main.cpp
+c:\users\gicu\documents\github\findordie\findordie\enemy.h(19): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+c:\users\gicu\documents\github\findordie\findordie\enemy.h(25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  Menu.cpp
+c:\users\gicu\documents\github\findordie\findordie\menu.cpp(42): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  Enemy.cpp
+  Chests.cpp
+  Animation.cpp
   FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\x64\Debug\FindOrDie.exe
   FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\x64\Debug\FindOrDie.pdb (Partial PDB)

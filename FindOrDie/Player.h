@@ -12,16 +12,12 @@ public:
 	Player();
 	~Player();
 	void HandleEvents(sf::Event& event);
-	void Update(float deltaTime, class Map& map);
+	void Update(class Map& map);
 	void setDirection(sf::Vector2f direction);
 	void Draw(sf::RenderWindow& window);
-	void RestartClock();
 	void StartingPosition(sf::RenderWindow& window);
-	void setTextureWoman();
-	void setTextureMan();
+	void setTexture(string textureType);
 	pair <float, float> returnPlayer2DPosition();
-	pair <float, float> convert2DToIso(pair<float, float> pair);
-	pair <float, float> convertIsoTo2D(pair<float, float> pair);
 	sf::Vector2f returnPlayerBodySize();
 private:
 	enum class AnimationIndex
@@ -59,15 +55,14 @@ private:
 	sf::Texture texture;
 	sf::Sprite sprite;
 	sf::RectangleShape playerBody;
-	sf::Clock clock;
+	sf::Clock time;
 	sf::Vector2f velocity = { 0,0 };
 
 	bool cameraPerspective = true;
 	unsigned int row = 0;
-	static constexpr float speed = 100.0f; // movement speed
+	static constexpr float speed = 50.0f; // movement speed
 	static constexpr float characterTextureSize = 80.0f;
 	float deltaTime = 0.0f;
-	float totalTime = 0.0f;
-	float switchTime = 0.1f;
+
 };
 
