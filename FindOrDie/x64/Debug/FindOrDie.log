@@ -1,51 +1,65 @@
 ﻿  Player.cpp
-c:\users\gicu\documents\github\findordie\findordie\player.cpp(12): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\player.cpp(12): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  Map.cpp
-c:\users\gicu\documents\github\findordie\findordie\map.cpp(119): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\map.cpp(185): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.10.25017\include\utility(189): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  c:\users\gicu\documents\github\findordie\findordie\map.cpp(98): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,int,void,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
-          with
-          [
-              _Other1=int,
-              _Other2=int
-          ]
-  c:\users\gicu\documents\github\findordie\findordie\map.cpp(98): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,int,void,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
-          with
-          [
-              _Other1=int,
-              _Other2=int
-          ]
-c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.10.25017\include\utility(189): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  c:\users\gicu\documents\github\findordie\findordie\map.cpp(128): note: see reference to function template instantiation 'std::pair<float,float>::pair<_Ty1&,double,void,0>(_Other1,_Other2 &&) noexcept' being compiled
-          with
-          [
-              _Ty1=float,
-              _Other1=float &,
-              _Other2=double
-          ]
-  c:\users\gicu\documents\github\findordie\findordie\map.cpp(128): note: see reference to function template instantiation 'std::pair<float,float>::pair<_Ty1&,double,void,0>(_Other1,_Other2 &&) noexcept' being compiled
-          with
-          [
-              _Ty1=float,
-              _Other1=float &,
-              _Other2=double
-          ]
-  Game.cpp
-c:\users\gicu\documents\github\findordie\findordie\enemy.h(19): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\enemy.h(25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-  Generating Code...
-  Compiling...
-  main.cpp
-c:\users\gicu\documents\github\findordie\findordie\enemy.h(19): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-c:\users\gicu\documents\github\findordie\findordie\enemy.h(25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\share.h : warning C4821: Unable to determine Unicode encoding type, please save the file with signature (BOM)
+c:\users\ghita\onedrive\documents\github\findordie\findordie\player.cpp(170): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
+c:\users\ghita\onedrive\documents\github\findordie\findordie\player.cpp(170): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   Menu.cpp
-c:\users\gicu\documents\github\findordie\findordie\menu.cpp(42): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  Generating Code...
-  Skipping... (no relevant changes detected)
+c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\share.h : warning C4821: Unable to determine Unicode encoding type, please save the file with signature (BOM)
+c:\users\ghita\onedrive\documents\github\findordie\findordie\menu.cpp(42): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Map.cpp
+c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\share.h : warning C4821: Unable to determine Unicode encoding type, please save the file with signature (BOM)
+c:\users\ghita\onedrive\documents\github\findordie\findordie\map.cpp(119): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\ghita\onedrive\documents\github\findordie\findordie\map.cpp(185): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\program files (x86)\microsoft visual studio\2017\professional\vc\tools\msvc\14.10.25017\include\utility(189): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  c:\users\ghita\onedrive\documents\github\findordie\findordie\map.cpp(98): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,int,void,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=int
+          ]
+  c:\users\ghita\onedrive\documents\github\findordie\findordie\map.cpp(98): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,int,void,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=int
+          ]
+c:\program files (x86)\microsoft visual studio\2017\professional\vc\tools\msvc\14.10.25017\include\utility(189): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  c:\users\ghita\onedrive\documents\github\findordie\findordie\map.cpp(128): note: see reference to function template instantiation 'std::pair<float,float>::pair<_Ty1&,double,void,0>(_Other1,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Ty1=float,
+              _Other1=float &,
+              _Other2=double
+          ]
+  c:\users\ghita\onedrive\documents\github\findordie\findordie\map.cpp(128): note: see reference to function template instantiation 'std::pair<float,float>::pair<_Ty1&,double,void,0>(_Other1,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Ty1=float,
+              _Other1=float &,
+              _Other2=double
+          ]
+  main.cpp
+c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\share.h : warning C4821: Unable to determine Unicode encoding type, please save the file with signature (BOM)
+c:\users\ghita\onedrive\documents\github\findordie\findordie\enemy.h(19): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+c:\users\ghita\onedrive\documents\github\findordie\findordie\enemy.h(25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  GameStates.cpp
+  Game.cpp
+c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\share.h : warning C4821: Unable to determine Unicode encoding type, please save the file with signature (BOM)
+c:\users\ghita\onedrive\documents\github\findordie\findordie\enemy.h(19): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+c:\users\ghita\onedrive\documents\github\findordie\findordie\enemy.h(25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
   Enemy.cpp
+c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\share.h : warning C4821: Unable to determine Unicode encoding type, please save the file with signature (BOM)
+c:\users\ghita\onedrive\documents\github\findordie\findordie\enemy.h(19): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+c:\users\ghita\onedrive\documents\github\findordie\findordie\enemy.h(25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+c:\users\ghita\onedrive\documents\github\findordie\findordie\enemy.cpp(95): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ghita\onedrive\documents\github\findordie\findordie\enemy.cpp(96): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   Chests.cpp
+c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\share.h : warning C4821: Unable to determine Unicode encoding type, please save the file with signature (BOM)
+  Camera.cpp
+c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\share.h : warning C4821: Unable to determine Unicode encoding type, please save the file with signature (BOM)
+c:\users\ghita\onedrive\documents\github\findordie\findordie\camera.cpp(97): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
   Animation.cpp
-  FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\x64\Debug\FindOrDie.exe
-  FindOrDie.vcxproj -> C:\Users\Gicu\Documents\GitHub\FindOrDie\x64\Debug\FindOrDie.pdb (Partial PDB)
+c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\share.h : warning C4821: Unable to determine Unicode encoding type, please save the file with signature (BOM)
+  Generating Code...
+  LINK : C:\Users\ghita\OneDrive\documents\GitHub\FindOrDie\x64\Debug\FindOrDie.exe not found or not built by the last incremental link; performing full link
+  FindOrDie.vcxproj -> C:\Users\ghita\OneDrive\documents\GitHub\FindOrDie\x64\Debug\FindOrDie.exe
+  FindOrDie.vcxproj -> C:\Users\ghita\OneDrive\documents\GitHub\FindOrDie\x64\Debug\FindOrDie.pdb (Partial PDB)

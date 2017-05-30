@@ -59,8 +59,9 @@ private:
 	sf::Vector2f velocity = { 0,0 };
 
 	bool cameraPerspective = true;
+	bool drawOver = false;
 	unsigned int row = 0;
-	static constexpr float speed = 50.0f; // movement speed
+	static constexpr float speed = 25.0f; // movement speed
 	static constexpr float characterTextureSize = 80.0f;
 	float deltaTime = 0.0f;
 

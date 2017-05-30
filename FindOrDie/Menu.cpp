@@ -21,9 +21,9 @@ Menu::Menu()
 			text.setFillColor(sf::Color::White);
 		}
 
-		if (i < itemsMainMenu)main.push_back(text);
-		if (i < itemsPauseMenu)pause.push_back(text);
-		if (i < itemsSelectCharacterMenu)selectCharacter.push_back(text);
+		if (i < itemsMainMenu)main.emplace_back(text);
+		if (i < itemsPauseMenu)pause.emplace_back(text);
+		if (i < itemsSelectCharacterMenu)selectCharacter.emplace_back(text);
 	}
 }
 

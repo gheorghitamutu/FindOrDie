@@ -3,9 +3,9 @@
 
 Player::Player()
 {
-	playerBody.setSize(sf::Vector2f(25.f, 25.f));
+	playerBody.setSize(sf::Vector2f(20.f, 20.f));
 	playerBody.setPosition({ 300, 300 });
-	playerBody.setOrigin(4, 0);
+	playerBody.setOrigin(8, -6);
 }
 
 void Player::HandleEvents(sf::Event& event)
@@ -140,6 +140,30 @@ void Player::Update(Map& map)
 	deltaTime = time.getElapsedTime().asSeconds();
 	animations[int(currentAnimation)].Update(deltaTime);
 	animations[int(currentAnimation)].ApplyToSprite(playerBody);
+
+	if (currentAnimation == AnimationIndex::IdleEast ||
+		currentAnimation == AnimationIndex::IdleNorth ||
+		currentAnimation == AnimationIndex::IdleSouth ||
+		currentAnimation == AnimationIndex::IdleWest ||
+		currentAnimation == AnimationIndex::IdleNorthEast ||
+		currentAnimation == AnimationIndex::IdleNorthWest ||
+		currentAnimation == AnimationIndex::IdleSouthEast ||
+		currentAnimation == AnimationIndex::IdleSouthWest ||
+		currentAnimation == AnimationIndex::WalkingSouth ||
+		currentAnimation == AnimationIndex::WalkingSouthEast ||
+		currentAnimation == AnimationIndex::WalkingSouth || 
+		currentAnimation == AnimationIndex::RunningSouth || 
+		currentAnimation == AnimationIndex::RunningSouthEast || 
+		currentAnimation == AnimationIndex::RunningSouthWest)
+	{
+		drawOver = true;
+	}
+	else
+	{
+		drawOver = false;
+	}
+
+	map.isCollidingDrawOver(returnPlayer2DPosition(), returnPlayerBodySize());
 	if (map.isColliding(returnPlayer2DPosition(), returnPlayerBodySize(), velocity*deltaTime))
 	{
 		playerBody.move(velocity*deltaTime);

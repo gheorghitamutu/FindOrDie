@@ -18,11 +18,15 @@ void Map::drawMap(sf::RenderWindow& window)
 	{
 			window.draw(tile);
 	}
-
 }
 
-void Map::drawOnlyViewedTiles(sf::View view)
+void Map::drawTilesOverPlayer(sf::RenderWindow & window)
 {
+	if (drawTileOverPlayer > -1)
+	{
+		window.draw(tiles[drawTileOverPlayer].first);
+	}
+	drawTileOverPlayer = -1;
 }
 
 pair<float, float> Map::convert2DToIso(pair<float, float> pair)
@@ -49,13 +53,14 @@ pair<float, float> Map::getTileCenterFromTileCoordinate(pair<float, float> pair)
 }
 
 
-bool Map::containsPoint(pair<float, float> point, vector<pair<float, float>> nonWalkableAreaCoords)
+bool Map::containsPoint(pair<float, float> point, pair<vector<pair<float, float>>, int> nonWalkableAreaCoords)
 {
-	Point polygon1[] = { { nonWalkableAreaCoords[0].first, nonWalkableAreaCoords[0].second },
-						 { nonWalkableAreaCoords[1].first, nonWalkableAreaCoords[1].second },
-						 { nonWalkableAreaCoords[2].first, nonWalkableAreaCoords[2].second },
-						 { nonWalkableAreaCoords[3].first, nonWalkableAreaCoords[3].second } };
-	return isInside(polygon1, 4, { point.first, point.second });
+	vector<pair<float, float>>polygon1;
+	for(auto &object : nonWalkableAreaCoords.first)
+	{
+		polygon1.emplace_back(object);
+	}
+	return isInside(polygon1, polygon1.size(), { point.first, point.second });
 }
 
 bool Map::isColliding(pair <float, float> position, sf::Vector2f bodySize, sf::Vector2f velocity)
@@ -81,62 +86,88 @@ bool Map::isColliding(pair <float, float> position, sf::Vector2f bodySize, sf::V
 	//return true;
 }
 
+void Map::isCollidingDrawOver(pair<float, float> position, sf::Vector2f bodySize)
+{
+	for (auto& object : canDrawOverPlayerObjects)
+	{
+		if (containsPoint({ position.first, position.second + bodySize.y }, object))
+		{
+
+			drawTileOverPlayer = object.second;
+		}
+	}
+}
+
 void Map::createMap()
 {
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dis(100, 100);
+	std::uniform_int_distribution<> dis(10, 30);
 	std::uniform_int_distribution<> dis2(1, 8);
 	mapDimensions = { dis(gen), dis(gen) };
 	tilesCoords.clear();
 	tiles.clear();
 	nonWalkableObjects.clear();
-	for (int i = 0; i < mapDimensions.second; i++)
+
+	for (int i = 0; i < mapDimensions.first*mapDimensions.second; i++)
 	{
-		for (int j = 0; j < mapDimensions.first; j++)
-		{
-			if (i == 0 || j == 0 || i == mapDimensions.second - 1 || j == mapDimensions.first - 1) {
-				tilesCoords.push_back({ { 0,0 }, false });
+			if (dis2(gen) == 1 ||
+				i < mapDimensions.first ||
+				i % mapDimensions.first  == 0 || 
+				i % mapDimensions.first  == mapDimensions.first - 1 || 
+				i > mapDimensions.first*(mapDimensions.second-1)) 
+			{
+				tilesCoords.emplace_back(pair<float,float>( 0, 0 ), false);
 			}
 			else
-			{
-				if (dis2(gen) == 1)
 				{
-					tilesCoords.push_back({ { 0,0 }, false });
+					tilesCoords.emplace_back(pair<float, float>(3, 0), false);
 				}
-				else
-				{
-					tilesCoords.push_back({ {3,0}, true });
-				}
-			}
-		}
 	}
 
 	float posX = 0, posY = 0;
+	int tileNumber = 0;
 	for (auto &pair : tilesCoords)
 	{
 		tile.second = isWalkable({ (int)pair.first.first, (int)pair.first.second });
 		tile.first.setPosition(convert2DToIso({ posX*(tileSize / 2), posY*(tileSize / 2) }).first, convert2DToIso({ posX*(tileSize / 2) , posY*(tileSize / 2) }).second);
 		tile.first.setTextureRect(sf::IntRect(pair.first.first *  tileSize, pair.first.second *  tileSize, tileSize, tileSize));
-		tiles.push_back(tile);
+		tiles.emplace_back(tile);
 
-		if (!isWalkable({ (int)pair.first.first, (int)pair.first.second }))
+		if (!tile.second)
 		{
-			std::vector<std::pair<float, float>> points;
-			std::pair<float, float> tileOrigin;
-			tileOrigin = { tile.first.getPosition().x, tile.first.getPosition().y };
-			points.push_back({ tileOrigin.first + tileSize / 2, tileOrigin.second + tileSize / 2    });
-			points.push_back({ tileOrigin.first           , tileOrigin.second + tileSize * 0.75 });
-			points.push_back({ tileOrigin.first + tileSize / 2, tileOrigin.second + tileSize        });
-			points.push_back({ tileOrigin.first + tileSize    , tileOrigin.second + tileSize * 0.75 });
-			nonWalkableObjects.push_back(points);
+			nonWalkableObjects.emplace_back(
+				std::pair<vector<std::pair<float, float>>, int>
+			{ 
+				{
+					{ tile.first.getPosition().x + halfTileSize, tile.first.getPosition().y + halfTileSize },
+					{ tile.first.getPosition().x, tile.first.getPosition().y + threeFourthsTileSize },
+					{ tile.first.getPosition().x + halfTileSize, tile.first.getPosition().y + tileSize },
+					{ tile.first.getPosition().x + tileSize, tile.first.getPosition().y + threeFourthsTileSize }
+				},
+					tileNumber
+			});
+
+			canDrawOverPlayerObjects.emplace_back(
+				std::pair<vector<std::pair<float, float>>, int>
+			{
+				{
+					{ tile.first.getPosition().x + halfTileSize, tile.first.getPosition().y},
+					{ tile.first.getPosition().x               , tile.first.getPosition().y + quarterTileSize },
+					{ tile.first.getPosition().x               , tile.first.getPosition().y + threeFourthsTileSize },
+					{ tile.first.getPosition().x + halfTileSize, tile.first.getPosition().y + tileSize },
+					{ tile.first.getPosition().x + tileSize    , tile.first.getPosition().y + threeFourthsTileSize },
+					{ tile.first.getPosition().x + tileSize    , tile.first.getPosition().y + quarterTileSize }
+				},
+					tileNumber
+			});
 		}
 
-		posX++;
-		if (posX >= mapDimensions.first)
+		if (++posX >= mapDimensions.first)
 		{
 			posX = 0;
 			posY++;
 		}
+		tileNumber++;
 	}
 }
 
@@ -147,11 +178,12 @@ vector<sf::Sprite> Map::checkWhatToDraw()
 	{
 		if (tile.first.getGlobalBounds().intersects(viewBounds))
 		{
-			drawTheseLocal.push_back(tile.first);
+			drawTheseLocal.emplace_back(tile.first);
 		}
 	}
 	return drawTheseLocal;
 }
+
 
 void Map::setWhatToDraw(vector<sf::Sprite> drawTheseTiles)
 {
@@ -171,23 +203,26 @@ void Map::setViewBounds(sf::FloatRect& viewBounds)
 	this->viewBounds.width -= 400;
 }
 
-bool Map::onSegment(Point p, Point q, Point r)
+bool Map::onSegment(pair<float, float> p, pair<float, float> q, pair<float, float> r)
 {
-	if (q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) && q.y <= max(p.y, r.y) && q.y >= min(p.y, r.y))
+	if (q.first <= max(p.first, r.first) && q.first >= min(p.first, r.first) && q.second <= max(p.second, r.second) && q.second >= min(p.second, r.second))
 	{
 		return true;
 	}	
 	return false;
 }
 
-int Map::orientation(Point p, Point q, Point r)
+int Map::orientation(pair<float, float> p, pair<float, float> q, pair<float, float> r)
 {
-	int val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
-	if (val == 0) return 0;
+	int val = (q.second - p.second) * (r.first - q.first) - (q.first - p.first) * (r.second - q.second);
+	if (val == 0)
+	{
+		return 0;
+	}
 	return (val > 0) ? 1 : 2;
 }
 
-bool Map::doIntersect(Point p1, Point q1, Point p2, Point q2)
+bool Map::doIntersect(pair<float, float> p1, pair<float, float> q1, pair<float, float> p2, pair<float, float> q2)
 {
 	int o1 = orientation(p1, q1, p2);
 	int o2 = orientation(p1, q1, q2);
@@ -204,17 +239,17 @@ bool Map::doIntersect(Point p1, Point q1, Point p2, Point q2)
 	return false; 
 }
 
-bool Map::isInside(Point polygon[], int n, Point p)
+bool Map::isInside(vector<pair<float, float>> polygon, int n, pair<float, float> p)
 {
 	if (n < 3)
 	{
 		return false;
 	}
-	extreme.y = p.y;
-	int count = 0, i = 0;
+	extreme.second = p.second;
+	int count = 0, i = 0, next;
 	do
 	{
-		int next = (i + 1) % n;
+		next = (i + 1) % n;
 		if (doIntersect(polygon[i], polygon[next], p, extreme))
 		{
 			if (orientation(polygon[i], p, polygon[next]) == 0)
