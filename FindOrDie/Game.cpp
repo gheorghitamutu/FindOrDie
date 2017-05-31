@@ -35,7 +35,6 @@ void Game::GameRun()
 		//	chest.DrawChest(window);
 			player.Update(map);
 			player.Draw(window);
-			map.drawTilesOverPlayer(window);
 		}
 		window.display();
 		window.clear(sf::Color::Black);

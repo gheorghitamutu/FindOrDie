@@ -21,8 +21,8 @@ public:
 	void setWhatToDraw(vector<sf::Sprite> drawTheseTiles);
 	void setViewBounds(sf::FloatRect& viewBounds);
 	void drawMap(sf::RenderWindow& window);
-	void drawTilesOverPlayer(sf::RenderWindow& window);
-	void isCollidingDrawOver(pair <float, float> position, sf::Vector2f bodySize);
+	void drawTilesOverPlayer(bool isColliding);
+	bool isCollidingDrawOver(pair <float, float> position, sf::Vector2f bodySize);
 	bool isWalkable(pair<int, int> pair);
 	bool containsPoint(pair<float, float> point, pair<vector<pair<float, float>>, int> nonWalkableAreaCoords);
 	bool isColliding(pair <float, float> returnPlayer2DPosition, sf::Vector2f bodySize, sf::Vector2f velocity);
@@ -36,6 +36,7 @@ public:
 	pair<sf::Sprite, bool> tile;
 	vector<pair<pair<float, float>, bool>> tilesCoords;
 	vector <pair<sf::Sprite, bool>> tiles;
+	vector <pair<sf::Sprite, bool>> nonWalkableTiles;
 	pair <int, int> mapDimensions;
 	vector<pair<vector<pair<float, float>>, int>> nonWalkableObjects;
 	vector<pair<vector<pair<float, float>>, int>> canDrawOverPlayerObjects;
@@ -57,5 +58,6 @@ public:
 	sf::FloatRect viewBounds;
 
 	int drawTileOverPlayer = 0;
+	int lastTileCollidedWith = 0;
 };
 

@@ -163,7 +163,8 @@ void Player::Update(Map& map)
 		drawOver = false;
 	}
 
-	map.isCollidingDrawOver(returnPlayer2DPosition(), returnPlayerBodySize());
+
+	map.drawTilesOverPlayer(map.isCollidingDrawOver(returnPlayer2DPosition(), returnPlayerBodySize()));
 	if (map.isColliding(returnPlayer2DPosition(), returnPlayerBodySize(), velocity*deltaTime))
 	{
 		playerBody.move(velocity*deltaTime);

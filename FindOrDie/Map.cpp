@@ -20,13 +20,22 @@ void Map::drawMap(sf::RenderWindow& window)
 	}
 }
 
-void Map::drawTilesOverPlayer(sf::RenderWindow & window)
+void Map::drawTilesOverPlayer(bool isColliding)
 {
-	if (drawTileOverPlayer > -1)
+	if (isColliding)
 	{
-		window.draw(tiles[drawTileOverPlayer].first);
+		nonWalkableTiles[drawTileOverPlayer].first.setColor(sf::Color(255, 255, 255, 120));
+		if (drawTileOverPlayer != lastTileCollidedWith)
+		{
+			nonWalkableTiles[lastTileCollidedWith].first.setColor(sf::Color(255, 255, 255, 255));
+			lastTileCollidedWith = drawTileOverPlayer;
+		}
 	}
-	drawTileOverPlayer = -1;
+	else
+	{
+		nonWalkableTiles[drawTileOverPlayer].first.setColor(sf::Color(255, 255, 255, 255));
+	}
+	lastTileCollidedWith = drawTileOverPlayer;
 }
 
 pair<float, float> Map::convert2DToIso(pair<float, float> pair)
@@ -86,16 +95,17 @@ bool Map::isColliding(pair <float, float> position, sf::Vector2f bodySize, sf::V
 	//return true;
 }
 
-void Map::isCollidingDrawOver(pair<float, float> position, sf::Vector2f bodySize)
+bool Map::isCollidingDrawOver(pair<float, float> position, sf::Vector2f bodySize)
 {
 	for (auto& object : canDrawOverPlayerObjects)
 	{
 		if (containsPoint({ position.first, position.second + bodySize.y }, object))
 		{
-
 			drawTileOverPlayer = object.second;
+			return true;
 		}
 	}
+	return false;
 }
 
 void Map::createMap()
@@ -130,8 +140,12 @@ void Map::createMap()
 	{
 		tile.second = isWalkable({ (int)pair.first.first, (int)pair.first.second });
 		tile.first.setPosition(convert2DToIso({ posX*(tileSize / 2), posY*(tileSize / 2) }).first, convert2DToIso({ posX*(tileSize / 2) , posY*(tileSize / 2) }).second);
-		tile.first.setTextureRect(sf::IntRect(pair.first.first *  tileSize, pair.first.second *  tileSize, tileSize, tileSize));
+		//tile.first.setTextureRect(sf::IntRect(pair.first.first *  tileSize, pair.first.second *  tileSize, tileSize, tileSize));
+		tile.first.setTextureRect(sf::IntRect(3 *  tileSize, pair.first.second *  tileSize, tileSize, tileSize));
 		tiles.emplace_back(tile);
+
+		tile.first.setTextureRect(sf::IntRect(pair.first.first *  tileSize, pair.first.second *  tileSize, tileSize, tileSize));
+		nonWalkableTiles.emplace_back(tile);
 
 		if (!tile.second)
 		{
@@ -181,6 +195,15 @@ vector<sf::Sprite> Map::checkWhatToDraw()
 			drawTheseLocal.emplace_back(tile.first);
 		}
 	}
+
+	for (auto &tile : nonWalkableTiles)
+	{
+		if (tile.first.getGlobalBounds().intersects(viewBounds))
+		{
+			drawTheseLocal.emplace_back(tile.first);
+		}
+	}
+
 	return drawTheseLocal;
 }
 
