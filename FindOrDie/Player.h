@@ -19,7 +19,7 @@ public:
 	void setTexture(string textureType);
 	pair <float, float> returnPlayer2DPosition();
 	sf::Vector2f returnPlayerBodySize();
-private:
+public:
 	enum class AnimationIndex
 	{
 		WalkingSouth,

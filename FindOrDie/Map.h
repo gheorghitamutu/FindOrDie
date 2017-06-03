@@ -18,7 +18,7 @@ public:
 	Map();
 	~Map();
 	void createMap();
-	void setWhatToDraw(vector<sf::Sprite> drawTheseTiles);
+	void setWhatToDraw();
 	void setViewBounds(sf::FloatRect& viewBounds);
 	void drawMap(sf::RenderWindow& window);
 	void drawTilesOverPlayer(bool isColliding);
@@ -29,17 +29,24 @@ public:
 	pair <float, float> convert2DToIso(pair<float, float> pair);
 	pair <float, float> convertIsoTo2D(pair<float, float> pair);
 	pair <float, float> getTileCenterFromTileCoordinate(pair<float, float> pair);
-	vector<sf::Sprite> checkWhatToDraw();
+	vector<sf::Sprite*> checkWhatToDraw();
+	vector<pair<float, float>> getPolygonPoints(sf::Sprite* tile);
+	int getTileNumberWherePlayerIs(pair <float, float> position, sf::Vector2f bodySize);
 public:
 	std::random_device rd;
 	sf::Texture tileTexture;
 	pair<sf::Sprite, bool> tile;
 	vector<pair<pair<float, float>, bool>> tilesCoords;
+	vector<pair<vector<pair<float, float>>, int>> floorLevelTilesCoords;
 	vector <pair<sf::Sprite, bool>> tiles;
 	vector <pair<sf::Sprite, bool>> nonWalkableTiles;
 	pair <int, int> mapDimensions;
 	vector<pair<vector<pair<float, float>>, int>> nonWalkableObjects;
 	vector<pair<vector<pair<float, float>>, int>> canDrawOverPlayerObjects;
+
+	int numberOfTiles;
+	int tileNumberWherePlayerIs = 0;
+	int lastKnownTileNumberWherePlayerIs = -1;
 
 	pair<float, float> extreme;
 
@@ -54,10 +61,10 @@ public:
 	static constexpr int tileSize = 64;
 
 
-	vector<sf::Sprite> drawThese;
+	vector<sf::Sprite*> drawThese;
 	sf::FloatRect viewBounds;
 
-	int drawTileOverPlayer = 0;
-	int lastTileCollidedWith = 0;
+	vector<int> drawTileOverPlayer;
+	vector<int> lastKnownTilesOverPlayer;
 };
 
