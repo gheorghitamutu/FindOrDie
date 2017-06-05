@@ -113,6 +113,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="ANode.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chests.h" />
     <ClInclude Include="Enemy.h" />
@@ -120,10 +121,12 @@
     <ClInclude Include="GameStates.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="ANode.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chests.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -132,6 +135,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -31,12 +31,12 @@ void Map::drawTilesOverPlayer(bool isColliding)
 	}
 	else
 	{
-		for (auto &elem : lastKnownTilesOverPlayer)
+		for (auto& elem : lastKnownTilesOverPlayer)
 		{
 			nonWalkableTiles[elem].first.setColor(sf::Color(255, 255, 255, 255));
-			drawTileOverPlayer.clear();
-			lastKnownTilesOverPlayer.clear();
 		}
+		drawTileOverPlayer.clear();
+		lastKnownTilesOverPlayer.clear();
 	}
 	
 }
@@ -199,8 +199,8 @@ bool Map::isCollidingDrawOver(pair<float, float> position, sf::Vector2f bodySize
 void Map::createMap()
 {
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dis(100, 100);
-	std::uniform_int_distribution<> dis2(1, 8);
+	std::uniform_int_distribution<> dis(60, 60);
+	std::uniform_int_distribution<> dis2(1, 5);
 	mapDimensions = { dis(gen), dis(gen) };
 	tilesCoords.clear();
 	tiles.clear();
@@ -268,6 +268,36 @@ void Map::createMap()
 		}
 		tileNumber++;
 	}
+
+	for (int y = 0; y<mapDimensions.second; y++)
+	{
+		mapMatrix.emplace_back(vector<int>(mapDimensions.first, 0));
+	}
+
+	int a = 0;
+	for (auto& elem1 : mapMatrix)
+	{
+		for (auto& elem2 : elem1)
+		{
+			if (nonWalkableTiles[a++].second)
+			{
+				elem2 = 0;
+			}
+			else
+			{
+				elem2 = 1;
+			}
+		}
+	}
+
+	for (auto& elem1 : mapMatrix)
+	{
+		for (auto& elem2 : elem1)
+		{
+			cout << elem2 << " ";
+		}
+		cout << endl;
+	}
 }
 
 vector<sf::Sprite*> Map::checkWhatToDraw()
@@ -313,6 +343,91 @@ int Map::getTileNumberWherePlayerIs(pair <float, float> position, sf::Vector2f b
 		{
 			return floorTile.second;
 		}
+	}
+}
+
+int Map::getTileNumberClicked(sf::Event event, sf::RenderWindow& window)
+{
+	sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+	std::cout << "mouse x: " << worldPos.x << std::endl;
+	std::cout << "mouse y: " << worldPos.y << std::endl;
+	for (auto& floorTile : floorLevelTilesCoords)
+	{
+		if (containsPoint({ worldPos.x, worldPos.y }, floorTile))
+		{
+			std::cout << "tileNumber: " << floorTile.second << std::endl;
+			return floorTile.second;
+		}
+	}
+	return -1;
+}
+
+pair<string, pair<pair<int, int>, pair<int, int>>> Map::setFinishLocation(sf::Event event, sf::RenderWindow& window, pair <float, float> position, sf::Vector2f bodySize)
+{
+	int tileNumberClicked = getTileNumberClicked(event, window);
+	if (tileNumberClicked > -1)
+	{
+		if (tiles[tileNumberClicked].second)
+		{
+			this->finishLocation = {
+				tileNumberClicked / mapDimensions.first,
+				tileNumberClicked % mapDimensions.first
+			};
+			std::cout << "finishLocation: " << finishLocation.first <<" "<< finishLocation.second<< std::endl;
+			setStartLocation(position, bodySize);
+			Pathfinding* path = new Pathfinding();
+			playerPath = path->pathFind(mapDimensions, mapMatrix, dx, dy, dir, startLocation.first, startLocation.second, finishLocation.first, finishLocation.second);
+			delete path;
+		}
+	}
+	return playerPath;
+}
+
+void Map::setStartLocation(pair <float, float> position, sf::Vector2f bodySize)
+{
+	int tileNumberPlayerIs = getTileNumberWherePlayerIs(position, bodySize);
+	if (tileNumberPlayerIs > -1)
+	{
+			this->startLocation = {
+				tileNumberPlayerIs / mapDimensions.first,
+				tileNumberPlayerIs % mapDimensions.first
+			};
+			std::cout << "startLocation: " << startLocation.first << " " << startLocation.second << std::endl;
+	}
+}
+
+pair<float, float> Map::getStartLocation()
+{
+	return startLocation;
+}
+
+pair<float, float> Map::getFinishLocation()
+{
+	return finishLocation;
+}
+
+vector<pair<vector<pair<float, float>>, int>> Map::getFloorLevelTilesCoords()
+{
+	return floorLevelTilesCoords;
+}
+
+pair<int, int> Map::getMapDimensions()
+{
+	return mapDimensions;
+}
+
+vector<pair<sf::Sprite, bool>> Map::getTiles()
+{
+	return tiles;
+}
+
+void Map::changeTilesOpacity(vector<int> whichTiles)
+{
+	for (auto& elem : whichTiles)
+	{
+		tiles[elem].first.setColor(sf::Color(255, 255, 255, 10));
+		nonWalkableTiles[elem].first.setColor(sf::Color(255, 255, 255, 10));
 	}
 }
 

@@ -1,7 +1,8 @@
 #pragma once
+#include<list>
+#include<iostream>
 #include "SFML\Graphics.hpp"
 #include "math.h"
-#include<iostream>
 #include "Map.h"
 #include "Animation.h"
 using namespace std;
@@ -17,8 +18,14 @@ public:
 	void Draw(sf::RenderWindow& window);
 	void StartingPosition(sf::RenderWindow& window);
 	void setTexture(string textureType);
+	void setPlayerPath(pair<string, pair<pair<int, int>, pair<int, int>>> path, vector <pair<sf::Sprite, bool>>& tiles, pair <int, int> mapDimensions);
+	pair<int, int> decodePath(const char character);
+	pair<float, float> decodeDirections();
+	void decodeAnimationPath(pair<float, float> direction);
+	void goThroughPath();
 	pair <float, float> returnPlayer2DPosition();
 	sf::Vector2f returnPlayerBodySize();
+	vector<int> getTilesToBeColored();
 public:
 	enum class AnimationIndex
 	{
@@ -59,11 +66,12 @@ public:
 	sf::Vector2f velocity = { 0,0 };
 
 	bool cameraPerspective = true;
-	bool drawOver = false;
 	unsigned int row = 0;
-	static constexpr float speed = 25.0f; // movement speed
+	static constexpr float speed = 30.0f; // movement speed
 	static constexpr float characterTextureSize = 80.0f;
 	float deltaTime = 0.0f;
 
+	list<pair<pair<int,int>,pair<float, float>>> playerPath;
+	vector<int> tilesToBeColored;
 };
 

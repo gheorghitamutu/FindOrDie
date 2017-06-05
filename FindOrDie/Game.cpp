@@ -2,8 +2,8 @@
 #include <future>
 void Game::GameRun()
 {
-	sf::RenderWindow window(videoMode, "Find Or Die!", sf::Style::Fullscreen, settings);
-	window.setMouseCursorVisible(false);
+	sf::RenderWindow window(videoMode, "Find Or Die!", sf::Style::Resize, settings);
+	window.setMouseCursorVisible(true);
 	window.setFramerateLimit(60);
 	while (window.isOpen())
 	{
@@ -60,6 +60,14 @@ void Game::processEvents(sf::RenderWindow& window)
 		camera.zoomPlayerView(window, event);
 		map.setViewBounds(camera.getPlayerViewBounds());
 		map.setWhatToDraw();
+		if (event.type == sf::Event::MouseButtonPressed)
+		{
+			if (event.mouseButton.button == sf::Mouse::Left)
+			{
+				player.setPlayerPath(map.setFinishLocation(event, window, player.returnPlayer2DPosition(), player.returnPlayerBodySize()), map.getTiles(), map.getMapDimensions());
+				map.changeTilesOpacity(player.getTilesToBeColored());
+			}
+		}
 		player.HandleEvents(event);
 		switch (event.type)
 		{
