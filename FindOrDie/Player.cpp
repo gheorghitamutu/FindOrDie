@@ -210,37 +210,59 @@ void Player::setPlayerPath(pair<string, pair<pair<int, int>, pair<int, int>>> pa
 
 pair<int, int> Player::decodePath(const char character)
 {
-	if (character == '4')
+	if (dir == 8)
 	{
-		return{ 0,1 };
+		if (character == '4')
+		{
+			return{ 0,1 };
+		}
+		if (character == '5')
+		{
+			return{ 1,1 };
+		}
+		if (character == '6')
+		{
+			return{ 1,0 };
+		}
+		if (character == '3')
+		{
+			return{ -1,1 };
+		}
+		if (character == '0')
+		{
+			return{ 0,-1 };
+		}
+		if (character == '1')
+		{
+			return{ -1,-1 };
+		}
+		if (character == '2')
+		{
+			return{ -1,0 };
+		}
+		if (character == '7')
+		{
+			return{ 1,-1 };
+		}
 	}
-	if (character == '5')
+	else if (dir == 4)
 	{
-		return{ 1,1 };
-	}
-	if (character == '6')
-	{
-		return{ 1,0 };
-	}
-	if (character == '3')
-	{
-		return{ -1,1 };
-	}
-	if (character == '0')
-	{
-		return{ 0,-1 };
-	}
-	if (character == '1')
-	{
-		return{ -1,-1 };
-	}
-	if (character == '2')
-	{
-		return{ -1,0 };
-	}
-	if (character == '7')
-	{
-		return{ 1,-1 };
+		if (character == '2')
+		{
+			return{ 0,1 };
+		}
+		if (character == '3')
+		{
+			return{ 1,0 };
+		}
+		if (character == '0')
+		{
+			return{ 0,-1 };
+		}
+		if (character == '1')
+		{
+			return{ -1,0 };
+		}
 	}
 	return { 0,0 };
 }

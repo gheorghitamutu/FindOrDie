@@ -73,5 +73,12 @@ public:
 
 	list<pair<pair<int,int>,pair<float, float>>> playerPath;
 	vector<int> tilesToBeColored;
+
+	int dir = 4;
+	vector <int> dx={1, 0, -1, 0};
+	vector <int> dy={0, 1, 0, -1};
+	/*int dir = 8;
+	vector<int> dx = { 1, 1, 0, -1, -1, -1, 0, 1 };
+	vector<int> dy = { 0, 1, 1, 1, 0, -1, -1, -1 };*/
 };
 

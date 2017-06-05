@@ -54,12 +54,12 @@ public:
 	vector<pair<vector<pair<float, float>>, int>> canDrawOverPlayerObjects;
 
 	vector<vector<int>> mapMatrix;
-	//int dir = 4;
-	//vector <int> dx={1, 0, -1, 0};
-	//vector<int> dy={0, 1, 0, -1};
-	int dir = 8;
+	int dir = 4;
+	vector <int> dx={1, 0, -1, 0};
+	vector<int> dy={0, 1, 0, -1};
+	/*int dir = 8;
 	vector<int> dx = { 1, 1, 0, -1, -1, -1, 0, 1 };
-	vector<int> dy = { 0, 1, 1, 1, 0, -1, -1, -1 };
+	vector<int> dy = { 0, 1, 1, 1, 0, -1, -1, -1 };*/
 	pair<int, int> startLocation;
 	pair<int, int> finishLocation;
 	pair<string, pair<pair<int, int>, pair<int, int>>> playerPath;

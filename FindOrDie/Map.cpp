@@ -199,7 +199,7 @@ bool Map::isCollidingDrawOver(pair<float, float> position, sf::Vector2f bodySize
 void Map::createMap()
 {
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dis(60, 60);
+	std::uniform_int_distribution<> dis(10, 150);
 	std::uniform_int_distribution<> dis2(1, 5);
 	mapDimensions = { dis(gen), dis(gen) };
 	tilesCoords.clear();
@@ -209,6 +209,9 @@ void Map::createMap()
 	drawTileOverPlayer.clear();
 	canDrawOverPlayerObjects.clear();
 	nonWalkableTiles.clear();
+	drawTileOverPlayer.clear();
+	lastKnownTilesOverPlayer.clear();
+	mapMatrix.clear();
 	
 	numberOfTiles = mapDimensions.first*mapDimensions.second;
 
@@ -289,7 +292,7 @@ void Map::createMap()
 			}
 		}
 	}
-
+	a = 0;
 	for (auto& elem1 : mapMatrix)
 	{
 		for (auto& elem2 : elem1)

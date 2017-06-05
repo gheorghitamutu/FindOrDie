@@ -81,7 +81,7 @@ pair<string, pair<pair<int,int>,pair<int,int>>> Pathfinding::pathFind(pair<int, 
 				{
 					pq[pqi].pop();
 				}
-				showStuff(path, { xStart, yStart }, mapDimensions, dx, dy, map);
+			//	showStuff(path, { xStart, yStart }, mapDimensions, dx, dy, map);
 				return { path,{{xStart, yStart},{xFinish,yFinish}} };
 			}
 			for (i = 0; i<dir; i++)
