@@ -4,11 +4,11 @@
 Player::Player()
 {
 	playerBody.setSize(sf::Vector2f(20.f, 20.f));
-	playerBody.setPosition({ 300, 300 });
+	playerBody.setPosition({ 100, 100 });
 	playerBody.setOrigin(8, -6);
 }
 
-void Player::HandleEvents(sf::Event& event)
+void Player::HandleEvents()
 {
 	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) && !playerPath.empty())
@@ -17,120 +17,27 @@ void Player::HandleEvents(sf::Event& event)
 	}
 	if (playerPath.empty())
 	{
-		sf::Vector2f direction = { 0.0f, 0.0f };
+		direction = { 0.0f, 0.0f };
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
-		{
-			direction.x -= 2;
-			direction.y += 2;
-			////currentAnimation = AnimationIndex::RunningSouthWest;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
-		{
-			direction.x += 2;
-			direction.y += 2;
-			//currentAnimation = AnimationIndex::RunningSouthEast;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
-		{
-			direction.x -= 2;
-			direction.y -= 2;
-			//currentAnimation = AnimationIndex::RunningNorthWest;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
-		{
-			direction.x += 2;
-			direction.y -= 2;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-		{
-			direction.x -= 1;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
 			direction.y += 1;
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-		{
-			direction.x += 1;
-			direction.y += 1;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-		{
-			direction.x -= 1;
-			direction.y -= 1;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-		{
-			direction.x += 1;
-			direction.y -= 1;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
-		{
-			direction.y += 2;
-			//currentAnimation = AnimationIndex::RunningSouth;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
-		{
-			direction.x -= 2;
-			//currentAnimation = AnimationIndex::RunningWest;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
-		{
-			direction.x += 2;
-			//currentAnimation = AnimationIndex::RunningEast;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
-		{
-			direction.y -= 2;
-			//currentAnimation = AnimationIndex::RunningNorth;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-			direction.y += 1;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 			direction.x -= 1;
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 			direction.x += 1;
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
 		{
 			direction.y -= 1;
-		}
-		else
+		}	
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
 		{
-			if (currentAnimation == AnimationIndex::WalkingSouth || currentAnimation == AnimationIndex::RunningSouth)
-			{
-				currentAnimation = AnimationIndex::IdleSouth;
-			}
-			else if (currentAnimation == AnimationIndex::WalkingNorth || currentAnimation == AnimationIndex::RunningNorth)
-			{
-				currentAnimation = AnimationIndex::IdleNorth;
-			}
-			else if (currentAnimation == AnimationIndex::WalkingEast || currentAnimation == AnimationIndex::RunningEast)
-			{
-				currentAnimation = AnimationIndex::IdleEast;
-			}
-			else if (currentAnimation == AnimationIndex::WalkingWest || currentAnimation == AnimationIndex::RunningWest)
-			{
-				currentAnimation = AnimationIndex::IdleWest;
-			}
-			else if (currentAnimation == AnimationIndex::WalkingSouthEast || currentAnimation == AnimationIndex::RunningSouthEast)
-			{
-				currentAnimation = AnimationIndex::IdleSouthEast;
-			}
-			else if (currentAnimation == AnimationIndex::WalkingNorthEast || currentAnimation == AnimationIndex::RunningNorthEast)
-			{
-				currentAnimation = AnimationIndex::IdleNorthEast;
-			}
-			else if (currentAnimation == AnimationIndex::WalkingSouthWest || currentAnimation == AnimationIndex::RunningSouthWest)
-			{
-				currentAnimation = AnimationIndex::IdleNorthWest;
-			}
-			else if (currentAnimation == AnimationIndex::WalkingNorthWest || currentAnimation == AnimationIndex::RunningNorthWest)
-			{
-				currentAnimation = AnimationIndex::IdleNorthWest;
-			}
+			direction.x *= 2;
+			direction.y *= 2;
 		}
-		setDirection(direction);
+		setVelocity();
 	}
 }
 
@@ -138,37 +45,21 @@ void Player::Update(Map& map)
 {
 	deltaTime = time.getElapsedTime().asSeconds();
 	goThroughPath();
-	decodeAnimationPath({ velocity.x,velocity.y });
+	decodeAnimationPath({ direction.x, direction.y });
 	animations[int(currentAnimation)].Update(deltaTime);
 	animations[int(currentAnimation)].ApplyToSprite(playerBody);
 
-	/* (currentAnimation == AnimationIndex::IdleEast ||
-		currentAnimation == AnimationIndex::IdleNorth ||
-		currentAnimation == AnimationIndex::IdleSouth ||
-		currentAnimation == AnimationIndex::IdleWest ||
-		currentAnimation == AnimationIndex::IdleNorthEast ||
-		currentAnimation == AnimationIndex::IdleNorthWest ||
-		currentAnimation == AnimationIndex::IdleSouthEast ||
-		currentAnimation == AnimationIndex::IdleSouthWest ||
-		currentAnimation == AnimationIndex::WalkingSouth ||
-		currentAnimation == AnimationIndex::WalkingSouthEast ||
-		currentAnimation == AnimationIndex::WalkingSouth || 
-		currentAnimation == AnimationIndex::RunningSouth || 
-		currentAnimation == AnimationIndex::RunningSouthEast || 
-		currentAnimation == AnimationIndex::RunningSouthWest)
-		*/
-
-	map.drawTilesOverPlayer(map.isCollidingDrawOver(returnPlayer2DPosition(), returnPlayerBodySize()));
-	if (map.isColliding(returnPlayer2DPosition(), returnPlayerBodySize(), velocity*deltaTime))
+	map.drawTilesOverPlayer(map.isCollidingDrawOver(returnPlayerBodySize()));
+	if (map.isColliding(returnPlayerBodySize(), velocity*deltaTime))
 	{
 		playerBody.move(velocity*deltaTime);
 	}
 	time.restart().asSeconds();
 }
 
-void Player::setDirection(sf::Vector2f direction)
+void Player::setVelocity()
 {
-	velocity = direction * speed;
+	velocity = this->direction * speed;
 }
 
 void Player::Draw(sf::RenderWindow& window)
@@ -178,7 +69,7 @@ void Player::Draw(sf::RenderWindow& window)
 
 void Player::StartingPosition(sf::RenderWindow& window)
 {
-	playerBody.setPosition({ 300, 300 });
+	playerBody.setPosition({ 100,100 });
 }
 
 void Player::setTexture(string textureType)
@@ -193,6 +84,7 @@ void Player::setTexture(string textureType)
 void Player::setPlayerPath(pair<string, pair<pair<int, int>, pair<int, int>>> path, vector <pair<sf::Sprite, bool>>& tiles, pair <int, int> mapDimensions)
 {
 	playerPath.clear();
+	tilesToBeColored.clear();
 	pair<int, int> location = path.second.first;
 	int tileNumber;
 	if (path.first != "")
@@ -202,7 +94,7 @@ void Player::setPlayerPath(pair<string, pair<pair<int, int>, pair<int, int>>> pa
 			location.second -= decodePath(elem).first;
 			location.first -= decodePath(elem).second;
 			tileNumber = location.first*mapDimensions.first + location.second;
-			playerPath.emplace_front(location,  pair<float,float>(tiles[tileNumber].first.getPosition().x + 32, tiles[tileNumber].first.getPosition().y+32)); //double check this
+			playerPath.emplace_front(location,  pair<float,float>(tiles[tileNumber].first.getPosition().x + 32, tiles[tileNumber].first.getPosition().y + 32));
 			tilesToBeColored.emplace_back(tileNumber);
 		}
 	}
@@ -286,35 +178,127 @@ void Player::decodeAnimationPath(pair<float, float> direction)
 {
 	if (direction.first == 0.0f && direction.second > 0.0f )
 	{
-		currentAnimation = AnimationIndex::WalkingSouth;
+		if (direction.second > walkingSpeed)
+		{
+			currentAnimation = AnimationIndex::RunningSouth;
+		}
+		else
+		{
+			currentAnimation = AnimationIndex::WalkingSouth;
+		}
 	}
-	if (direction.first > 0.0f && direction.second > 0.0f)
+	else if (direction.first > 0.0f && direction.second > 0.0f)
 	{
-		currentAnimation = AnimationIndex::WalkingSouthEast;
+		if (direction.first > walkingSpeed && direction.second > walkingSpeed)
+		{
+			currentAnimation = AnimationIndex::RunningSouthEast;
+		}
+		else
+		{
+			currentAnimation = AnimationIndex::WalkingSouthEast;
+		}
 	}
-	if (direction.first > 0.0f && direction.second == 0.0f)
+	else if (direction.first > 0.0f && direction.second == 0.0f)
 	{
-		currentAnimation = AnimationIndex::WalkingEast;
+		if (direction.first > walkingSpeed)
+		{
+			currentAnimation = AnimationIndex::RunningEast;
+		}
+		else
+		{
+			currentAnimation = AnimationIndex::WalkingEast;
+		}
 	}
-	if (direction.first < 0.0f && direction.second > 0.0f)
+	else if (direction.first < 0.0f && direction.second > 0.0f)
 	{
-		currentAnimation = AnimationIndex::WalkingSouthWest;
+		if (direction.first < -walkingSpeed && direction.second > walkingSpeed)
+		{
+			currentAnimation = AnimationIndex::RunningSouthWest;
+		}
+		else
+		{
+			currentAnimation = AnimationIndex::WalkingSouthWest;
+		}
+
 	}
-	if (direction.first < 0.0f && direction.second == 0.0f)
+	else if (direction.first < 0.0f && direction.second == 0.0f)
 	{
-		currentAnimation = AnimationIndex::WalkingWest;
+		if (direction.first < -walkingSpeed)
+		{
+			currentAnimation = AnimationIndex::RunningWest;
+		}
+		else
+		{
+			currentAnimation = AnimationIndex::WalkingWest;
+		}
 	}
-	if (direction.first < 0.0f && direction.second < 0.0f)
+	else if (direction.first < 0.0f && direction.second < 0.0f)
 	{
-		currentAnimation = AnimationIndex::WalkingNorthWest;
+		if (direction.first < -walkingSpeed && direction.second < -walkingSpeed)
+		{
+			currentAnimation = AnimationIndex::RunningNorthWest;
+		}
+		else
+		{
+			currentAnimation = AnimationIndex::WalkingNorthWest;
+		}
 	}
-	if (direction.first == 0.0f && direction.second < 0.0f)
+	else if (direction.first == 0.0f && direction.second < 0.0f)
 	{
-		currentAnimation = AnimationIndex::WalkingNorth;
+		if (direction.second < -walkingSpeed)
+		{
+			currentAnimation = AnimationIndex::RunningNorth;
+		}
+		else
+		{
+			currentAnimation = AnimationIndex::WalkingNorth;
+		}
 	}
-	if (direction.first > 0.0f && direction.second < 0.0f)
+	else if (direction.first > 0.0f && direction.second < 0.0f)
 	{
-		currentAnimation = AnimationIndex::WalkingNorthEast;
+		if (direction.first > walkingSpeed && direction.second < -walkingSpeed)
+		{
+			currentAnimation = AnimationIndex::RunningNorthEast;
+		}
+		else
+		{
+			currentAnimation = AnimationIndex::WalkingNorthEast;
+		}
+	}
+	else
+	{
+		if (currentAnimation == AnimationIndex::WalkingSouth || currentAnimation == AnimationIndex::RunningSouth)
+		{
+			currentAnimation = AnimationIndex::IdleSouth;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingNorth || currentAnimation == AnimationIndex::RunningNorth)
+		{
+			currentAnimation = AnimationIndex::IdleNorth;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingEast || currentAnimation == AnimationIndex::RunningEast)
+		{
+			currentAnimation = AnimationIndex::IdleEast;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingWest || currentAnimation == AnimationIndex::RunningWest)
+		{
+			currentAnimation = AnimationIndex::IdleWest;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingSouthEast || currentAnimation == AnimationIndex::RunningSouthEast)
+		{
+			currentAnimation = AnimationIndex::IdleSouthEast;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingNorthEast || currentAnimation == AnimationIndex::RunningNorthEast)
+		{
+			currentAnimation = AnimationIndex::IdleNorthEast;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingSouthWest || currentAnimation == AnimationIndex::RunningSouthWest)
+		{
+			currentAnimation = AnimationIndex::IdleNorthWest;
+		}
+		else if (currentAnimation == AnimationIndex::WalkingNorthWest || currentAnimation == AnimationIndex::RunningNorthWest)
+		{
+			currentAnimation = AnimationIndex::IdleNorthWest;
+		}
 	}
 }
 
@@ -329,10 +313,17 @@ void Player::goThroughPath()
 		}
 		else
 		{
-			pair<float, float> direction = decodeDirections();
-			direction.first *= 3;
-			direction.second *= 3;
-			setDirection({ direction.first, direction.second });
+			direction = { decodeDirections().first*3, decodeDirections().second*3 };
+			setVelocity();
+		}
+	}
+	else
+	{
+		if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) ||
+			sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)))
+		{
+			direction = { 0,0 };
+			setVelocity();
 		}
 	}
 }
@@ -349,7 +340,16 @@ sf::Vector2f Player::returnPlayerBodySize()
 
 vector<int> Player::getTilesToBeColored()
 {
+	if (playerPath.empty())
+	{
+		return {};
+	}
 	return tilesToBeColored;
+}
+
+void Player::setEvent(sf::Event * event)
+{
+	this->playerEvent = event;
 }
 
 Player::~Player()

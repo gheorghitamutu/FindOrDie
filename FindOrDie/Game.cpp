@@ -1,46 +1,48 @@
 #include "Game.h"
-#include <future>
 void Game::GameRun()
 {
-	sf::RenderWindow window(videoMode, "Find Or Die!", sf::Style::Resize, settings);
-	window.setMouseCursorVisible(true);
-	window.setFramerateLimit(60);
 	while (window.isOpen())
 	{
 		while (window.pollEvent(event))
 		{ 
-			processEvents(window);
+			processEvents();
 		}
 		window.clear(sf::Color::Black);
 		if (gameState.getCurrentState() == GameStates::GameState::MainMenu)
 		{
-			camera.setMenuView(window);
+			camera.setMenuView();
 			menu.draw(window);
 		}
 		else if (gameState.getCurrentState() == GameStates::GameState::CharacterSelection)
 		{
+			camera.setMenuView();
 			menu.draw(window);
 		}
 		else if (gameState.getCurrentState() == GameStates::GameState::Pause)
 		{
-			camera.setMenuView(window);
+			camera.setMenuView();
 			menu.draw(window);
 		}
 		else if (gameState.getCurrentState() == GameStates::GameState::Running)
 		{
+			map.setPlayerPosition(player.returnPlayer2DPosition());
+			map.changeTilesOpacity(player.getTilesToBeColored());
+			map.setViewBounds(camera.getPlayerViewBounds());
+			map.setWhatToDraw();
 			map.drawMap(window);
 		//	enemies.Draw(window);
 		//	chest.DrawChest(window);
 			player.Update(map);
+			camera.setPlayerView();
+			camera.CameraFollowPlayer(player.returnPlayer2DPosition());
 			player.Draw(window);
-			camera.CameraFollowPlayer(window, player.returnPlayer2DPosition());
 		}
 		window.display();
 	}
 }
 
 
-void Game::processEvents(sf::RenderWindow& window)
+void Game::processEvents()
 {
 	if (event.type == sf::Event::Closed || gameState.getCurrentState() == GameStates::GameState::Exit) {
 		window.close();
@@ -53,29 +55,27 @@ void Game::processEvents(sf::RenderWindow& window)
 	{
 		menu.options(event, player, map, gameState);
 		player.StartingPosition(window);
+		camera.setPlayerView();
 	}
 	else if (gameState.getCurrentState() == GameStates::GameState::Running)
 	{
-		camera.draggableCamera(window, event);
-		camera.zoomPlayerView(window, event);
-		map.setViewBounds(camera.getPlayerViewBounds());
-		map.setWhatToDraw();
+		camera.draggableCamera();
+		camera.zoomPlayerView();
 		if (event.type == sf::Event::MouseButtonPressed)
 		{
 			if (event.mouseButton.button == sf::Mouse::Left)
 			{
-				player.setPlayerPath(map.setFinishLocation(event, window, player.returnPlayer2DPosition(), player.returnPlayerBodySize()), map.getTiles(), map.getMapDimensions());
-				map.changeTilesOpacity(player.getTilesToBeColored());
+				player.setPlayerPath(map.setFinishLocation(event, window, player.returnPlayerBodySize()), map.getTiles(), map.getMapDimensions());
 			}
 		}
-		player.HandleEvents(event);
+		player.HandleEvents();
 		switch (event.type)
 		{
 		case sf::Event::KeyReleased:
 			switch (event.key.code)
 			{
 			case sf::Keyboard::Space:
-				camera.centerOnPlayer(window, player.returnPlayer2DPosition());
+				camera.centerOnPlayer(player.returnPlayer2DPosition());
 				break;
 			case sf::Keyboard::Escape:
 				gameState.setCurrentState(GameStates::GameState::Pause);
@@ -87,6 +87,7 @@ void Game::processEvents(sf::RenderWindow& window)
 	}
 	else if (gameState.getCurrentState() == GameStates::GameState::Pause)
 	{
+		camera.setMenuView();
 		menu.options(event, player, map, gameState);
 	}
 }
@@ -98,14 +99,26 @@ void Game::getScreenResolution()
 
 Game::Game()
 {
+	settings.antialiasingLevel = 1;
 	getScreenResolution();
+	window.create(videoMode, "Find Or Die!", sf::Style::Resize, settings);
+	window.setMouseCursorVisible(true);
+	window.setFramerateLimit(60);
+
 	menu.setDimensions((float)videoMode.width, (float)videoMode.height);
-	menu.setMenus();
-	settings.antialiasingLevel = 2;
+
+	camera.setEvent(&this->event);
+	camera.setWindow(&this->window);
 	camera.playerViewSetSize({ videoMode.width, videoMode.height });
 	camera.playerViewSetCenter({ player.returnPlayer2DPosition() });
 	camera.setLastKnownPosition(player.returnPlayer2DPosition());
+	camera.setMenuView();
+
+	map.setEvent(&this->event);
 	map.setViewBounds(camera.getPlayerViewBounds());
+
+	player.setEvent(&this->event);
+
 	GameRun();
 }
 

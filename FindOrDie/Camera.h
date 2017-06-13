@@ -6,15 +6,18 @@ class Camera
 public:
 	Camera();
 	~Camera();
-	void setMenuView(sf::RenderWindow & window);
-	void CameraFollowPlayer(sf::RenderWindow& window, std::pair<float, float>& playerPosition);
+	void setMenuView();
+	void setPlayerView();
+	void CameraFollowPlayer(std::pair<float, float>& playerPosition);
 	void setLastKnownPosition(std::pair<float, float>& position);
 	float getAspectRatio(std::pair<unsigned int, unsigned int> dimensions);
-	void draggableCamera(sf::RenderWindow& window, sf::Event event);
-	void zoomPlayerView(sf::RenderWindow& window, sf::Event event);
-	void centerOnPlayer(sf::RenderWindow& window, std::pair<float, float>& playerPosition);
+	void draggableCamera();
+	void zoomPlayerView();
+	void centerOnPlayer(std::pair<float, float>& playerPosition);
 	void playerViewSetSize(std::pair<unsigned int, unsigned int> dimensions);
 	void playerViewSetCenter(std::pair<float, float> center);
+	void setEvent(sf::Event* event);
+	void setWindow(sf::RenderWindow* window);
 	sf::FloatRect getPlayerViewBounds();
 
 private: 
@@ -30,8 +33,13 @@ private:
 
 	sf::View playerView, menuView;
 
+	sf::Event* event;
+	sf::RenderWindow* window;
+
 	bool rightClickWasPressed = false;
 	bool initialPosition = true;
 	bool centerCameraOnPlayer = true;
+	bool isPlayerView = false;
+	bool isMenuView = false;
 };
 

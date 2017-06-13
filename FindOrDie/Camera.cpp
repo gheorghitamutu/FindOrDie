@@ -8,27 +8,42 @@ Camera::~Camera()
 {
 }
 
-void Camera::setMenuView(sf::RenderWindow& window)
+void Camera::setMenuView()
 {
-	menuView = window.getDefaultView();
-	window.setView(menuView);
+	if (!isMenuView)
+	{
+		menuView = window->getDefaultView();
+		window->setView(menuView);
+		isPlayerView = false;
+		isMenuView = true;
+	}
+}
+
+void Camera::setPlayerView()
+{
+	if (!isPlayerView)
+	{
+		window->setView(playerView);
+		isPlayerView = true;
+		isMenuView = false;
+	}
 }
 
 
-void Camera::CameraFollowPlayer(sf::RenderWindow& window, std::pair<float,float>& playerPosition)
+void Camera::CameraFollowPlayer(std::pair<float,float>& playerPosition)
 {
 	if (centerCameraOnPlayer && lastKnownPosition != playerPosition )
 	{
 		playerView.move(-(lastKnownPosition.first - playerPosition.first), -(lastKnownPosition.second - playerPosition.second));
 		lastKnownPosition = playerPosition;
-		window.setView(playerView);
+		window->setView(playerView);
 	}
 	else
 	{
 		if (initialPosition)
 		{
 			playerView.setCenter(lastKnownPosition.first, lastKnownPosition.second);
-			window.setView(playerView);
+			window->setView(playerView);
 			initialPosition = false;
 		}
 	}
@@ -44,11 +59,11 @@ float Camera::getAspectRatio(std::pair<unsigned int, unsigned int> dimensions)
 	return float(dimensions.first) / float(dimensions.second);
 }
 
-void Camera::draggableCamera(sf::RenderWindow& window, sf::Event event)
+void Camera::draggableCamera()
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && !rightClickWasPressed)
 	{
-		position = sf::Mouse::getPosition(window);
+		position = sf::Mouse::getPosition(*window);
 		rightClickWasPressed = true;
 		cameraCenter = playerView.getCenter();
 	}
@@ -58,28 +73,29 @@ void Camera::draggableCamera(sf::RenderWindow& window, sf::Event event)
 	}
 	if (rightClickWasPressed)
 	{
-			deltaPosition.x = (position.x - sf::Mouse::getPosition(window).x);
-			deltaPosition.y = (position.y - sf::Mouse::getPosition(window).y);
+			deltaPosition.x = (position.x - sf::Mouse::getPosition(*window).x);
+			deltaPosition.y = (position.y - sf::Mouse::getPosition(*window).y);
 			if (initialPosition || centerCameraOnPlayer)
 			{
 				initialPosition = false;
 				centerCameraOnPlayer = false;
 			}
 			playerView.setCenter(cameraCenter.x + deltaPosition.x, cameraCenter.y + deltaPosition.y);
-			window.setView(playerView);
+			window->setView(playerView);
 	}
 }
 
-void Camera::zoomPlayerView(sf::RenderWindow& window, sf::Event event)
+void Camera::zoomPlayerView()
 {
-	if (event.type == sf::Event::MouseWheelMoved)
+	
+	if (this->event->type==sf::Event::MouseWheelMoved)
 	{
-		playerView.zoom(1.f + event.mouseWheel.delta*0.1f);
-		window.setView(playerView);
+		playerView.zoom(1.f + event->mouseWheel.delta*0.1f);
+		window->setView(playerView);
 	}
 }
 
-void Camera::centerOnPlayer(sf::RenderWindow& window, std::pair<float, float>& playerPosition)
+void Camera::centerOnPlayer(std::pair<float, float>& playerPosition)
 {
 	if (centerCameraOnPlayer) {
 		centerCameraOnPlayer = false;
@@ -88,7 +104,7 @@ void Camera::centerOnPlayer(sf::RenderWindow& window, std::pair<float, float>& p
 	{
 		centerCameraOnPlayer = true;
 		playerView.setCenter({ playerPosition.first, playerPosition.second });
-		window.setView(playerView);
+		window->setView(playerView);
 	}
 }
 
@@ -100,6 +116,16 @@ void Camera::playerViewSetSize(std::pair<unsigned int, unsigned int> dimensions)
 void Camera::playerViewSetCenter(std::pair<float, float> center)
 {
 	 playerView.setCenter({ center.first, center.second }); 
+}
+
+void Camera::setEvent(sf::Event * event)
+{
+	this->event = event;
+}
+
+void Camera::setWindow(sf::RenderWindow * window)
+{
+	this->window = window;
 }
 
 sf::FloatRect Camera::getPlayerViewBounds()

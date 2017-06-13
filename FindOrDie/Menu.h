@@ -3,6 +3,7 @@
 #include "Player.h"
 #include <vector>
 #include "GameStates.h"
+#include <string>
 class Menu
 {
 public:
@@ -12,7 +13,6 @@ public:
 	void MoveDown();
 	void options(sf::Event& event, class Player& player, class Map& map, GameStates& gameState);
 	void pickMenu();
-	void setMenus();
 	void setDimensions(float widthD, float heightD);
 
 public:
@@ -40,6 +40,8 @@ public:
 
 	float width;
 	float height;
+
+	unsigned int fontSize = 50;
 
 	~Menu();
 };

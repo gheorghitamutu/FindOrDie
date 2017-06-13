@@ -7,24 +7,6 @@ Menu::Menu()
 	{
 		printf("Can't load font!\n");
 	}
-	else
-	{
-		text.setFont(font);
-		text.setScale({ 1.5f, 1.5f });
-		text.setFillColor(sf::Color::Red);
-	}
-
-	for (int i = 0; i < std::max(std::max(itemsMainMenu, itemsPauseMenu), itemsSelectCharacterMenu); i++)
-	{
-		if (i == 1)
-		{
-			text.setFillColor(sf::Color::White);
-		}
-
-		if (i < itemsMainMenu)main.emplace_back(text);
-		if (i < itemsPauseMenu)pause.emplace_back(text);
-		if (i < itemsSelectCharacterMenu)selectCharacter.emplace_back(text);
-	}
 }
 
 void Menu::draw(sf::RenderWindow& window)
@@ -36,29 +18,23 @@ void Menu::draw(sf::RenderWindow& window)
 
 void Menu::MoveUp()
 {
-	if (selectedItemIndex >= 0) {
-		menu[selectedItemIndex].setFillColor(sf::Color::White);
-		if (selectedItemIndex>0)selectedItemIndex--;
-		else selectedItemIndex = menu.size() - 1;
-		menu[selectedItemIndex].setFillColor(sf::Color::Red);
+	menu[selectedItemIndex].setFillColor(sf::Color::Red);
+	if (--selectedItemIndex < 0)
+	{
+		selectedItemIndex = menu.size() - 1;
 	}
+	menu[selectedItemIndex].setFillColor(sf::Color::White);
+
 }
 
 void Menu::MoveDown()
 {
-	if (selectedItemIndex >= 0)
-	{
-		menu[selectedItemIndex].setFillColor(sf::Color::White);
-		if (selectedItemIndex < menu.size() - 1)
-			{
-				selectedItemIndex++;
-			}
-			else
-			{
-				selectedItemIndex = 0;
-			}
-		menu[selectedItemIndex].setFillColor(sf::Color::Red);
-	}
+	menu[selectedItemIndex].setFillColor(sf::Color::Red);
+	if (++selectedItemIndex > menu.size() - 1)
+		{
+			selectedItemIndex = 0;
+		}
+	menu[selectedItemIndex].setFillColor(sf::Color::White);
 }
 
 void Menu::options(sf::Event& event, class Player& player, class Map& map, GameStates& gameState)
@@ -95,16 +71,16 @@ void Menu::options(sf::Event& event, class Player& player, class Map& map, GameS
 				}
 				else if (menuState == Menu::MenuState::SelectCharacter)
 				{
-					gameState.setCurrentState(GameStates::GameState::Running);
-					menuState = Menu::MenuState::Pause;
 					if (selectedItemIndex == 0)
 					{
 						player.setTexture("Man");
 					}
-					if (selectedItemIndex == 1)
+					else if (selectedItemIndex == 1)
 					{
 						player.setTexture("Woman");
 					}
+					menuState = Menu::MenuState::Pause;
+					gameState.setCurrentState(GameStates::GameState::Running);
 				}
 
 				else if (menuState == Menu::MenuState::Pause)
@@ -131,7 +107,8 @@ void Menu::options(sf::Event& event, class Player& player, class Map& map, GameS
 void Menu::pickMenu()
 {
 	selectedItemIndex = 0;
-	switch (menuState) {
+	switch (menuState)
+	{
 	case Menu::MenuState::Main:
 		menu = main;
 		break;
@@ -142,63 +119,44 @@ void Menu::pickMenu()
 		menu = pause;
 		break;
 	}
-}
-
-void Menu::setMenus()
-{
-	for (int i = 0; i < itemsMainMenu; i++)
-	{
-		switch (i)
-		{
-		case 0:
-			main[i].setString("New Game");
-			break;
-		case 1:
-			main[i].setString("Load Game");
-			break;
-		case 2:
-			main[i].setString("Exit Game");
-			break;
-		}
-		main[i].setPosition({ (float)(width / 3), (float)(height / (itemsSelectCharacterMenu / (i / 1.9 + 0.4))) });
-	}
-	menu = main;
-	for (int i = 0; i < itemsSelectCharacterMenu; i++)
-	{
-		switch (i)
-		{
-		case 0:
-			selectCharacter[i].setString("Male");
-			break;
-		case 1:
-			selectCharacter[i].setString("Female");
-			break;
-		}
-		selectCharacter[i].setPosition({ (float)(width / 3), (float)(height / (itemsSelectCharacterMenu / (i / 1.9 + 0.4))) });
-	}
-
-	for (int i = 0; i < itemsPauseMenu; i++)
-	{
-		switch (i)
-		{
-		case 0:
-			pause[i].setString("Resume Game");
-			break;
-		case 1:
-			pause[i].setString("Save Game");
-			break;
-		case 2:
-			pause[i].setString("Exit Game to Main Menu");
-			break;
-		}
-		pause[i].setPosition({ (float)(width / 3), (float)(height / (itemsPauseMenu / (i / 1.9 + 0.4))) });
-	}
+	menu[selectedItemIndex].setFillColor(sf::Color::White);
 }
 
 void Menu::setDimensions(float widthD, float heightD)
 {
 	this->width = widthD;
 	this->height = heightD;
+
+	main = { { "New Game", font, fontSize },{ "Load Game", font,  fontSize },{ "Exit Game", font,  fontSize } };
+	selectCharacter = { { "Male", font, fontSize },{ "Female", font,  fontSize } };
+	pause = { { "Resume Game", font, fontSize },{ "Save Game", font,  fontSize },{ "Exit Game to Main Menu", font,  fontSize } };
+
+	int maxItemsMenu = std::max(std::max(itemsMainMenu, itemsPauseMenu), itemsSelectCharacterMenu);
+	float xPosOrigin = main[0].getString().getSize() * fontSize / 2;
+	float xPos = (float)(width / 2);
+
+	for (int i = 0; i < maxItemsMenu; i++)
+	{
+		if (i < itemsMainMenu)
+		{
+			main[i].setFillColor(sf::Color::Red);
+			main[i].setOrigin(xPosOrigin, 0);
+			main[i].setPosition({ xPos, (float)(height / (maxItemsMenu / (i / 1.9 + 0.4))) });
+		}
+		if (i < itemsPauseMenu)
+		{
+			pause[i].setFillColor(sf::Color::Red);
+			pause[i].setOrigin(xPosOrigin, 0);
+			pause[i].setPosition({ xPos, (float)(height / (maxItemsMenu / (i / 1.9 + 0.4))) });
+		}
+		if (i < itemsSelectCharacterMenu)
+		{
+			selectCharacter[i].setFillColor(sf::Color::Red);
+			selectCharacter[i].setOrigin(xPosOrigin, 0);
+			selectCharacter[i].setPosition({ xPos,(float)(height / (maxItemsMenu / (i / 1.9 + 0.4))) });
+		}
+	}
+	pickMenu();
 }
 
 Menu::~Menu()

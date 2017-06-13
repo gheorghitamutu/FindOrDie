@@ -73,9 +73,9 @@ bool Map::containsPoint(pair<float, float> point, pair<vector<pair<float, float>
 	return isInside(polygon1, polygon1.size(), { point.first, point.second });
 }
 
-bool Map::isColliding(pair <float, float> position, sf::Vector2f bodySize, sf::Vector2f velocity)
+bool Map::isColliding(sf::Vector2f bodySize, sf::Vector2f velocity)
 {
-	tileNumberWherePlayerIs = getTileNumberWherePlayerIs(position, bodySize);
+	tileNumberWherePlayerIs = getTileNumberWherePlayerIs(bodySize);
 	if (tileNumberWherePlayerIs != lastKnownTileNumberWherePlayerIs)
 	{
 		nonWalkableObjects.clear();
@@ -115,7 +115,7 @@ bool Map::isColliding(pair <float, float> position, sf::Vector2f bodySize, sf::V
 	}
 	for (auto& object : nonWalkableObjects)
 	{
-		if (containsPoint({ position.first + velocity.x, position.second + velocity.y + bodySize.y }, object ))
+		if (containsPoint({ playerPosition.first + velocity.x, playerPosition.second + velocity.y + bodySize.y }, object ))
 		{
 			return false;
 		}
@@ -123,11 +123,11 @@ bool Map::isColliding(pair <float, float> position, sf::Vector2f bodySize, sf::V
 	return true;
 }
 
-bool Map::isCollidingDrawOver(pair<float, float> position, sf::Vector2f bodySize)
+bool Map::isCollidingDrawOver(sf::Vector2f bodySize)
 {
 		drawTileOverPlayer.clear();
 		if (tileNumberWherePlayerIs - mapDimensions.first - 1 >= 0 &&
-			containsPoint({ position.first, position.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs - mapDimensions.first - 1]) &&
+			containsPoint({ this->playerPosition.first, this->playerPosition.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs - mapDimensions.first - 1]) &&
 			!tiles[tileNumberWherePlayerIs - mapDimensions.first - 1].second)
 		{
 			drawTileOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs - mapDimensions.first - 1].second);
@@ -135,55 +135,55 @@ bool Map::isCollidingDrawOver(pair<float, float> position, sf::Vector2f bodySize
 		}
 		if (tileNumberWherePlayerIs - mapDimensions.first >= 0 &&
 			!tiles[tileNumberWherePlayerIs - mapDimensions.first].second &&
-			containsPoint({ position.first, position.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs - mapDimensions.first]))
+			containsPoint({ this->playerPosition.first, this->playerPosition.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs - mapDimensions.first]))
 		{
 			drawTileOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs - mapDimensions.first].second);
 			lastKnownTilesOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs - mapDimensions.first].second);
 		}
 		if (tileNumberWherePlayerIs - mapDimensions.first + 1 >= 0 &&
 			!tiles[tileNumberWherePlayerIs - mapDimensions.first + 1].second &&
-			containsPoint({ position.first, position.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs - mapDimensions.first + 1]))
+			containsPoint({ this->playerPosition.first, this->playerPosition.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs - mapDimensions.first + 1]))
 		{
 			drawTileOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs - mapDimensions.first + 1].second);
 			lastKnownTilesOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs - mapDimensions.first + 1].second);
 		}
 		if (tileNumberWherePlayerIs - 1 >= 0 &&
 			!tiles[tileNumberWherePlayerIs - 1].second &&
-			containsPoint({ position.first, position.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs - 1]))
+			containsPoint({ this->playerPosition.first, this->playerPosition.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs - 1]))
 		{
 			drawTileOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs - 1].second);
 			lastKnownTilesOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs - 1].second);
 		}
 		if (tileNumberWherePlayerIs + 1 < numberOfTiles &&
 			!tiles[tileNumberWherePlayerIs + 1].second &&
-			containsPoint({ position.first, position.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs + 1]))
+			containsPoint({ this->playerPosition.first, this->playerPosition.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs + 1]))
 		{
 			drawTileOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs + 1].second);
 			lastKnownTilesOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs + 1].second);
 		}
 		if (tileNumberWherePlayerIs + mapDimensions.first - 1 < numberOfTiles &&
 			!tiles[tileNumberWherePlayerIs + mapDimensions.first - 1].second &&
-			containsPoint({ position.first, position.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs + mapDimensions.first - 1]))
+			containsPoint({ this->playerPosition.first, this->playerPosition.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs + mapDimensions.first - 1]))
 		{
 			drawTileOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs + mapDimensions.first - 1].second);
 			lastKnownTilesOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs + mapDimensions.first - 1].second);
 		}
 		if (tileNumberWherePlayerIs + mapDimensions.first < numberOfTiles &&
 			!tiles[tileNumberWherePlayerIs + mapDimensions.first].second &&
-			containsPoint({ position.first, position.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs + mapDimensions.first]))
+			containsPoint({ this->playerPosition.first, this->playerPosition.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs + mapDimensions.first]))
 		{
 			drawTileOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs + mapDimensions.first].second);
 			lastKnownTilesOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs + mapDimensions.first].second);
 		}
 		if (tileNumberWherePlayerIs + mapDimensions.first + 1 < numberOfTiles &&
 			!tiles[tileNumberWherePlayerIs + mapDimensions.first + 1].second &&
-			containsPoint({ position.first, position.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs + mapDimensions.first + 1]))
+			containsPoint({ this->playerPosition.first, this->playerPosition.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs + mapDimensions.first + 1]))
 		{
 			drawTileOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs + mapDimensions.first + 1].second);
 			lastKnownTilesOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs + mapDimensions.first + 1].second);
 		}
 		if (!tiles[tileNumberWherePlayerIs].second &&
-			containsPoint({ position.first, position.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs]))
+			containsPoint({ this->playerPosition.first, this->playerPosition.second + bodySize.y }, canDrawOverPlayerObjects[tileNumberWherePlayerIs]))
 		{
 			drawTileOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs].second);
 			lastKnownTilesOverPlayer.emplace_back(canDrawOverPlayerObjects[tileNumberWherePlayerIs].second);
@@ -198,11 +198,8 @@ bool Map::isCollidingDrawOver(pair<float, float> position, sf::Vector2f bodySize
 
 void Map::createMap()
 {
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dis(10, 150);
-	std::uniform_int_distribution<> dis2(1, 5);
-	mapDimensions = { dis(gen), dis(gen) };
-	tilesCoords.clear();
+	tileType.clear();
+	floorLevelTilesCoords.clear();
 	tiles.clear();
 	nonWalkableObjects.clear();
 	lastKnownTilesOverPlayer.clear();
@@ -212,7 +209,10 @@ void Map::createMap()
 	drawTileOverPlayer.clear();
 	lastKnownTilesOverPlayer.clear();
 	mapMatrix.clear();
+	recolorTiles.clear();
+	drawThese.clear();
 	
+	mapDimensions = { dis(gen), dis(gen) };
 	numberOfTiles = mapDimensions.first*mapDimensions.second;
 
 	for (int i = 0; i < numberOfTiles; i++)
@@ -223,17 +223,17 @@ void Map::createMap()
 				i % mapDimensions.first  == mapDimensions.first - 1 || 
 				i > mapDimensions.first*(mapDimensions.second-1)) 
 			{
-				tilesCoords.emplace_back(pair<float,float>( 0, 0 ), false);
+				tileType.emplace_back(pair<float,float>( 0, 0 ), false);
 			}
 			else
 				{
-					tilesCoords.emplace_back(pair<float, float>(3, 0), false);
+					tileType.emplace_back(pair<float, float>(3, 0), false);
 				}
 	}
 
 	float posX = 0, posY = 0;
 	int tileNumber = 0;
-	for (auto &pair : tilesCoords)
+	for (auto &pair : tileType)
 	{
 		tile.second = isWalkable({ (int)pair.first.first, (int)pair.first.second });
 		tile.first.setPosition(convert2DToIso({ posX*(tileSize / 2), posY*(tileSize / 2) }).first, convert2DToIso({ posX*(tileSize / 2) , posY*(tileSize / 2) }).second);
@@ -292,15 +292,6 @@ void Map::createMap()
 			}
 		}
 	}
-	a = 0;
-	for (auto& elem1 : mapMatrix)
-	{
-		for (auto& elem2 : elem1)
-		{
-			cout << elem2 << " ";
-		}
-		cout << endl;
-	}
 }
 
 vector<sf::Sprite*> Map::checkWhatToDraw()
@@ -321,7 +312,6 @@ vector<sf::Sprite*> Map::checkWhatToDraw()
 			drawTheseLocal.emplace_back(&tile.first);
 		}
 	}
-
 	return drawTheseLocal;
 }
 
@@ -338,37 +328,34 @@ vector<pair<float, float>> Map::getPolygonPoints(sf::Sprite* tile)
 	};
 }
 
-int Map::getTileNumberWherePlayerIs(pair <float, float> position, sf::Vector2f bodySize)
+int Map::getTileNumberWherePlayerIs(sf::Vector2f bodySize)
 {
 	for (auto& floorTile : floorLevelTilesCoords)
 	{
-		if (containsPoint({ position.first,position.second + bodySize.y }, floorTile))
+		if (containsPoint({ this->playerPosition.first,this->playerPosition.second + bodySize.y }, floorTile))
 		{
 			return floorTile.second;
 		}
 	}
 }
 
-int Map::getTileNumberClicked(sf::Event event, sf::RenderWindow& window)
+int Map::getTileNumberClicked(sf::RenderWindow& window)
 {
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
-	std::cout << "mouse x: " << worldPos.x << std::endl;
-	std::cout << "mouse y: " << worldPos.y << std::endl;
 	for (auto& floorTile : floorLevelTilesCoords)
 	{
 		if (containsPoint({ worldPos.x, worldPos.y }, floorTile))
 		{
-			std::cout << "tileNumber: " << floorTile.second << std::endl;
 			return floorTile.second;
 		}
 	}
 	return -1;
 }
 
-pair<string, pair<pair<int, int>, pair<int, int>>> Map::setFinishLocation(sf::Event event, sf::RenderWindow& window, pair <float, float> position, sf::Vector2f bodySize)
+pair<string, pair<pair<int, int>, pair<int, int>>> Map::setFinishLocation(sf::Event event, sf::RenderWindow& window, sf::Vector2f bodySize)
 {
-	int tileNumberClicked = getTileNumberClicked(event, window);
+	int tileNumberClicked = getTileNumberClicked(window);
 	if (tileNumberClicked > -1)
 	{
 		if (tiles[tileNumberClicked].second)
@@ -377,8 +364,7 @@ pair<string, pair<pair<int, int>, pair<int, int>>> Map::setFinishLocation(sf::Ev
 				tileNumberClicked / mapDimensions.first,
 				tileNumberClicked % mapDimensions.first
 			};
-			std::cout << "finishLocation: " << finishLocation.first <<" "<< finishLocation.second<< std::endl;
-			setStartLocation(position, bodySize);
+			setStartLocation(bodySize);
 			Pathfinding* path = new Pathfinding();
 			playerPath = path->pathFind(mapDimensions, mapMatrix, dx, dy, dir, startLocation.first, startLocation.second, finishLocation.first, finishLocation.second);
 			delete path;
@@ -387,16 +373,15 @@ pair<string, pair<pair<int, int>, pair<int, int>>> Map::setFinishLocation(sf::Ev
 	return playerPath;
 }
 
-void Map::setStartLocation(pair <float, float> position, sf::Vector2f bodySize)
+void Map::setStartLocation(sf::Vector2f bodySize)
 {
-	int tileNumberPlayerIs = getTileNumberWherePlayerIs(position, bodySize);
+	int tileNumberPlayerIs = getTileNumberWherePlayerIs(bodySize);
 	if (tileNumberPlayerIs > -1)
 	{
 			this->startLocation = {
 				tileNumberPlayerIs / mapDimensions.first,
 				tileNumberPlayerIs % mapDimensions.first
 			};
-			std::cout << "startLocation: " << startLocation.first << " " << startLocation.second << std::endl;
 	}
 }
 
@@ -427,15 +412,39 @@ vector<pair<sf::Sprite, bool>> Map::getTiles()
 
 void Map::changeTilesOpacity(vector<int> whichTiles)
 {
-	for (auto& elem : whichTiles)
+	if (whichTiles.size() == 0 || (whichTiles.size() != recolorTiles.size() && recolorTiles.size() != 0 || event->mouseButton.button == sf::Mouse::Left))
 	{
-		tiles[elem].first.setColor(sf::Color(255, 255, 255, 10));
-		nonWalkableTiles[elem].first.setColor(sf::Color(255, 255, 255, 10));
+		for (auto& elem : recolorTiles)
+		{
+			nonWalkableTiles[elem].first.setColor(sf::Color(255, 255, 255, 255));
+			tiles[elem].first.setColor(sf::Color(255, 255, 255, 255));
+		}
+		recolorTiles.clear();
 	}
+	if (whichTiles.size() != 0)
+	{
+		recolorTiles = whichTiles;
+		for (auto& elem : whichTiles)
+		{
+			tiles[elem].first.setColor(sf::Color(255, 255, 255, 30));
+			nonWalkableTiles[elem].first.setColor(sf::Color(255, 255, 255, 30));
+		}
+	}
+}
+
+void Map::setPlayerPosition(pair<float, float> position)
+{
+	playerPosition = position;
+}
+
+void Map::setEvent(sf::Event * event)
+{
+	this->event = event;
 }
 
 void Map::setWhatToDraw()
 {
+	drawThese.clear();
 	drawThese = checkWhatToDraw();
 }
 
@@ -443,13 +452,13 @@ void Map::setViewBounds(sf::FloatRect& viewBounds)
 {
 	this->viewBounds = viewBounds;
     //this is for drawing tiles on the entire view
-	//this->viewBounds.height += 300;
-	//this->viewBounds.width += 300;
+	this->viewBounds.height += 300;
+	this->viewBounds.width += 300;
 	//this is for drawing tiles on a smaller area of a view | this can also be done with a viewport
-	this->viewBounds.left += 150;
-	this->viewBounds.top += 150;
-	this->viewBounds.height -= 300;
-	this->viewBounds.width -= 400;
+	//this->viewBounds.left += 150;
+	//this->viewBounds.top += 150;
+	//this->viewBounds.height -= 300;
+	//this->viewBounds.width -= 400;
 }
 
 bool Map::onSegment(pair<float, float> p, pair<float, float> q, pair<float, float> r)

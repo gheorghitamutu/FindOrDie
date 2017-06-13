@@ -12,9 +12,9 @@ class Player
 public:
 	Player();
 	~Player();
-	void HandleEvents(sf::Event& event);
+	void HandleEvents();
 	void Update(class Map& map);
-	void setDirection(sf::Vector2f direction);
+	void setVelocity();
 	void Draw(sf::RenderWindow& window);
 	void StartingPosition(sf::RenderWindow& window);
 	void setTexture(string textureType);
@@ -26,6 +26,7 @@ public:
 	pair <float, float> returnPlayer2DPosition();
 	sf::Vector2f returnPlayerBodySize();
 	vector<int> getTilesToBeColored();
+	void setEvent(sf::Event* event);
 public:
 	enum class AnimationIndex
 	{
@@ -73,12 +74,17 @@ public:
 
 	list<pair<pair<int,int>,pair<float, float>>> playerPath;
 	vector<int> tilesToBeColored;
-
+	
 	int dir = 4;
 	vector <int> dx={1, 0, -1, 0};
 	vector <int> dy={0, 1, 0, -1};
 	/*int dir = 8;
 	vector<int> dx = { 1, 1, 0, -1, -1, -1, 0, 1 };
 	vector<int> dy = { 0, 1, 1, 1, 0, -1, -1, -1 };*/
+
+	sf::Vector2f direction;
+	const float walkingSpeed = 1.1f;
+
+	sf::Event* playerEvent;
 };
 

@@ -22,30 +22,35 @@ public:
 	void setViewBounds(sf::FloatRect& viewBounds);
 	void drawMap(sf::RenderWindow& window);
 	void drawTilesOverPlayer(bool isColliding);
-	bool isCollidingDrawOver(pair <float, float> position, sf::Vector2f bodySize);
+	bool isCollidingDrawOver(sf::Vector2f bodySize);
 	bool isWalkable(pair<int, int> pair);
 	bool containsPoint(pair<float, float> point, pair<vector<pair<float, float>>, int> nonWalkableAreaCoords);
-	bool isColliding(pair <float, float> returnPlayer2DPosition, sf::Vector2f bodySize, sf::Vector2f velocity);
+	bool isColliding(sf::Vector2f bodySize, sf::Vector2f velocity);
 	pair <float, float> convert2DToIso(pair<float, float> pair);
 	pair <float, float> convertIsoTo2D(pair<float, float> pair);
 	pair <float, float> getTileCenterFromTileCoordinate(pair<float, float> pair);
 	vector<sf::Sprite*> checkWhatToDraw();
 	vector<pair<float, float>> getPolygonPoints(sf::Sprite* tile);
-	int getTileNumberWherePlayerIs(pair <float, float> position, sf::Vector2f bodySize);
-	int getTileNumberClicked(sf::Event event, sf::RenderWindow& window);
-	pair<string, pair<pair<int, int>, pair<int, int>>> setFinishLocation(sf::Event event, sf::RenderWindow& window, pair <float, float> position, sf::Vector2f bodySize);
-	void setStartLocation(pair <float, float> position, sf::Vector2f bodySize);
+	int getTileNumberWherePlayerIs(sf::Vector2f bodySize);
+	int getTileNumberClicked(sf::RenderWindow& window);
+	pair<string, pair<pair<int, int>, pair<int, int>>> setFinishLocation(sf::Event event, sf::RenderWindow& window, sf::Vector2f bodySize);
+	void setStartLocation(sf::Vector2f bodySize);
 	pair <float, float> getStartLocation();
 	pair <float, float> getFinishLocation();
 	vector<pair<vector<pair<float, float>>, int>> getFloorLevelTilesCoords();
 	pair <int, int> getMapDimensions();
 	vector <pair<sf::Sprite, bool>> getTiles();
 	void changeTilesOpacity(vector<int> whichTiles);
+	void setPlayerPosition(pair <float, float> position);
+	void setEvent(sf::Event* event);
 public:
 	std::random_device rd;
+	std::mt19937 gen{ rd() };
+	std::uniform_int_distribution<> dis{ 10, 150 };
+	std::uniform_int_distribution<> dis2{ 1, 5 };
 	sf::Texture tileTexture;
 	pair<sf::Sprite, bool> tile;
-	vector<pair<pair<float, float>, bool>> tilesCoords;
+	vector<pair<pair<float, float>, bool>> tileType;
 	vector<pair<vector<pair<float, float>>, int>> floorLevelTilesCoords;
 	vector <pair<sf::Sprite, bool>> tiles;
 	vector <pair<sf::Sprite, bool>> nonWalkableTiles;
@@ -86,5 +91,11 @@ public:
 
 	vector<int> drawTileOverPlayer;
 	vector<int> lastKnownTilesOverPlayer;
+
+	vector<int> recolorTiles;
+
+	pair <float, float> playerPosition;
+
+	sf::Event * event;
 };
 

@@ -17,8 +17,10 @@ public:
 	~Game();
 
 	void GameRun();
-	void processEvents(sf::RenderWindow& window);
+	void processEvents();
 	void getScreenResolution();
+
+	sf::Event event;
 
 	Chests chest;
 	Enemy enemies;
@@ -27,12 +29,12 @@ public:
 	Camera camera;
 	Menu menu;
 
-	sf::Event event;
-
 	sf::ContextSettings settings;
 
 	sf::VideoMode videoMode;
 
 	GameStates gameState;
+
+	sf::RenderWindow window;
 };
 
