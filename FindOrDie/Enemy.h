@@ -16,13 +16,13 @@ public:
 	void Animation();
 	void Update();
 
-	int ReturnMonsterVectorSize() { return body.size(); }
+	int ReturnMonsterVectorSize() { return (int)(body.size()); }
 
 	float ReturnMonsterSpeed() { return speed; }
 
 	std::vector <sf::RectangleShape> returnMonsterVector() { return body; }
 
-	int returnNumberOfMonsters() { return this->body.size(); };
+	int returnNumberOfMonsters() { return (int)(this->body.size()); };
 	
 	sf::Texture texture;
 

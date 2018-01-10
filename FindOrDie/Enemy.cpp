@@ -35,16 +35,20 @@ void Enemy::goToPlayer(sf::Vector2f returnPlayerPosition)
 	for (auto &monster : body) {
 		if (monster.getPosition().x - returnPlayerPosition.x > speed || monster.getPosition().x - returnPlayerPosition.x < -speed)
 		{
-			if (round(monster.getPosition().x) < round(returnPlayerPosition.x)) {
+			if (round(monster.getPosition().x) < round(returnPlayerPosition.x))
+			{
 				monster.move(speed, 0.0f);
-				if (monster.getPosition().x < returnPlayerPosition.x) {
+				if (monster.getPosition().x < returnPlayerPosition.x)
+				{
 					right = true;
 					row = 4;
 				}
 			}
-			else if (round(monster.getPosition().x) > round(returnPlayerPosition.x)) {
+			else if (round(monster.getPosition().x) > round(returnPlayerPosition.x)) 
+			{
 				monster.move(-speed, 0.0f);
-				if (monster.getPosition().x > returnPlayerPosition.x) {
+				if (monster.getPosition().x > returnPlayerPosition.x) 
+				{
 					left = true;
 					row = 0;
 				}
@@ -52,9 +56,11 @@ void Enemy::goToPlayer(sf::Vector2f returnPlayerPosition)
 		}
 		if (monster.getPosition().y - returnPlayerPosition.y > speed || monster.getPosition().y - returnPlayerPosition.y < -speed)
 		{
-			if (round(monster.getPosition().y) < round(returnPlayerPosition.y)) {
+			if (round(monster.getPosition().y) < round(returnPlayerPosition.y))
+			{
 				monster.move(0.0f, speed);
-				if (monster.getPosition().y < returnPlayerPosition.y) {
+				if (monster.getPosition().y < returnPlayerPosition.y)
+				{
 					if (right) row = 5;
 					else if (left) row = 7;
 					else row = 6;
@@ -63,7 +69,8 @@ void Enemy::goToPlayer(sf::Vector2f returnPlayerPosition)
 			else if (round(monster.getPosition().y) > round(returnPlayerPosition.y))
 			{
 				monster.move(0.0f, -speed);
-				if (monster.getPosition().x < returnPlayerPosition.x) {
+				if (monster.getPosition().x < returnPlayerPosition.x)
+				{
 					if (right) row = 3;
 					else if (left) row = 1;
 					else row = 2;
@@ -92,8 +99,8 @@ void Enemy::createEnemy(sf::RenderWindow & window)
 void Enemy::Animation()
 {
 	currentImage.x = 0;
-	uvRect.width = texture.getSize().x / float(imageCount.x);
-	uvRect.height = texture.getSize().y / float(imageCount.y);
+	uvRect.width = (int)(texture.getSize().x / float(imageCount.x));
+	uvRect.height = (int)(texture.getSize().y / float(imageCount.y));
 }
 
 void Enemy::Update()

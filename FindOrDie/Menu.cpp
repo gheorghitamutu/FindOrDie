@@ -21,7 +21,7 @@ void Menu::MoveUp()
 	menu[selectedItemIndex].setFillColor(sf::Color::Red);
 	if (--selectedItemIndex < 0)
 	{
-		selectedItemIndex = menu.size() - 1;
+		selectedItemIndex = (int)(menu.size() - 1);
 	}
 	menu[selectedItemIndex].setFillColor(sf::Color::White);
 
@@ -132,7 +132,7 @@ void Menu::setDimensions(float widthD, float heightD)
 	pause = { { "Resume Game", font, fontSize },{ "Save Game", font,  fontSize },{ "Exit Game to Main Menu", font,  fontSize } };
 
 	int maxItemsMenu = std::max(std::max(itemsMainMenu, itemsPauseMenu), itemsSelectCharacterMenu);
-	float xPosOrigin = main[0].getString().getSize() * fontSize / 2;
+	float xPosOrigin = (float)(main[0].getString().getSize() * fontSize / 2);
 	float xPos = (float)(width / 2);
 
 	for (int i = 0; i < maxItemsMenu; i++)

@@ -44,7 +44,8 @@ void Game::GameRun()
 
 void Game::processEvents()
 {
-	if (event.type == sf::Event::Closed || gameState.getCurrentState() == GameStates::GameState::Exit) {
+	if (event.type == sf::Event::Closed || gameState.getCurrentState() == GameStates::GameState::Exit)
+	{
 		window.close();
 	}
 	if (gameState.getCurrentState() == GameStates::GameState::MainMenu)

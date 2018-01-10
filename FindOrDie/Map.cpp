@@ -70,7 +70,7 @@ bool Map::containsPoint(pair<float, float> point, pair<vector<pair<float, float>
 	{
 		polygon1.emplace_back(object);
 	}
-	return isInside(polygon1, polygon1.size(), { point.first, point.second });
+	return isInside(polygon1, (int)polygon1.size(), { point.first, point.second });
 }
 
 bool Map::isColliding(sf::Vector2f bodySize, sf::Vector2f velocity)
@@ -237,10 +237,10 @@ void Map::createMap()
 	{
 		tile.second = isWalkable({ (int)pair.first.first, (int)pair.first.second });
 		tile.first.setPosition(convert2DToIso({ posX*(tileSize / 2), posY*(tileSize / 2) }).first, convert2DToIso({ posX*(tileSize / 2) , posY*(tileSize / 2) }).second);
-		tile.first.setTextureRect(sf::IntRect(3 *  tileSize, pair.first.second *  tileSize, tileSize, tileSize)); //floor level
+		tile.first.setTextureRect(sf::IntRect(3 *  tileSize, (int)(pair.first.second *  tileSize), tileSize, tileSize)); //floor level
 		tiles.emplace_back(tile);
 
-		tile.first.setTextureRect(sf::IntRect(pair.first.first *  tileSize, pair.first.second *  tileSize, tileSize, tileSize));
+		tile.first.setTextureRect(sf::IntRect((int)(pair.first.first *  tileSize), (int)(pair.first.second *  tileSize), tileSize, tileSize));
 		nonWalkableTiles.emplace_back(tile);
 
 		floorLevelTilesCoords.emplace_back(
@@ -318,7 +318,7 @@ vector<sf::Sprite*> Map::checkWhatToDraw()
 vector<pair<float, float>> Map::getPolygonPoints(sf::Sprite* tile)
 {
 	return vector<pair<float, float>>
-		{
+	{
 			{ (*tile).getPosition().x + halfTileSize, (*tile).getPosition().y},
 			{ (*tile).getPosition().x               , (*tile).getPosition().y + quarterTileSize },
 			{ (*tile).getPosition().x               , (*tile).getPosition().y + threeFourthsTileSize },
@@ -337,6 +337,8 @@ int Map::getTileNumberWherePlayerIs(sf::Vector2f bodySize)
 			return floorTile.second;
 		}
 	}
+
+	return -1;
 }
 
 int Map::getTileNumberClicked(sf::RenderWindow& window)
@@ -472,7 +474,7 @@ bool Map::onSegment(pair<float, float> p, pair<float, float> q, pair<float, floa
 
 int Map::orientation(pair<float, float> p, pair<float, float> q, pair<float, float> r)
 {
-	int val = (q.second - p.second) * (r.first - q.first) - (q.first - p.first) * (r.second - q.second);
+	int val = (int)((q.second - p.second) * (r.first - q.first) - (q.first - p.first) * (r.second - q.second));
 	if (val == 0)
 	{
 		return 0;

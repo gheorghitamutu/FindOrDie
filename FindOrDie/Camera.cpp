@@ -110,7 +110,7 @@ void Camera::centerOnPlayer(std::pair<float, float>& playerPosition)
 
 void Camera::playerViewSetSize(std::pair<unsigned int, unsigned int> dimensions)
 {
-	playerView.setSize(dimensions.second * getAspectRatio(dimensions), dimensions.second);
+	playerView.setSize((float)dimensions.second * getAspectRatio(dimensions), (float)dimensions.second);
 }
 
 void Camera::playerViewSetCenter(std::pair<float, float> center)

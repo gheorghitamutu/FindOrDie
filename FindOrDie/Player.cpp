@@ -77,7 +77,12 @@ void Player::setTexture(string textureType)
 	texture.loadFromFile("Animation/" + textureType + "/fullPlayerAnimations.png");
 	for (int i = 0; i<int(AnimationIndex::Count); i++)
 	{
-		animations[i] = Animation(characterTextureSize, i*characterTextureSize, characterTextureSize, characterTextureSize, texture);
+		animations[i] = Animation(
+			(int)characterTextureSize, 
+			int(i*characterTextureSize), 
+			(int)characterTextureSize, 
+			(int)characterTextureSize, 
+			texture);
 	}
 }
 
