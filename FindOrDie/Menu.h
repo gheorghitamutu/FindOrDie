@@ -18,7 +18,8 @@ public:
 public:
 	int selectedItemIndex = 0;
 
-	enum class MenuState {
+	enum class MenuState
+	{
 		Main,
 		SelectCharacter,
 		Pause
