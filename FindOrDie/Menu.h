@@ -28,7 +28,7 @@ public:
 
 	MenuState menuState = Menu::MenuState::Main;
 
-	sf::Font font;
+	sf::Font* font;
 	sf::Text text;
 	vector <sf::Text> main;
 	vector <sf::Text> select_character;

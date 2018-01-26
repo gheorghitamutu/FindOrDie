@@ -1,6 +1,6 @@
 #include "Animation.h"
 
-Animation::Animation(int x, int y, int width, int height, sf::Texture texture)
+Animation::Animation(int x, int y, int width, int height, sf::Texture *texture)
 {
 	this->texture = texture;
 	for (int i = 0; i < this->number_of_frames; i++)
@@ -11,7 +11,7 @@ Animation::Animation(int x, int y, int width, int height, sf::Texture texture)
 
 void Animation::ApplyToSprite(sf::RectangleShape& body)
 {
-	body.setTexture(&this->texture);
+	body.setTexture(this->texture);
 	body.setTextureRect(this->frames[this->frame_index]);
 }
 

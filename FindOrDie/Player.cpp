@@ -6,10 +6,16 @@ Player::Player()
 	this->player_body.setSize(sf::Vector2f(20.f, 20.f));
 	this->player_body.setPosition({ 100, 100 });
 	this->player_body.setOrigin(8, -6);
+
+	this->texture = nullptr;
 }
 
 Player::~Player()
 {
+	if (this->texture != nullptr)
+	{
+		delete this->texture;
+	}
 }
 
 void Player::HandleEvents()
@@ -81,7 +87,13 @@ void Player::StartingPosition(sf::RenderWindow& window)
 
 void Player::SetTexture(string texture_type)
 {	
-	this->texture.loadFromFile("Animation/" + texture_type + "/fullPlayerAnimations.png");
+	if (this->texture != nullptr)
+	{
+		delete this->texture;
+	}
+	this->texture = new sf::Texture;
+	this->texture->loadFromFile("Animation/" + texture_type + "/fullPlayerAnimations.png");
+
 	for (int index = 0; index<int(AnimationIndex::Count); index++)
 	{
 		this->animations[index] = Animation(

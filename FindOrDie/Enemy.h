@@ -28,7 +28,7 @@ public:
 
 	int GetNumberOfMonsters();
 	
-	sf::Texture texture;
+	sf::Texture* texture;
 
 	sf::Vector2u image_count = sf::Vector2u(8, 8);
 	sf::Vector2u current_image;

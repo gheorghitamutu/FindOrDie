@@ -59,7 +59,7 @@ public:
 	Animation animations[(int)AnimationIndex::Count];
 	AnimationIndex current_animation = AnimationIndex::IdleSouth;
 
-	sf::Texture texture;
+	sf::Texture* texture;
 	sf::Sprite sprite;
 	sf::RectangleShape player_body;
 	sf::Clock time;

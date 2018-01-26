@@ -4,10 +4,16 @@ Enemy::Enemy()
 {
 	SetTexture();
 	Animation();
+
+	this->texture = new sf::Texture;
 }
 
 Enemy::~Enemy()
 {
+	if (this->texture != nullptr)
+	{
+		delete texture;
+	}
 }
 
 void Enemy::Draw(sf::RenderWindow & window)
@@ -104,7 +110,7 @@ void Enemy::CreateEnemy(sf::RenderWindow & window)
 		this->count_spawn_time = 0;
 		this->body.push_back(this->single_body);
 		this->body.back().setSize(sf::Vector2f(12.50f, 12.50f));
-		this->body.back().setTexture(&this->texture);
+		this->body.back().setTexture(this->texture);
 		this->body.back().setPosition(250.0f, 550.0f);
 		this->body.back().setOrigin(this->body.back().getSize() / 2.0f);
 	}
@@ -117,15 +123,20 @@ void Enemy::ClearMonsterVector()
 }
 
 void Enemy::SetTexture()
-{
-	this->texture.loadFromFile("Animation/Monsters/zombie.png"); 
+{	
+	if (this->texture != nullptr)
+	{
+		delete texture;
+	}
+	this->texture = new sf::Texture;
+	this->texture->loadFromFile("Animation/Monsters/zombie.png"); 
 }
 
 void Enemy::Animation()
 {
 	this->current_image.x = 0;
-	this->uv_rect.width = (int)(this->texture.getSize().x / float(this->image_count.x));
-	this->uv_rect.height = (int)(this->texture.getSize().y / float(this->image_count.y));
+	this->uv_rect.width = (int)(this->texture->getSize().x / float(this->image_count.x));
+	this->uv_rect.height = (int)(this->texture->getSize().y / float(this->image_count.y));
 }
 
 void Enemy::Update()

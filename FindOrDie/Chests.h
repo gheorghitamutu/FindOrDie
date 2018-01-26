@@ -10,7 +10,7 @@ public:
 	void LoadTexture();
 
 	sf::RectangleShape body;
-	sf::Texture texture;
+	sf::Texture* texture;
 
 	int chest_number = 1;
 	int score = 0;

@@ -3,7 +3,8 @@
 #include "Map.h"
 Menu::Menu()
 {
-	if (!this->font.loadFromFile("Fonts/neuropol.ttf"))
+	this->font = new sf::Font;
+	if (!this->font->loadFromFile("Fonts/neuropol.ttf"))
 	{
 		printf("Can't load font!\n");
 	}
@@ -11,11 +12,16 @@ Menu::Menu()
 
 Menu::~Menu()
 {
+	if (this->font != nullptr)
+	{
+		delete font;
+	}
 }
 
 void Menu::Draw(sf::RenderWindow& window)
 {
-	for (auto& lines : this->menu) {
+	for (auto& lines : this->menu)
+	{
 		window.draw(lines);
 	}
 }
@@ -131,9 +137,9 @@ void Menu::SetDimensions(float width, float height)
 	this->width = width;
 	this->height = height;
 
-	this->main = { { "New Game", this->font, this->font_size },{ "Load Game", this->font,  this->font_size },{ "Exit Game", this->font,  this->font_size } };
-	this->select_character = { { "Male", this->font, this->font_size },{ "Female", this->font,  this->font_size } };
-	this->pause = { { "Resume Game", this->font, this->font_size },{ "Save Game", this->font,  this->font_size },{ "Exit Game to Main Menu", this->font,  this->font_size } };
+	this->main = { { "New Game", *this->font, this->font_size },{ "Load Game", *this->font,  this->font_size },{ "Exit Game", *this->font,  this->font_size } };
+	this->select_character = { { "Male", *this->font, this->font_size },{ "Female", *this->font,  this->font_size } };
+	this->pause = { { "Resume Game", *this->font, this->font_size },{ "Save Game", *this->font,  this->font_size },{ "Exit Game to Main Menu", *this->font,  this->font_size } };
 
 	int max_items_menu = std::max(std::max(this->items_main_menu, this->items_pause_menu), this->items_select_character_menu);
 	float x_pos_origin = (float)(this->main[0].getString().getSize() * this->font_size / 2);

@@ -49,7 +49,7 @@ public:
 	std::mt19937 gen { rd() };
 	std::uniform_int_distribution<> dis{ 10, 150 };
 	std::uniform_int_distribution<> dis2{ 1, 5 };
-	sf::Texture tile_texture;
+	sf::Texture* tile_texture;
 	pair<sf::Sprite, bool> tile;
 	vector<pair<pair<float, float>, bool>> tile_type;
 	vector<pair<vector<pair<float, float>>, int>> floor_level_tiles_coords;
@@ -76,10 +76,10 @@ public:
 
 	pair<float, float> extreme;
 
-	bool onSegment(pair<float, float> p, pair<float, float> q, pair<float, float> r);
+	bool OnSegment(pair<float, float> p, pair<float, float> q, pair<float, float> r);
 	int orientation(pair<float, float> p, pair<float, float> q, pair<float, float> r);
-	bool doIntersect(pair<float, float> p1, pair<float, float> q1, pair<float, float> p2, pair<float, float> q2);
-	bool isInside(vector<pair<float, float>> polygon, int n, pair<float, float> p);
+	bool DoIntersect(pair<float, float> p1, pair<float, float> q1, pair<float, float> p2, pair<float, float> q2);
+	bool IsInside(vector<pair<float, float>> polygon, int n, pair<float, float> p);
 
 	static constexpr int quarter_tile_size = 16;
 	static constexpr int half_tile_size = 32;

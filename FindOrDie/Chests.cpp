@@ -6,8 +6,10 @@ Chests::Chests()
 	this->body.setSize(sf::Vector2f(25.0f, 25.0f));
 	this->body.setPosition(this->chest_number*350.0f, 850.0f);
 	this->body.setOrigin(this->body.getSize() / 2.0f);
-	this->texture.loadFromFile("Animation/Chest/chest.png");
-	this->body.setTexture(&this->texture);
+
+	this->texture = new sf::Texture;
+	this->texture->loadFromFile("Animation/Chest/chest.png");
+	this->body.setTexture(this->texture);
 }
 
 void Chests::DrawChest(sf::RenderWindow & window)
@@ -23,10 +25,22 @@ void Chests::GetNumberOfChest(int & number)
 
 void Chests::LoadTexture()
 {
-	this->texture.loadFromFile("Animation/Chest/chest.png");
-	if (!this->texture.loadFromFile("Animation/Chest/chest.png")) std::cout << "Can t load" << std::endl;
+	if (this->texture != nullptr)
+	{
+		delete texture;
+	}
+	this->texture = new sf::Texture;
+	this->texture->loadFromFile("Animation/Chest/chest.png");
+	if (!this->texture->loadFromFile("Animation/Chest/chest.png"))
+	{
+		std::cout << "Can t load" << std::endl;
+	}
 }
 
 Chests::~Chests()
 {
+	if (this->texture != nullptr)
+	{
+		delete texture;
+	}
 }

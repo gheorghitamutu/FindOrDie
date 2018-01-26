@@ -3,13 +3,18 @@
 
 Map::Map()
 {
-	this->tile_texture.loadFromFile("iso-64x64-building.png");
-	this->tile.first.setTexture(this->tile_texture);
+	this->tile_texture = new sf::Texture;
+	this->tile_texture->loadFromFile("iso-64x64-building.png");
+	this->tile.first.setTexture(*(this->tile_texture));
 	this->extreme = { 10000, 0 };
 }
 
 Map::~Map()
 {
+	if (this->tile_texture == nullptr)
+	{
+		delete this->tile_texture;
+	}
 }
 
 void Map::DrawMap(sf::RenderWindow& window)
@@ -70,7 +75,7 @@ bool Map::ContainsPoint(pair<float, float> point, pair<vector<pair<float, float>
 	{
 		polygon.emplace_back(object);
 	}
-	return isInside(polygon, (int)polygon.size(), { point.first, point.second });
+	return IsInside(polygon, (int)polygon.size(), { point.first, point.second });
 }
 
 bool Map::IsColliding(sf::Vector2f body_size, sf::Vector2f velocity)
@@ -464,7 +469,7 @@ void Map::SetViewBounds(sf::FloatRect& view_bounds)
 	//this->viewBounds.width -= 400;
 }
 
-bool Map::onSegment(pair<float, float> p, pair<float, float> q, pair<float, float> r)
+bool Map::OnSegment(pair<float, float> p, pair<float, float> q, pair<float, float> r)
 {
 	if (q.first <= max(p.first, r.first) && q.first >= min(p.first, r.first) && q.second <= max(p.second, r.second) && q.second >= min(p.second, r.second))
 	{
@@ -483,24 +488,24 @@ int Map::orientation(pair<float, float> p, pair<float, float> q, pair<float, flo
 	return (val > 0) ? 1 : 2;
 }
 
-bool Map::doIntersect(pair<float, float> p1, pair<float, float> q1, pair<float, float> p2, pair<float, float> q2)
+bool Map::DoIntersect(pair<float, float> p1, pair<float, float> q1, pair<float, float> p2, pair<float, float> q2)
 {
 	int o1 = orientation(p1, q1, p2);
 	int o2 = orientation(p1, q1, q2);
 	int o3 = orientation(p2, q2, p1);
 	int o4 = orientation(p2, q2, q1);
 	if ((o1 != o2 && o3 != o4) ||
-		(o1 == 0 && onSegment(p1, p2, q1)) ||
-		(o2 == 0 && onSegment(p1, q2, q1)) ||
-		(o3 == 0 && onSegment(p2, p1, q2)) ||
-		(o4 == 0 && onSegment(p2, q1, q2)))
+		(o1 == 0 && OnSegment(p1, p2, q1)) ||
+		(o2 == 0 && OnSegment(p1, q2, q1)) ||
+		(o3 == 0 && OnSegment(p2, p1, q2)) ||
+		(o4 == 0 && OnSegment(p2, q1, q2)))
 	{
 		return true;
 	}
 	return false; 
 }
 
-bool Map::isInside(vector<pair<float, float>> polygon, int n, pair<float, float> p)
+bool Map::IsInside(vector<pair<float, float>> polygon, int n, pair<float, float> p)
 {
 	if (n < 3)
 	{
@@ -511,11 +516,11 @@ bool Map::isInside(vector<pair<float, float>> polygon, int n, pair<float, float>
 	do
 	{
 		next = (i + 1) % n;
-		if (doIntersect(polygon[i], polygon[next], p, extreme))
+		if (DoIntersect(polygon[i], polygon[next], p, extreme))
 		{
 			if (orientation(polygon[i], p, polygon[next]) == 0)
 			{
-				return onSegment(polygon[i], p, polygon[next]);
+				return OnSegment(polygon[i], p, polygon[next]);
 			}
 			count++;
 		}
