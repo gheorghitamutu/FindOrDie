@@ -1,45 +1,46 @@
 #pragma once
 #include "SFML\Graphics.hpp"
 #include <iostream>
+
 class Camera
 {
 public:
 	Camera();
 	~Camera();
-	void setMenuView();
+	void SetMenuView();
 	void setPlayerView();
-	void CameraFollowPlayer(std::pair<float, float>& playerPosition);
-	void setLastKnownPosition(std::pair<float, float>& position);
-	float getAspectRatio(std::pair<unsigned int, unsigned int> dimensions);
-	void draggableCamera();
-	void zoomPlayerView();
-	void centerOnPlayer(std::pair<float, float>& playerPosition);
-	void playerViewSetSize(std::pair<unsigned int, unsigned int> dimensions);
-	void playerViewSetCenter(std::pair<float, float> center);
-	void setEvent(sf::Event* event);
-	void setWindow(sf::RenderWindow* window);
-	sf::FloatRect getPlayerViewBounds();
+	void CameraFollowPlayer(std::pair<float, float>& player_position);
+	void SetLastKnownPosition(std::pair<float, float>& position);
+	float GetAspectRatio(std::pair<unsigned int, unsigned int> dimensions);
+	void DraggableCamera();
+	void ZoomPlayerView();
+	void CenterOnPlayer(std::pair<float, float>& player_position);
+	void PlayerViewSetSize(std::pair<unsigned int, unsigned int> dimensions);
+	void PlayerViewSetCenter(std::pair<float, float> center);
+	void SetEvent(sf::Event* event);
+	void SetWindow(sf::RenderWindow* window);
+	sf::FloatRect GetPlayerViewBounds();
 
 private: 
 	sf::Vector2i position;
-	sf::Vector2i deltaPosition;
+	sf::Vector2i delta_position;
 
-	sf::Vector2f cameraCenter;
-	std::pair<float, float> lastKnownPosition;
+	sf::Vector2f camera_center;
+	std::pair<float, float> last_known_position;
 
 	sf::Clock clock;
 
-	sf::Time timeElapsed;
+	sf::Time time_elapsed;
 
-	sf::View playerView, menuView;
+	sf::View player_view, menu_view;
 
 	sf::Event* event;
 	sf::RenderWindow* window;
 
-	bool rightClickWasPressed = false;
-	bool initialPosition = true;
-	bool centerCameraOnPlayer = true;
-	bool isPlayerView = false;
-	bool isMenuView = false;
+	bool right_click_pressed = false;
+	bool initial_position = true;
+	bool center_camera_on_player = true;
+	bool is_player_view = false;
+	bool is_menu_view = false;
 };
 

@@ -9,6 +9,7 @@
 #include "Chests.h"
 #include "Menu.h"
 #include "GameStates.h"
+
 class Game
 {
 public:
@@ -17,8 +18,8 @@ public:
 	~Game();
 
 	void GameRun();
-	void processEvents();
-	void getScreenResolution();
+	void ProcessEvents();
+	void GetScreenResolution();
 
 	sf::Event event;
 
@@ -31,9 +32,9 @@ public:
 
 	sf::ContextSettings settings;
 
-	sf::VideoMode videoMode;
+	sf::VideoMode video_mode;
 
-	GameStates gameState;
+	GameStates game_state;
 
 	sf::RenderWindow window;
 };

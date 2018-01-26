@@ -5,21 +5,21 @@
 class ANode
 {
 private:
-	std::pair<int, int> currentPosition;
+	std::pair<int, int> current_position;
 	int level;
 	int priority;
 	int dir = 8;
 public:
 	ANode(int xp, int yp, int d, int p);
-	void operator = (const ANode& N);
+	void operator = (const ANode& node);
 	friend bool operator<(const ANode& a, const ANode& b);
-	int getxPos() const;
-	int getyPos() const;
-	int getLevel() const;
-	int getPriority() const;
-	void updatePriority(const int & xDest, const int & yDest);
-	void nextLevel(const int & i);
-	const int & estimate(const int & xDest, const int & yDest) const;
+	int GetXPos() const;
+	int GetYPos() const;
+	int GetLevel() const;
+	int GetPriority() const;
+	void UpdatePriority(const int & x_dest, const int & y_dest);
+	void NextLevel(const int & i);
+	const int & Estimate(const int & x_dest, const int & y_dest) const;
 	~ANode();
 };
 

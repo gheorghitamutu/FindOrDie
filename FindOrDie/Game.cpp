@@ -1,124 +1,125 @@
 #include "Game.h"
+
 void Game::GameRun()
 {
-	while (window.isOpen())
+	while (this->window.isOpen())
 	{
-		while (window.pollEvent(event))
+		while (this->window.pollEvent(this->event))
 		{ 
-			processEvents();
+			ProcessEvents();
 		}
-		window.clear(sf::Color::Black);
-		if (gameState.getCurrentState() == GameStates::GameState::MainMenu)
+		this->window.clear(sf::Color::Black);
+		if (this->game_state.GetCurrentState() == GameStates::GameState::MainMenu)
 		{
-			camera.setMenuView();
-			menu.draw(window);
+			this->camera.SetMenuView();
+			this->menu.Draw(this->window);
 		}
-		else if (gameState.getCurrentState() == GameStates::GameState::CharacterSelection)
+		else if (this->game_state.GetCurrentState() == GameStates::GameState::CharacterSelection)
 		{
-			camera.setMenuView();
-			menu.draw(window);
+			this->camera.SetMenuView();
+			this->menu.Draw(this->window);
 		}
-		else if (gameState.getCurrentState() == GameStates::GameState::Pause)
+		else if (game_state.GetCurrentState() == GameStates::GameState::Pause)
 		{
-			camera.setMenuView();
-			menu.draw(window);
+			this->camera.SetMenuView();
+			this->menu.Draw(this->window);
 		}
-		else if (gameState.getCurrentState() == GameStates::GameState::Running)
+		else if (this->game_state.GetCurrentState() == GameStates::GameState::Running)
 		{
-			map.setPlayerPosition(player.returnPlayer2DPosition());
-			map.changeTilesOpacity(player.getTilesToBeColored());
-			map.setViewBounds(camera.getPlayerViewBounds());
-			map.setWhatToDraw();
-			map.drawMap(window);
-		//	enemies.Draw(window);
-		//	chest.DrawChest(window);
-			player.Update(map);
-			camera.setPlayerView();
-			camera.CameraFollowPlayer(player.returnPlayer2DPosition());
-			player.Draw(window);
+			this->map.SetPlayerPosition(this->player.GetPlayer2DPosition());
+			this->map.ChangeTilesOpacity(this->player.GetTilesToBeColored());
+			this->map.SetViewBounds(this->camera.GetPlayerViewBounds());
+			this->map.SetWhatToDraw();
+			this->map.DrawMap(this->window);
+		//	this->enemies.Draw(this->window);
+		//	this->chest.DrawChest(this->window);
+			this->player.Update(this->map);
+			this->camera.setPlayerView();
+			this->camera.CameraFollowPlayer(this->player.GetPlayer2DPosition());
+			this->player.Draw(this->window);
 		}
-		window.display();
+		this->window.display();
 	}
 }
 
 
-void Game::processEvents()
+void Game::ProcessEvents()
 {
-	if (event.type == sf::Event::Closed || gameState.getCurrentState() == GameStates::GameState::Exit)
+	if (this->event.type == sf::Event::Closed || this->game_state.GetCurrentState() == GameStates::GameState::Exit)
 	{
-		window.close();
+		this->window.close();
 	}
-	if (gameState.getCurrentState() == GameStates::GameState::MainMenu)
+	if (this->game_state.GetCurrentState() == GameStates::GameState::MainMenu)
 	{
-		menu.options(event, player, map, gameState);
+		this->menu.Options(this->event, this->player, this->map, this->game_state);
 	}
-	else if (gameState.getCurrentState() == GameStates::GameState::CharacterSelection)
+	else if (this->game_state.GetCurrentState() == GameStates::GameState::CharacterSelection)
 	{
-		menu.options(event, player, map, gameState);
-		player.StartingPosition(window);
-		camera.setPlayerView();
+		this->menu.Options(this->event, this->player, this->map, this->game_state);
+		this->player.StartingPosition(this->window);
+		this->camera.setPlayerView();
 	}
-	else if (gameState.getCurrentState() == GameStates::GameState::Running)
+	else if (this->game_state.GetCurrentState() == GameStates::GameState::Running)
 	{
-		camera.draggableCamera();
-		camera.zoomPlayerView();
-		if (event.type == sf::Event::MouseButtonPressed)
+		this->camera.DraggableCamera();
+		this->camera.ZoomPlayerView();
+		if (this->event.type == sf::Event::MouseButtonPressed)
 		{
-			if (event.mouseButton.button == sf::Mouse::Left)
+			if (this->event.mouseButton.button == sf::Mouse::Left)
 			{
-				player.setPlayerPath(map.setFinishLocation(event, window, player.returnPlayerBodySize()), map.getTiles(), map.getMapDimensions());
+				this->player.SetPlayerPath(this->map.SetFinishLocation(this->event, this->window, this->player.GetPlayerBodySize()), this->map.GetTiles(), this->map.GetMapDimensions());
 			}
 		}
-		player.HandleEvents();
-		switch (event.type)
+		this->player.HandleEvents();
+		switch (this->event.type)
 		{
 		case sf::Event::KeyReleased:
-			switch (event.key.code)
+			switch (this->event.key.code)
 			{
 			case sf::Keyboard::Space:
-				camera.centerOnPlayer(player.returnPlayer2DPosition());
+				this->camera.CenterOnPlayer(this->player.GetPlayer2DPosition());
 				break;
 			case sf::Keyboard::Escape:
-				gameState.setCurrentState(GameStates::GameState::Pause);
+				this->game_state.SetCurrentState(GameStates::GameState::Pause);
 				break;
 			}
 		}
-	    //enemies.createEnemy(window);
-		//enemies.goToPlayer({ player.returnPlayer2DPosition().first, player.returnPlayer2DPosition().second });
+	    //this->enemies.createEnemy(this->window);
+		//this->enemies.goToPlayer({ this->player.returnPlayer2DPosition().first, this->player.returnPlayer2DPosition().second });
 	}
-	else if (gameState.getCurrentState() == GameStates::GameState::Pause)
+	else if (this->game_state.GetCurrentState() == GameStates::GameState::Pause)
 	{
-		camera.setMenuView();
-		menu.options(event, player, map, gameState);
+		this->camera.SetMenuView();
+		this->menu.Options(this->event, this->player, this->map, this->game_state);
 	}
 }
 
-void Game::getScreenResolution()
+void Game::GetScreenResolution()
 {
-	videoMode = sf::VideoMode::getDesktopMode();
+	this->video_mode = sf::VideoMode::getDesktopMode();
 }
 
 Game::Game()
 {
-	settings.antialiasingLevel = 1;
-	getScreenResolution();
-	window.create(videoMode, "Find Or Die!", sf::Style::Resize, settings);
-	window.setMouseCursorVisible(true);
-	window.setFramerateLimit(60);
+	this->settings.antialiasingLevel = 1;
+	GetScreenResolution();
+	this->window.create(video_mode, "Find Or Die!", sf::Style::Resize, this->settings);
+	this->window.setMouseCursorVisible(true);
+	this->window.setFramerateLimit(60);
 
-	menu.setDimensions((float)videoMode.width, (float)videoMode.height);
+	this->menu.SetDimensions((float)this->video_mode.width, (float)this->video_mode.height);
 
-	camera.setEvent(&this->event);
-	camera.setWindow(&this->window);
-	camera.playerViewSetSize({ videoMode.width, videoMode.height });
-	camera.playerViewSetCenter({ player.returnPlayer2DPosition() });
-	camera.setLastKnownPosition(player.returnPlayer2DPosition());
-	camera.setMenuView();
+	this->camera.SetEvent(&this->event);
+	this->camera.SetWindow(&this->window);
+	this->camera.PlayerViewSetSize({ this->video_mode.width, this->video_mode.height });
+	this->camera.PlayerViewSetCenter({ this->player.GetPlayer2DPosition() });
+	this->camera.SetLastKnownPosition(this->player.GetPlayer2DPosition());
+	this->camera.SetMenuView();
 
-	map.setEvent(&this->event);
-	map.setViewBounds(camera.getPlayerViewBounds());
+	this->map.SetEvent(&this->event);
+	this->map.SetViewBounds(this->camera.GetPlayerViewBounds());
 
-	player.setEvent(&this->event);
+	this->player.SetEvent(&this->event);
 
 	GameRun();
 }

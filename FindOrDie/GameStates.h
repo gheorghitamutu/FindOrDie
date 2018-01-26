@@ -14,10 +14,10 @@ public:
 		Exit
 	};
 
-	GameState getCurrentState();
-	void setCurrentState(GameState state);
+	GameState GetCurrentState();
+	void SetCurrentState(GameState state);
 
 private:
-	GameState gameState = GameState::MainMenu;
+	GameState game_state = GameState::MainMenu;
 };
 

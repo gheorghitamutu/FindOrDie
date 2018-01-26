@@ -3,41 +3,45 @@
 #include <vector>
 #include "Player.h"
 #include "Map.h"
+#include <math.h>
+#include <iostream>
+#include <algorithm>
+
 class Enemy
 {
 public:
 	Enemy();
 	~Enemy();
 	void Draw(sf::RenderWindow& window);
-	void goToPlayer(sf::Vector2f returnPlayerPosition);
-	void createEnemy(sf::RenderWindow& window);
-	void clearMonsterVector() { this->body.erase(body.begin(), body.end()); };
-	void setTexture() { texture.loadFromFile("Animation/Monsters/zombie.png"); };
+	void GoToPlayer(sf::Vector2f return_player_position);
+	void CreateEnemy(sf::RenderWindow& window);
+	void ClearMonsterVector();
+	void SetTexture();
 	void Animation();
 	void Update();
 
-	int ReturnMonsterVectorSize() { return (int)(body.size()); }
+	int GetMonsterVectorSize();
 
-	float ReturnMonsterSpeed() { return speed; }
+	float GetMonsterSpeed();
 
-	std::vector <sf::RectangleShape> returnMonsterVector() { return body; }
+	std::vector <sf::RectangleShape> GetMonsterVector();
 
-	int returnNumberOfMonsters() { return (int)(this->body.size()); };
+	int GetNumberOfMonsters();
 	
 	sf::Texture texture;
 
-	sf::Vector2u imageCount = sf::Vector2u(8, 8);
-	sf::Vector2u currentImage;
+	sf::Vector2u image_count = sf::Vector2u(8, 8);
+	sf::Vector2u current_image;
 
-	sf::IntRect uvRect;
+	sf::IntRect uv_rect;
 
 	std::vector <sf::RectangleShape> body;
-	sf::RectangleShape singleBody;
+	sf::RectangleShape single_body;
 
 	unsigned int row = 0;
-	int countSpawnTime = 1;
-	int spawnTime = 3600;
+	int count_spawn_time = 1;
+	int spawn_time = 3600;
 	float speed = 0.20f; // * 60 frames/second = 60.0f
-	float switchTime = 0.4f;
+	float switch_time = 0.4f;
 };
 

@@ -4,6 +4,7 @@ class Chests
 {
 public:
 	Chests();
+	~Chests();
 	void DrawChest(sf::RenderWindow& window);
 	void GetNumberOfChest(int& number);
 	void LoadTexture();
@@ -11,8 +12,7 @@ public:
 	sf::RectangleShape body;
 	sf::Texture texture;
 
-	int chestNumber = 1;
+	int chest_number = 1;
 	int score = 0;
-	~Chests();
 };
 

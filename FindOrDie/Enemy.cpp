@@ -1,14 +1,10 @@
 #include "Enemy.h"
-#include <math.h> 
-#include <iostream>
-#include <algorithm>
-#include "Map.h"
+
 Enemy::Enemy()
 {
-	setTexture();
+	SetTexture();
 	Animation();
 }
-
 
 Enemy::~Enemy()
 {
@@ -16,10 +12,10 @@ Enemy::~Enemy()
 
 void Enemy::Draw(sf::RenderWindow & window)
 {
-	for (auto &monster : body) window.draw(monster);
+	for (auto &monster : this->body) window.draw(monster);
 }
 
-void Enemy::goToPlayer(sf::Vector2f returnPlayerPosition)
+void Enemy::GoToPlayer(sf::Vector2f return_player_position)
 {
 	// 0 - LEFT
 	// 1 - LEFT UP
@@ -32,84 +28,139 @@ void Enemy::goToPlayer(sf::Vector2f returnPlayerPosition)
 	bool right = false;
 	bool left = false;
 	//deltaTime /= (body.size()*speed); // fixing deltaTime divisions
-	for (auto &monster : body) {
-		if (monster.getPosition().x - returnPlayerPosition.x > speed || monster.getPosition().x - returnPlayerPosition.x < -speed)
+	for (auto &monster : this->body) {
+		if (monster.getPosition().x - return_player_position.x > this->speed || monster.getPosition().x - return_player_position.x < -this->speed)
 		{
-			if (round(monster.getPosition().x) < round(returnPlayerPosition.x))
+			if (round(monster.getPosition().x) < round(return_player_position.x))
 			{
-				monster.move(speed, 0.0f);
-				if (monster.getPosition().x < returnPlayerPosition.x)
+				monster.move(this->speed, 0.0f);
+				if (monster.getPosition().x < return_player_position.x)
 				{
 					right = true;
-					row = 4;
+					this->row = 4;
 				}
 			}
-			else if (round(monster.getPosition().x) > round(returnPlayerPosition.x)) 
+			else if (round(monster.getPosition().x) > round(return_player_position.x)) 
 			{
-				monster.move(-speed, 0.0f);
-				if (monster.getPosition().x > returnPlayerPosition.x) 
+				monster.move(-this->speed, 0.0f);
+				if (monster.getPosition().x > return_player_position.x) 
 				{
 					left = true;
-					row = 0;
+					this->row = 0;
 				}
 			}
 		}
-		if (monster.getPosition().y - returnPlayerPosition.y > speed || monster.getPosition().y - returnPlayerPosition.y < -speed)
+		if (monster.getPosition().y - return_player_position.y > this->speed || monster.getPosition().y - return_player_position.y < -this->speed)
 		{
-			if (round(monster.getPosition().y) < round(returnPlayerPosition.y))
+			if (round(monster.getPosition().y) < round(return_player_position.y))
 			{
-				monster.move(0.0f, speed);
-				if (monster.getPosition().y < returnPlayerPosition.y)
+				monster.move(0.0f, this->speed);
+				if (monster.getPosition().y < return_player_position.y)
 				{
-					if (right) row = 5;
-					else if (left) row = 7;
-					else row = 6;
+					if (right)
+					{
+						this->row = 5;
+					}
+					else if (left)
+					{
+						this->row = 7;
+					}
+					else
+					{
+						this->row = 6;
+					}
 				}
 			}
-			else if (round(monster.getPosition().y) > round(returnPlayerPosition.y))
+			else if (round(monster.getPosition().y) > round(return_player_position.y))
 			{
 				monster.move(0.0f, -speed);
-				if (monster.getPosition().x < returnPlayerPosition.x)
+				if (monster.getPosition().x < return_player_position.x)
 				{
-					if (right) row = 3;
-					else if (left) row = 1;
-					else row = 2;
+					if (right)
+					{
+						this->row = 3;
+					}
+					else if (left)
+					{
+						this->row = 1;
+					}
+					else
+					{
+						this->row = 2;
+					}
 				}
 			}
 		}
 		Update();
-		monster.setTextureRect(uvRect);
+		monster.setTextureRect(this->uv_rect);
 	}
 }
 
 
-void Enemy::createEnemy(sf::RenderWindow & window)
+void Enemy::CreateEnemy(sf::RenderWindow & window)
 {
-	if (spawnTime/countSpawnTime == 1) {
-		countSpawnTime = 0;
-		body.push_back(singleBody);
-		body.back().setSize(sf::Vector2f(12.50f, 12.50f));
-		body.back().setTexture(&texture);
-		body.back().setPosition(250.0f, 550.0f);
-		body.back().setOrigin(body.back().getSize() / 2.0f);
+	if (this->spawn_time / this->count_spawn_time == 1)
+	{
+		this->count_spawn_time = 0;
+		this->body.push_back(this->single_body);
+		this->body.back().setSize(sf::Vector2f(12.50f, 12.50f));
+		this->body.back().setTexture(&this->texture);
+		this->body.back().setPosition(250.0f, 550.0f);
+		this->body.back().setOrigin(this->body.back().getSize() / 2.0f);
 	}
-		countSpawnTime++;
+	this->count_spawn_time++;
+}
+
+void Enemy::ClearMonsterVector()
+{
+	this->body.erase(this->body.begin(), this->body.end());
+}
+
+void Enemy::SetTexture()
+{
+	this->texture.loadFromFile("Animation/Monsters/zombie.png"); 
 }
 
 void Enemy::Animation()
 {
-	currentImage.x = 0;
-	uvRect.width = (int)(texture.getSize().x / float(imageCount.x));
-	uvRect.height = (int)(texture.getSize().y / float(imageCount.y));
+	this->current_image.x = 0;
+	this->uv_rect.width = (int)(this->texture.getSize().x / float(this->image_count.x));
+	this->uv_rect.height = (int)(this->texture.getSize().y / float(this->image_count.y));
 }
 
 void Enemy::Update()
 {
-	currentImage.y = row;
+	this->current_image.y = this->row;
 
-	if (countSpawnTime % 10 == 0)currentImage.x++;
-	if (currentImage.x >= imageCount.x)currentImage.x = 0;
+	if (this->count_spawn_time % 10 == 0)
+	{
+		this->current_image.x++;
+	}
+	if (this->current_image.x >= this->image_count.x)
+	{
+		this->current_image.x = 0;
+	}
 
-	uvRect.left = currentImage.x*uvRect.width;
-	uvRect.top = currentImage.y*uvRect.height;
+	this->uv_rect.left = this->current_image.x*this->uv_rect.width;
+	this->uv_rect.top = this->current_image.y*this->uv_rect.height;
+}
+
+int Enemy::GetMonsterVectorSize()
+{
+	return (int)(this->body.size());
+}
+
+float Enemy::GetMonsterSpeed()
+{
+	return this->speed;
+}
+
+std::vector<sf::RectangleShape> Enemy::GetMonsterVector()
+{
+	return this->body;
+}
+
+int Enemy::GetNumberOfMonsters()
+{
+	return (int)(this->body.size());
 }

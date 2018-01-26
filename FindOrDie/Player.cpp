@@ -3,160 +3,167 @@
 #include<math.h>
 Player::Player()
 {
-	playerBody.setSize(sf::Vector2f(20.f, 20.f));
-	playerBody.setPosition({ 100, 100 });
-	playerBody.setOrigin(8, -6);
+	this->player_body.setSize(sf::Vector2f(20.f, 20.f));
+	this->player_body.setPosition({ 100, 100 });
+	this->player_body.setOrigin(8, -6);
+}
+
+Player::~Player()
+{
 }
 
 void Player::HandleEvents()
 {
 	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) ||
-		sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) && !playerPath.empty())
+		sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) && !player_path.empty())
 	{
-		playerPath.clear();
+		this->player_path.clear();
 	}
-	if (playerPath.empty())
+	if (this->player_path.empty())
 	{
-		direction = { 0.0f, 0.0f };
+		this->direction = { 0.0f, 0.0f };
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-			direction.y += 1;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+		{
+			this->direction.y += 1;
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-			direction.x -= 1;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+		{
+			this->direction.x -= 1;
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-			direction.x += 1;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+		{
+			this->direction.x += 1;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
 		{
-			direction.y -= 1;
+			this->direction.y -= 1;
 		}	
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
 		{
-			direction.x *= 2;
-			direction.y *= 2;
+			this->direction.x *= 2;
+			this->direction.y *= 2;
 		}
-		setVelocity();
+		SetVelocity();
 	}
 }
 
 void Player::Update(Map& map)
 {
-	deltaTime = time.getElapsedTime().asSeconds();
-	goThroughPath();
-	decodeAnimationPath({ direction.x, direction.y });
-	animations[int(currentAnimation)].Update(deltaTime);
-	animations[int(currentAnimation)].ApplyToSprite(playerBody);
+	this->delta_time = this->time.getElapsedTime().asSeconds();
+	FollowPath();
+	DecodeAnimationPath({ direction.x, direction.y });
+	this->animations[int(this->current_animation)].Update(this->delta_time);
+	this->animations[int(this->current_animation)].ApplyToSprite(this->player_body);
 
-	map.drawTilesOverPlayer(map.isCollidingDrawOver(returnPlayerBodySize()));
-	if (map.isColliding(returnPlayerBodySize(), velocity*deltaTime))
+	map.DrawTilesOverPlayer(map.IsCollidingDrawOver(GetPlayerBodySize()));
+	if (map.IsColliding(GetPlayerBodySize(), this->velocity*this->delta_time))
 	{
-		playerBody.move(velocity*deltaTime);
+		this->player_body.move(this->velocity*this->delta_time);
 	}
-	time.restart().asSeconds();
+	this->time.restart().asSeconds();
 }
 
-void Player::setVelocity()
+void Player::SetVelocity()
 {
-	velocity = this->direction * speed;
+	this->velocity = this->direction * this->speed;
 }
 
 void Player::Draw(sf::RenderWindow& window)
 {	
-	window.draw(playerBody);
+	window.draw(this->player_body);
 }
 
 void Player::StartingPosition(sf::RenderWindow& window)
 {
-	playerBody.setPosition({ 100,100 });
+	this->player_body.setPosition({ 100,100 });
 }
 
-void Player::setTexture(string textureType)
+void Player::SetTexture(string texture_type)
 {	
-	texture.loadFromFile("Animation/" + textureType + "/fullPlayerAnimations.png");
-	for (int i = 0; i<int(AnimationIndex::Count); i++)
+	this->texture.loadFromFile("Animation/" + texture_type + "/fullPlayerAnimations.png");
+	for (int index = 0; index<int(AnimationIndex::Count); index++)
 	{
-		animations[i] = Animation(
-			(int)characterTextureSize, 
-			int(i*characterTextureSize), 
-			(int)characterTextureSize, 
-			(int)characterTextureSize, 
-			texture);
+		this->animations[index] = Animation(
+			(int)this->character_texture_size,
+			int(index*this->character_texture_size),
+			(int)this->character_texture_size,
+			(int)this->character_texture_size,
+			this->texture);
 	}
 }
 
-void Player::setPlayerPath(pair<string, pair<pair<int, int>, pair<int, int>>> path, vector <pair<sf::Sprite, bool>>& tiles, pair <int, int> mapDimensions)
+void Player::SetPlayerPath(pair<string, pair<pair<int, int>, pair<int, int>>> path, vector <pair<sf::Sprite, bool>>& tiles, pair <int, int> map_dimensions)
 {
-	playerPath.clear();
-	tilesToBeColored.clear();
+	this->player_path.clear();
+	this->tiles_to_be_colored.clear();
 	pair<int, int> location = path.second.first;
 	int tileNumber;
 	if (path.first != "")
 	{
 		for (auto& elem : path.first)
 		{
-			location.second -= decodePath(elem).first;
-			location.first -= decodePath(elem).second;
-			tileNumber = location.first*mapDimensions.first + location.second;
-			playerPath.emplace_front(location,  pair<float,float>(tiles[tileNumber].first.getPosition().x + 32, tiles[tileNumber].first.getPosition().y + 32));
-			tilesToBeColored.emplace_back(tileNumber);
+			location.second -= DecodePath(elem).first;
+			location.first -= DecodePath(elem).second;
+			tileNumber = location.first*map_dimensions.first + location.second;
+			this->player_path.emplace_front(location,  pair<float,float>(tiles[tileNumber].first.getPosition().x + 32, tiles[tileNumber].first.getPosition().y + 32));
+			this->tiles_to_be_colored.emplace_back(tileNumber);
 		}
 	}
 }
 
-pair<int, int> Player::decodePath(const char character)
+pair<int, int> Player::DecodePath(const char character_direction)
 {
-	if (dir == 8)
+	if (this->dir == 8)
 	{
-		if (character == '4')
+		if (character_direction == '4')
 		{
 			return{ 0,1 };
 		}
-		if (character == '5')
+		if (character_direction == '5')
 		{
 			return{ 1,1 };
 		}
-		if (character == '6')
+		if (character_direction == '6')
 		{
 			return{ 1,0 };
 		}
-		if (character == '3')
+		if (character_direction == '3')
 		{
 			return{ -1,1 };
 		}
-		if (character == '0')
+		if (character_direction == '0')
 		{
 			return{ 0,-1 };
 		}
-		if (character == '1')
+		if (character_direction == '1')
 		{
 			return{ -1,-1 };
 		}
-		if (character == '2')
+		if (character_direction == '2')
 		{
 			return{ -1,0 };
 		}
-		if (character == '7')
+		if (character_direction == '7')
 		{
 			return{ 1,-1 };
 		}
 	}
-	else if (dir == 4)
+	else if (this->dir == 4)
 	{
-		if (character == '2')
+		if (character_direction == '2')
 		{
 			return{ 0,1 };
 		}
-		if (character == '3')
+		if (character_direction == '3')
 		{
 			return{ 1,0 };
 		}
-		if (character == '0')
+		if (character_direction == '0')
 		{
 			return{ 0,-1 };
 		}
-		if (character == '1')
+		if (character_direction == '1')
 		{
 			return{ -1,0 };
 		}
@@ -164,162 +171,160 @@ pair<int, int> Player::decodePath(const char character)
 	return { 0,0 };
 }
 
-pair<float, float> Player::decodeDirections()
+pair<float, float> Player::DecodeDirections()
 {
-	if (!playerPath.empty())
+	if (!this->player_path.empty())
 	{
-		pair<float, float> dVector = { playerPath.back().second.first - playerBody.getPosition().x, playerPath.back().second.second - playerBody.getPosition().y };
-		float dVectorLength = sqrt(dVector.first*dVector.first + dVector.second*dVector.second);
-		pair<float, float> dVectorNormalized = { dVector.first / dVectorLength ,dVector.second / dVectorLength };
-		return dVectorNormalized;
+		pair<float, float> d_math_vector = { this->player_path.back().second.first - this->player_body.getPosition().x, this->player_path.back().second.second - this->player_body.getPosition().y };
+		float d_math_vector_length = sqrt(d_math_vector.first*d_math_vector.first + d_math_vector.second*d_math_vector.second);
+		pair<float, float> d_math_vector_normalized = { d_math_vector.first / d_math_vector_length ,d_math_vector.second / d_math_vector_length };
+		return d_math_vector_normalized;
 	}
-	else
-	{
-		return { 0,0 };
-	}
+
+	return { 0,0 };
 }
 
-void Player::decodeAnimationPath(pair<float, float> direction)
+void Player::DecodeAnimationPath(pair<float, float> direction)
 {
 	if (direction.first == 0.0f && direction.second > 0.0f )
 	{
-		if (direction.second > walkingSpeed)
+		if (direction.second > this->walking_speed)
 		{
-			currentAnimation = AnimationIndex::RunningSouth;
+			this->current_animation = AnimationIndex::RunningSouth;
 		}
 		else
 		{
-			currentAnimation = AnimationIndex::WalkingSouth;
+			this->current_animation = AnimationIndex::WalkingSouth;
 		}
 	}
 	else if (direction.first > 0.0f && direction.second > 0.0f)
 	{
-		if (direction.first > walkingSpeed && direction.second > walkingSpeed)
+		if (direction.first > this->walking_speed && direction.second > this->walking_speed)
 		{
-			currentAnimation = AnimationIndex::RunningSouthEast;
+			this->current_animation = AnimationIndex::RunningSouthEast;
 		}
 		else
 		{
-			currentAnimation = AnimationIndex::WalkingSouthEast;
+			this->current_animation = AnimationIndex::WalkingSouthEast;
 		}
 	}
 	else if (direction.first > 0.0f && direction.second == 0.0f)
 	{
-		if (direction.first > walkingSpeed)
+		if (direction.first > this->walking_speed)
 		{
-			currentAnimation = AnimationIndex::RunningEast;
+			this->current_animation = AnimationIndex::RunningEast;
 		}
 		else
 		{
-			currentAnimation = AnimationIndex::WalkingEast;
+			this->current_animation = AnimationIndex::WalkingEast;
 		}
 	}
 	else if (direction.first < 0.0f && direction.second > 0.0f)
 	{
-		if (direction.first < -walkingSpeed && direction.second > walkingSpeed)
+		if (direction.first < -this->walking_speed && direction.second > this->walking_speed)
 		{
-			currentAnimation = AnimationIndex::RunningSouthWest;
+			this->current_animation = AnimationIndex::RunningSouthWest;
 		}
 		else
 		{
-			currentAnimation = AnimationIndex::WalkingSouthWest;
+			this->current_animation = AnimationIndex::WalkingSouthWest;
 		}
 
 	}
 	else if (direction.first < 0.0f && direction.second == 0.0f)
 	{
-		if (direction.first < -walkingSpeed)
+		if (direction.first < -this->walking_speed)
 		{
-			currentAnimation = AnimationIndex::RunningWest;
+			this->current_animation = AnimationIndex::RunningWest;
 		}
 		else
 		{
-			currentAnimation = AnimationIndex::WalkingWest;
+			this->current_animation = AnimationIndex::WalkingWest;
 		}
 	}
 	else if (direction.first < 0.0f && direction.second < 0.0f)
 	{
-		if (direction.first < -walkingSpeed && direction.second < -walkingSpeed)
+		if (direction.first < -this->walking_speed && direction.second < -this->walking_speed)
 		{
-			currentAnimation = AnimationIndex::RunningNorthWest;
+			this->current_animation = AnimationIndex::RunningNorthWest;
 		}
 		else
 		{
-			currentAnimation = AnimationIndex::WalkingNorthWest;
+			this->current_animation = AnimationIndex::WalkingNorthWest;
 		}
 	}
 	else if (direction.first == 0.0f && direction.second < 0.0f)
 	{
-		if (direction.second < -walkingSpeed)
+		if (direction.second < -this->walking_speed)
 		{
-			currentAnimation = AnimationIndex::RunningNorth;
+			this->current_animation = AnimationIndex::RunningNorth;
 		}
 		else
 		{
-			currentAnimation = AnimationIndex::WalkingNorth;
+			this->current_animation = AnimationIndex::WalkingNorth;
 		}
 	}
 	else if (direction.first > 0.0f && direction.second < 0.0f)
 	{
-		if (direction.first > walkingSpeed && direction.second < -walkingSpeed)
+		if (direction.first > this->walking_speed && direction.second < -this->walking_speed)
 		{
-			currentAnimation = AnimationIndex::RunningNorthEast;
+			this->current_animation = AnimationIndex::RunningNorthEast;
 		}
 		else
 		{
-			currentAnimation = AnimationIndex::WalkingNorthEast;
+			this->current_animation = AnimationIndex::WalkingNorthEast;
 		}
 	}
 	else
 	{
-		if (currentAnimation == AnimationIndex::WalkingSouth || currentAnimation == AnimationIndex::RunningSouth)
+		if (this->current_animation == AnimationIndex::WalkingSouth || this->current_animation == AnimationIndex::RunningSouth)
 		{
-			currentAnimation = AnimationIndex::IdleSouth;
+			this->current_animation = AnimationIndex::IdleSouth;
 		}
-		else if (currentAnimation == AnimationIndex::WalkingNorth || currentAnimation == AnimationIndex::RunningNorth)
+		else if (this->current_animation == AnimationIndex::WalkingNorth || this->current_animation == AnimationIndex::RunningNorth)
 		{
-			currentAnimation = AnimationIndex::IdleNorth;
+			this->current_animation = AnimationIndex::IdleNorth;
 		}
-		else if (currentAnimation == AnimationIndex::WalkingEast || currentAnimation == AnimationIndex::RunningEast)
+		else if (this->current_animation == AnimationIndex::WalkingEast || this->current_animation == AnimationIndex::RunningEast)
 		{
-			currentAnimation = AnimationIndex::IdleEast;
+			this->current_animation = AnimationIndex::IdleEast;
 		}
-		else if (currentAnimation == AnimationIndex::WalkingWest || currentAnimation == AnimationIndex::RunningWest)
+		else if (this->current_animation == AnimationIndex::WalkingWest || this->current_animation == AnimationIndex::RunningWest)
 		{
-			currentAnimation = AnimationIndex::IdleWest;
+			this->current_animation = AnimationIndex::IdleWest;
 		}
-		else if (currentAnimation == AnimationIndex::WalkingSouthEast || currentAnimation == AnimationIndex::RunningSouthEast)
+		else if (this->current_animation == AnimationIndex::WalkingSouthEast || this->current_animation == AnimationIndex::RunningSouthEast)
 		{
-			currentAnimation = AnimationIndex::IdleSouthEast;
+			this->current_animation = AnimationIndex::IdleSouthEast;
 		}
-		else if (currentAnimation == AnimationIndex::WalkingNorthEast || currentAnimation == AnimationIndex::RunningNorthEast)
+		else if (this->current_animation == AnimationIndex::WalkingNorthEast || this->current_animation == AnimationIndex::RunningNorthEast)
 		{
-			currentAnimation = AnimationIndex::IdleNorthEast;
+			this->current_animation = AnimationIndex::IdleNorthEast;
 		}
-		else if (currentAnimation == AnimationIndex::WalkingSouthWest || currentAnimation == AnimationIndex::RunningSouthWest)
+		else if (this->current_animation == AnimationIndex::WalkingSouthWest || this->current_animation == AnimationIndex::RunningSouthWest)
 		{
-			currentAnimation = AnimationIndex::IdleNorthWest;
+			this->current_animation = AnimationIndex::IdleNorthWest;
 		}
-		else if (currentAnimation == AnimationIndex::WalkingNorthWest || currentAnimation == AnimationIndex::RunningNorthWest)
+		else if (this->current_animation == AnimationIndex::WalkingNorthWest || this->current_animation == AnimationIndex::RunningNorthWest)
 		{
-			currentAnimation = AnimationIndex::IdleNorthWest;
+			this->current_animation = AnimationIndex::IdleNorthWest;
 		}
 	}
 }
 
-void Player::goThroughPath()
+void Player::FollowPath()
 {
-	if (!playerPath.empty())
+	if (!this->player_path.empty())
 	{
-		if (abs(playerBody.getPosition().x - playerPath.back().second.first) < 10 &&
-			abs(playerBody.getPosition().y - playerPath.back().second.second) < 10)
+		if (abs(this->player_body.getPosition().x - this->player_path.back().second.first) < 10 &&
+			abs(this->player_body.getPosition().y - this->player_path.back().second.second) < 10)
 		{
-			playerPath.pop_back();
+			this->player_path.pop_back();
 		}
 		else
 		{
-			direction = { decodeDirections().first*3, decodeDirections().second*3 };
-			setVelocity();
+			this->direction = { DecodeDirections().first * 3, DecodeDirections().second * 3 };
+			SetVelocity();
 		}
 	}
 	else
@@ -327,36 +332,32 @@ void Player::goThroughPath()
 		if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) ||
 			sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)))
 		{
-			direction = { 0,0 };
-			setVelocity();
+			this->direction = { 0,0 };
+			SetVelocity();
 		}
 	}
 }
 
-pair <float, float> Player::returnPlayer2DPosition()
+pair <float, float> Player::GetPlayer2DPosition()
 {
-	return{ playerBody.getPosition().x, playerBody.getPosition().y };
+	return{ this->player_body.getPosition().x, this->player_body.getPosition().y };
 }
 
-sf::Vector2f Player::returnPlayerBodySize()
+sf::Vector2f Player::GetPlayerBodySize()
 {
-	return playerBody.getSize();
+	return this->player_body.getSize();
 }
 
-vector<int> Player::getTilesToBeColored()
+vector<int> Player::GetTilesToBeColored()
 {
-	if (playerPath.empty())
+	if (this->player_path.empty())
 	{
 		return {};
 	}
-	return tilesToBeColored;
+	return this->tiles_to_be_colored;
 }
 
-void Player::setEvent(sf::Event * event)
+void Player::SetEvent(sf::Event * event)
 {
-	this->playerEvent = event;
-}
-
-Player::~Player()
-{
+	this->player_event = event;
 }

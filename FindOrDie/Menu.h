@@ -8,15 +8,16 @@ class Menu
 {
 public:
 	Menu();
-	void draw(sf::RenderWindow& window);
+	~Menu();
+	void Draw(sf::RenderWindow& window);
 	void MoveUp();
 	void MoveDown();
-	void options(sf::Event& event, class Player& player, class Map& map, GameStates& gameState);
-	void pickMenu();
-	void setDimensions(float widthD, float heightD);
+	void Options(sf::Event& event, class Player& player, class Map& map, GameStates& game_state);
+	void PickMenu();
+	void SetDimensions(float width, float height);
 
 public:
-	int selectedItemIndex = 0;
+	int selected_item_index = 0;
 
 	enum class MenuState
 	{
@@ -30,20 +31,18 @@ public:
 	sf::Font font;
 	sf::Text text;
 	vector <sf::Text> main;
-	vector <sf::Text> selectCharacter;
+	vector <sf::Text> select_character;
 	vector <sf::Text> pause;
 
 	vector <sf::Text> menu;
 
-	int itemsMainMenu = 3;
-	int itemsSelectCharacterMenu = 2;
-	int itemsPauseMenu = 3;
+	int items_main_menu = 3;
+	int items_select_character_menu = 2;
+	int items_pause_menu = 3;
 
 	float width;
 	float height;
 
-	unsigned int fontSize = 50;
-
-	~Menu();
+	unsigned int font_size = 50;
 };
 

@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include <SFML\Graphics.hpp>
+
 Camera::Camera()
 {
 }
@@ -8,132 +9,132 @@ Camera::~Camera()
 {
 }
 
-void Camera::setMenuView()
+void Camera::SetMenuView()
 {
-	if (!isMenuView)
+	if (!this->is_menu_view)
 	{
-		menuView = window->getDefaultView();
-		window->setView(menuView);
-		isPlayerView = false;
-		isMenuView = true;
+		this->menu_view = this->window->getDefaultView();
+		this->window->setView(this->menu_view);
+		this->is_player_view = false;
+		this->is_menu_view = true;
 	}
 }
 
 void Camera::setPlayerView()
 {
-	if (!isPlayerView)
+	if (!this->is_player_view)
 	{
-		window->setView(playerView);
-		isPlayerView = true;
-		isMenuView = false;
+		this->window->setView(this->player_view);
+		this->is_player_view = true;
+		this->is_menu_view = false;
 	}
 }
 
 
-void Camera::CameraFollowPlayer(std::pair<float,float>& playerPosition)
+void Camera::CameraFollowPlayer(std::pair<float,float>& player_position)
 {
-	if (centerCameraOnPlayer && lastKnownPosition != playerPosition )
+	if (this->center_camera_on_player && this->last_known_position != player_position )
 	{
-		playerView.move(-(lastKnownPosition.first - playerPosition.first), -(lastKnownPosition.second - playerPosition.second));
-		lastKnownPosition = playerPosition;
-		window->setView(playerView);
+		this->player_view.move(-(this->last_known_position.first - player_position.first), -(this->last_known_position.second - player_position.second));
+		this->last_known_position = player_position;
+		this->window->setView(this->player_view);
 	}
 	else
 	{
-		if (initialPosition)
+		if (this->initial_position)
 		{
-			playerView.setCenter(lastKnownPosition.first, lastKnownPosition.second);
-			window->setView(playerView);
-			initialPosition = false;
+			this->player_view.setCenter(last_known_position.first, last_known_position.second);
+			this->window->setView(player_view);
+			this->initial_position = false;
 		}
 	}
 }
 
-void Camera::setLastKnownPosition(std::pair<float, float>& position)
+void Camera::SetLastKnownPosition(std::pair<float, float>& position)
 {
-	lastKnownPosition = position;
+	this->last_known_position = position;
 }
 
-float Camera::getAspectRatio(std::pair<unsigned int, unsigned int> dimensions)
+float Camera::GetAspectRatio(std::pair<unsigned int, unsigned int> dimensions)
 {
 	return float(dimensions.first) / float(dimensions.second);
 }
 
-void Camera::draggableCamera()
+void Camera::DraggableCamera()
 {
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && !rightClickWasPressed)
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && !this->right_click_pressed)
 	{
-		position = sf::Mouse::getPosition(*window);
-		rightClickWasPressed = true;
-		cameraCenter = playerView.getCenter();
+		this->position = sf::Mouse::getPosition(*this->window);
+		this->right_click_pressed = true;
+		this->camera_center = this->player_view.getCenter();
 	}
 	else if (!sf::Mouse::isButtonPressed(sf::Mouse::Right))
 	{
-		rightClickWasPressed = false;
+		this->right_click_pressed = false;
 	}
-	if (rightClickWasPressed)
+	if (this->right_click_pressed)
 	{
-			deltaPosition.x = (position.x - sf::Mouse::getPosition(*window).x);
-			deltaPosition.y = (position.y - sf::Mouse::getPosition(*window).y);
-			if (initialPosition || centerCameraOnPlayer)
+			this->delta_position.x = (this->position.x - sf::Mouse::getPosition(*this->window).x);
+			this->delta_position.y = (this->position.y - sf::Mouse::getPosition(*this->window).y);
+			if (this->initial_position || this->center_camera_on_player)
 			{
-				initialPosition = false;
-				centerCameraOnPlayer = false;
+				this->initial_position = false;
+				this->center_camera_on_player = false;
 			}
-			playerView.setCenter(cameraCenter.x + deltaPosition.x, cameraCenter.y + deltaPosition.y);
-			window->setView(playerView);
+			this->player_view.setCenter(this->camera_center.x + this->delta_position.x, this->camera_center.y + this->delta_position.y);
+			this->window->setView(this->player_view);
 	}
 }
 
-void Camera::zoomPlayerView()
+void Camera::ZoomPlayerView()
 {
 	
-	if (this->event->type==sf::Event::MouseWheelMoved)
+	if (this->event->type == sf::Event::MouseWheelMoved)
 	{
-		playerView.zoom(1.f + event->mouseWheel.delta*0.1f);
-		window->setView(playerView);
+		this->player_view.zoom(1.f + event->mouseWheel.delta*0.1f);
+		this->window->setView(player_view);
 	}
 }
 
-void Camera::centerOnPlayer(std::pair<float, float>& playerPosition)
+void Camera::CenterOnPlayer(std::pair<float, float>& player_position)
 {
-	if (centerCameraOnPlayer) {
-		centerCameraOnPlayer = false;
+	if (this->center_camera_on_player) {
+		this->center_camera_on_player = false;
 	}
 	else
 	{
-		centerCameraOnPlayer = true;
-		playerView.setCenter({ playerPosition.first, playerPosition.second });
-		window->setView(playerView);
+		this->center_camera_on_player = true;
+		this->player_view.setCenter({ player_position.first, player_position.second });
+		this->window->setView(player_view);
 	}
 }
 
-void Camera::playerViewSetSize(std::pair<unsigned int, unsigned int> dimensions)
+void Camera::PlayerViewSetSize(std::pair<unsigned int, unsigned int> dimensions)
 {
-	playerView.setSize((float)dimensions.second * getAspectRatio(dimensions), (float)dimensions.second);
+	this->player_view.setSize((float)dimensions.second * GetAspectRatio(dimensions), (float)dimensions.second);
 }
 
-void Camera::playerViewSetCenter(std::pair<float, float> center)
+void Camera::PlayerViewSetCenter(std::pair<float, float> center)
 {
-	 playerView.setCenter({ center.first, center.second }); 
+	 this->player_view.setCenter({ center.first, center.second }); 
 }
 
-void Camera::setEvent(sf::Event * event)
+void Camera::SetEvent(sf::Event * event)
 {
 	this->event = event;
 }
 
-void Camera::setWindow(sf::RenderWindow * window)
+void Camera::SetWindow(sf::RenderWindow * window)
 {
 	this->window = window;
 }
 
-sf::FloatRect Camera::getPlayerViewBounds()
+sf::FloatRect Camera::GetPlayerViewBounds()
 {
 		sf::FloatRect rt;
-		rt.left = playerView.getCenter().x - playerView.getSize().x / 2.f;
-		rt.top = playerView.getCenter().y - playerView.getSize().y / 2.f;
-		rt.width = playerView.getSize().x;
-		rt.height = playerView.getSize().y;
+		rt.left = this->player_view.getCenter().x - this->player_view.getSize().x / 2.f;
+		rt.top = this->player_view.getCenter().y - this->player_view.getSize().y / 2.f;
+		rt.width = this->player_view.getSize().x;
+		rt.height = this->player_view.getSize().y;
 		return rt;
 }

@@ -9,12 +9,12 @@ GameStates::~GameStates()
 {
 }
 
-GameStates::GameState GameStates::getCurrentState()
+GameStates::GameState GameStates::GetCurrentState()
 {
-	return this->gameState;
+	return this->game_state;
 }
 
-void GameStates::setCurrentState(GameState state)
+void GameStates::SetCurrentState(GameState state)
 {
-	this->gameState = state;
+	this->game_state = state;
 }

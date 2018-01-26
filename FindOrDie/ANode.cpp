@@ -2,53 +2,53 @@
 
 ANode::ANode(int xp, int yp, int d, int p)
 {
-		currentPosition.first = xp;
-		currentPosition.second = yp;
-		level = d;
-		priority = p;
+		this->current_position.first = xp;
+		this->current_position.second = yp;
+		this->level = d;
+		this->priority = p;
 }
 
-void ANode::operator=(const ANode & N)
+void ANode::operator=(const ANode & node)
 {
-	currentPosition.first = N.currentPosition.first;
-	currentPosition.second = N.currentPosition.second;
-	level = N.level;
-	priority = N.priority;
+	this->current_position.first = node.current_position.first;
+	this->current_position.second = node.current_position.second;
+	this->level = node.level;
+	this->priority = node.priority;
 }
 
-int ANode::getxPos() const
+int ANode::GetXPos() const
 {
-	return currentPosition.first;
+	return this->current_position.first;
 }
 
-int ANode::getyPos() const
+int ANode::GetYPos() const
 {
-	return currentPosition.second;
+	return this->current_position.second;
 }
 
-int ANode::getLevel() const
+int ANode::GetLevel() const
 {
-	return level;
+	return this->level;
 }
 
-int ANode::getPriority() const
+int ANode::GetPriority() const
 {
-	return priority;
+	return this->priority;
 }
 
-void ANode::updatePriority(const int & xDest, const int & yDest)
+void ANode::UpdatePriority(const int & x_dest, const int & y_dest)
 {
-	priority = level + estimate(xDest, yDest) * 10;
+	this->priority = this->level + Estimate(x_dest, y_dest) * 10;
 }
 
-void ANode::nextLevel(const int & i)
+void ANode::NextLevel(const int & i)
 {
-	level += (dir == 8 ? (i % 2 == 0 ? 10 : 14) : 10);
+	this->level += (this->dir == 8 ? (i % 2 == 0 ? 10 : 14) : 10);
 }
 
-const int & ANode::estimate(const int & xDest, const int & yDest) const
+const int & ANode::Estimate(const int & x_dest, const int & y_dest) const
 {
-	return(std::max(xDest - currentPosition.first, yDest - currentPosition.second));
+	return(std::max(x_dest - this->current_position.first, y_dest - this->current_position.second));
 }
 
 ANode::~ANode()
@@ -57,5 +57,5 @@ ANode::~ANode()
 
 bool operator<(const ANode & a, const ANode & b)
 {
-	return a.getPriority() > b.getPriority();
+	return a.GetPriority() > b.GetPriority();
 }

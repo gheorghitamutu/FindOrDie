@@ -3,24 +3,24 @@
 Animation::Animation(int x, int y, int width, int height, sf::Texture texture)
 {
 	this->texture = texture;
-	for (int i = 0; i < numberOfFrames; i++)
+	for (int i = 0; i < this->number_of_frames; i++)
 	{
-		frames[i] = { x + i*width, y, width, height };
+		this->frames[i] = { x + i*width, y, width, height };
 	}
 }
 
 void Animation::ApplyToSprite(sf::RectangleShape& body)
 {
-	body.setTexture(&texture);
-	body.setTextureRect(frames[frameIndex]);
+	body.setTexture(&this->texture);
+	body.setTextureRect(this->frames[this->frame_index]);
 }
 
-void Animation::Update(float deltaTime)
+void Animation::Update(float delta_time)
 {
-	time += deltaTime;
-	while (time >= holdTime)
+	this->time += delta_time;
+	while (this->time >= this->hold_time)
 	{
-		time -= holdTime;
+		this->time -= this->hold_time;
 		Advance();
 	}
 }
@@ -31,8 +31,8 @@ Animation::~Animation()
 
 void Animation::Advance()
 {
-	if (++frameIndex >= numberOfFrames)
+	if (++this->frame_index >= this->number_of_frames)
 	{
-		frameIndex = 0;
+		this->frame_index = 0;
 	}
 }
