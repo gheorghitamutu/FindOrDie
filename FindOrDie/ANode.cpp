@@ -8,6 +8,11 @@ ANode::ANode(int xp, int yp, int d, int p)
 		this->priority = p;
 }
 
+ANode::~ANode()
+{
+}
+
+
 void ANode::operator=(const ANode & node)
 {
 	this->current_position.first = node.current_position.first;
@@ -49,10 +54,6 @@ void ANode::NextLevel(const int & i)
 const int & ANode::Estimate(const int & x_dest, const int & y_dest) const
 {
 	return(std::max(x_dest - this->current_position.first, y_dest - this->current_position.second));
-}
-
-ANode::~ANode()
-{
 }
 
 bool operator<(const ANode & a, const ANode & b)

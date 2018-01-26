@@ -88,10 +88,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="grass5.png">
+    <Image Include="iso-64x64-building.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="iso-64x64-building.png">
+    <Image Include="Animation\Terrain\isometric_new_tiles_by_spasquini-d4jnp2i.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

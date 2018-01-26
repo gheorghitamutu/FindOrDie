@@ -1,14 +1,11 @@
 #pragma once
 #include "SFML\Graphics.hpp"
 #include <iostream>
-#include <fstream>
 #include <cctype>
-#include <sstream>
 #include <string>
-#include<math.h>
+#include <math.h>
 #include <vector>
 #include <random>
-#include <thread>
 #include "Pathfinding.h"
 
 using namespace std;
@@ -26,7 +23,7 @@ public:
 	bool IsCollidingDrawOver(sf::Vector2f body_size);
 	bool IsWalkable(pair<int, int> pair);
 	bool ContainsPoint(pair<float, float> point, pair<vector<pair<float, float>>, int> non_walkable_area_coords);
-	bool IsColliding(sf::Vector2f bodySize, sf::Vector2f velocity);
+	bool IsColliding(sf::Vector2f body_size, sf::Vector2f velocity);
 	pair <float, float> Convert2DToIso(pair<float, float> pair);
 	pair <float, float> ConvertIsoTo2D(pair<float, float> pair);
 	pair <float, float> GetTileCenterFromTileCoordinate(pair<float, float> pair);
@@ -34,7 +31,7 @@ public:
 	vector<pair<float, float>> GetPolygonPoints(sf::Sprite* tile);
 	int GetTileNumberWherePlayerIs(sf::Vector2f body_size);
 	int GetTileNumberClicked(sf::RenderWindow& window);
-	pair<string, pair<pair<int, int>, pair<int, int>>> SetFinishLocation(sf::Event event, sf::RenderWindow& window, sf::Vector2f bodySize);
+	pair<string, pair<pair<int, int>, pair<int, int>>> SetFinishLocation(sf::Event event, sf::RenderWindow& window, sf::Vector2f body_size);
 	void SetStartLocation(sf::Vector2f body_size);
 	pair <float, float> GetStartLocation();
 	pair <float, float> GetFinishLocation();
@@ -50,7 +47,7 @@ public:
 	std::uniform_int_distribution<> dis{ 10, 150 };
 	std::uniform_int_distribution<> dis2{ 1, 5 };
 	sf::Texture* tile_texture;
-	pair<sf::Sprite, bool> tile;
+	pair<sf::Sprite, bool> tile_brick;
 	vector<pair<pair<float, float>, bool>> tile_type;
 	vector<pair<vector<pair<float, float>>, int>> floor_level_tiles_coords;
 	vector <pair<sf::Sprite, bool>> tiles;
@@ -77,7 +74,7 @@ public:
 	pair<float, float> extreme;
 
 	bool OnSegment(pair<float, float> p, pair<float, float> q, pair<float, float> r);
-	int orientation(pair<float, float> p, pair<float, float> q, pair<float, float> r);
+	int Orientation(pair<float, float> p, pair<float, float> q, pair<float, float> r);
 	bool DoIntersect(pair<float, float> p1, pair<float, float> q1, pair<float, float> p2, pair<float, float> q2);
 	bool IsInside(vector<pair<float, float>> polygon, int n, pair<float, float> p);
 
@@ -97,6 +94,6 @@ public:
 
 	pair <float, float> player_position;
 
-	sf::Event * event;
+	sf::Event* event;
 };
 

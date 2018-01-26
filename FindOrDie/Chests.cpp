@@ -12,6 +12,15 @@ Chests::Chests()
 	this->body.setTexture(this->texture);
 }
 
+Chests::~Chests()
+{
+	if (this->texture != nullptr)
+	{
+		delete texture;
+	}
+}
+
+
 void Chests::DrawChest(sf::RenderWindow & window)
 {
 	window.draw(this->body);
@@ -34,13 +43,5 @@ void Chests::LoadTexture()
 	if (!this->texture->loadFromFile("Animation/Chest/chest.png"))
 	{
 		std::cout << "Can t load" << std::endl;
-	}
-}
-
-Chests::~Chests()
-{
-	if (this->texture != nullptr)
-	{
-		delete texture;
 	}
 }

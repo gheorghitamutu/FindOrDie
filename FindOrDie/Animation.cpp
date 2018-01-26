@@ -9,10 +9,14 @@ Animation::Animation(int x, int y, int width, int height, sf::Texture *texture)
 	}
 }
 
-void Animation::ApplyToSprite(sf::RectangleShape& body)
+Animation::~Animation()
 {
-	body.setTexture(this->texture);
-	body.setTextureRect(this->frames[this->frame_index]);
+}
+
+void Animation::ApplyToSprite(sf::RectangleShape* body)
+{
+	body->setTexture(this->texture);
+	body->setTextureRect(this->frames[this->frame_index]);
 }
 
 void Animation::Update(float delta_time)
@@ -23,10 +27,6 @@ void Animation::Update(float delta_time)
 		this->time -= this->hold_time;
 		Advance();
 	}
-}
-
-Animation::~Animation()
-{
 }
 
 void Animation::Advance()

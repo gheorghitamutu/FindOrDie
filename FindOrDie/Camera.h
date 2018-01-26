@@ -8,9 +8,9 @@ public:
 	Camera();
 	~Camera();
 	void SetMenuView();
-	void setPlayerView();
-	void CameraFollowPlayer(std::pair<float, float>& player_position);
-	void SetLastKnownPosition(std::pair<float, float>& position);
+	void SetPlayerView();
+	void CameraFollowPlayer(std::pair<float, float> &player_position);
+	void SetLastKnownPosition(std::pair<float, float> &position);
 	float GetAspectRatio(std::pair<unsigned int, unsigned int> dimensions);
 	void DraggableCamera();
 	void ZoomPlayerView();

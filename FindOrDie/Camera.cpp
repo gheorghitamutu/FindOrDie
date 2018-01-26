@@ -20,7 +20,7 @@ void Camera::SetMenuView()
 	}
 }
 
-void Camera::setPlayerView()
+void Camera::SetPlayerView()
 {
 	if (!this->is_player_view)
 	{

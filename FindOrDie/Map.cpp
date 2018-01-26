@@ -5,13 +5,15 @@ Map::Map()
 {
 	this->tile_texture = new sf::Texture;
 	this->tile_texture->loadFromFile("iso-64x64-building.png");
-	this->tile.first.setTexture(*(this->tile_texture));
+
+	this->tile_brick.first.setTexture(*this->tile_texture);
+
 	this->extreme = { 10000, 0 };
 }
 
 Map::~Map()
 {
-	if (this->tile_texture == nullptr)
+	if (this->tile_texture != nullptr)
 	{
 		delete this->tile_texture;
 	}
@@ -29,7 +31,7 @@ void Map::DrawTilesOverPlayer(bool is_colliding)
 {
 	if (is_colliding)
 	{
-		for (auto &elem : this->draw_tile_over_player)
+		for (auto& elem : this->draw_tile_over_player)
 		{
 			this->non_walkable_tiles[elem].first.setColor(sf::Color(255, 255, 255, 160));
 		}
@@ -71,7 +73,7 @@ pair<float, float> Map::GetTileCenterFromTileCoordinate(pair<float, float> pair)
 bool Map::ContainsPoint(pair<float, float> point, pair<vector<pair<float, float>>, int> non_walkable_area_coords)
 {
 	vector<pair<float, float>>polygon;
-	for(auto &object : non_walkable_area_coords.first)
+	for(auto& object : non_walkable_area_coords.first)
 	{
 		polygon.emplace_back(object);
 	}
@@ -238,24 +240,24 @@ void Map::CreateMap()
 
 	float pos_x = 0, pos_y = 0;
 	int tile_number = 0;
-	for (auto &pair : this->tile_type)
+	for (auto& pair : this->tile_type)
 	{
-		this->tile.second = IsWalkable({ (int)pair.first.first, (int)pair.first.second });
-		this->tile.first.setPosition(Convert2DToIso({ pos_x*(this->tile_size / 2), pos_y*(this->tile_size / 2) }).first, Convert2DToIso({ pos_x*(this->tile_size / 2) , pos_y*(this->tile_size / 2) }).second);
-		this->tile.first.setTextureRect(sf::IntRect(3 * this->tile_size, (int)(pair.first.second *  this->tile_size), this->tile_size, this->tile_size)); //floor level
-		this->tiles.emplace_back(this->tile);
+		this->tile_brick.second = IsWalkable({ (int)pair.first.first, (int)pair.first.second });
+		this->tile_brick.first.setPosition(Convert2DToIso({ pos_x*(this->tile_size / 2), pos_y*(this->tile_size / 2) }).first, Convert2DToIso({ pos_x*(this->tile_size / 2) , pos_y*(this->tile_size / 2) }).second);
+		this->tile_brick.first.setTextureRect(sf::IntRect(3 * this->tile_size, (int)(pair.first.second *  this->tile_size), this->tile_size, this->tile_size)); //floor level
+		this->tiles.emplace_back(this->tile_brick);
 
-		this->tile.first.setTextureRect(sf::IntRect((int)(pair.first.first *  this->tile_size), (int)(pair.first.second *  this->tile_size), this->tile_size, this->tile_size));
-		this->non_walkable_tiles.emplace_back(this->tile);
+		this->tile_brick.first.setTextureRect(sf::IntRect((int)(pair.first.first *  this->tile_size), (int)(pair.first.second *  this->tile_size), this->tile_size, this->tile_size));
+		this->non_walkable_tiles.emplace_back(this->tile_brick);
 
 		this->floor_level_tiles_coords.emplace_back(
 			std::pair<vector<std::pair<float, float>>, int>
 		{
 			{
-				{ this->tile.first.getPosition().x + this->half_tile_size, this->tile.first.getPosition().y + this->half_tile_size },
-				{ this->tile.first.getPosition().x, this->tile.first.getPosition().y + this->three_fourths_tile_size },
-				{ this->tile.first.getPosition().x + this->half_tile_size, this->tile.first.getPosition().y + this->tile_size },
-				{ this->tile.first.getPosition().x + this->tile_size, this->tile.first.getPosition().y + this->three_fourths_tile_size }
+				{ this->tile_brick.first.getPosition().x + this->half_tile_size, this->tile_brick.first.getPosition().y + this->half_tile_size },
+				{ this->tile_brick.first.getPosition().x, this->tile_brick.first.getPosition().y + this->three_fourths_tile_size },
+				{ this->tile_brick.first.getPosition().x + this->half_tile_size, this->tile_brick.first.getPosition().y + this->tile_size },
+				{ this->tile_brick.first.getPosition().x + this->tile_size, this->tile_brick.first.getPosition().y + this->three_fourths_tile_size }
 			},
 				tile_number
 		});
@@ -264,7 +266,7 @@ void Map::CreateMap()
 			std::pair<vector<std::pair<float, float>>, int>
 		{
 			{
-				GetPolygonPoints(&this->tile.first)
+				GetPolygonPoints(&this->tile_brick.first)
 			},
 				tile_number
 		});
@@ -302,7 +304,7 @@ void Map::CreateMap()
 vector<sf::Sprite*> Map::CheckWhatToDraw()
 {
 	std::vector<sf::Sprite*> draw_these_local;
-	for (auto &tile : this->tiles)
+	for (auto& tile : this->tiles)
 	{
 		if (tile.first.getGlobalBounds().intersects(view_bounds))
 		{
@@ -310,7 +312,7 @@ vector<sf::Sprite*> Map::CheckWhatToDraw()
 		}
 	}
 
-	for (auto &tile : this->non_walkable_tiles)
+	for (auto& tile : this->non_walkable_tiles)
 	{
 		if (tile.first.getGlobalBounds().intersects(view_bounds))
 		{
@@ -478,7 +480,7 @@ bool Map::OnSegment(pair<float, float> p, pair<float, float> q, pair<float, floa
 	return false;
 }
 
-int Map::orientation(pair<float, float> p, pair<float, float> q, pair<float, float> r)
+int Map::Orientation(pair<float, float> p, pair<float, float> q, pair<float, float> r)
 {
 	int val = (int)((q.second - p.second) * (r.first - q.first) - (q.first - p.first) * (r.second - q.second));
 	if (val == 0)
@@ -490,10 +492,10 @@ int Map::orientation(pair<float, float> p, pair<float, float> q, pair<float, flo
 
 bool Map::DoIntersect(pair<float, float> p1, pair<float, float> q1, pair<float, float> p2, pair<float, float> q2)
 {
-	int o1 = orientation(p1, q1, p2);
-	int o2 = orientation(p1, q1, q2);
-	int o3 = orientation(p2, q2, p1);
-	int o4 = orientation(p2, q2, q1);
+	int o1 = Orientation(p1, q1, p2);
+	int o2 = Orientation(p1, q1, q2);
+	int o3 = Orientation(p2, q2, p1);
+	int o4 = Orientation(p2, q2, q1);
 	if ((o1 != o2 && o3 != o4) ||
 		(o1 == 0 && OnSegment(p1, p2, q1)) ||
 		(o2 == 0 && OnSegment(p1, q2, q1)) ||
@@ -518,7 +520,7 @@ bool Map::IsInside(vector<pair<float, float>> polygon, int n, pair<float, float>
 		next = (i + 1) % n;
 		if (DoIntersect(polygon[i], polygon[next], p, extreme))
 		{
-			if (orientation(polygon[i], p, polygon[next]) == 0)
+			if (Orientation(polygon[i], p, polygon[next]) == 0)
 			{
 				return OnSegment(polygon[i], p, polygon[next]);
 			}

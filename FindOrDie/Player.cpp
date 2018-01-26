@@ -60,7 +60,7 @@ void Player::Update(Map& map)
 	FollowPath();
 	DecodeAnimationPath({ direction.x, direction.y });
 	this->animations[int(this->current_animation)].Update(this->delta_time);
-	this->animations[int(this->current_animation)].ApplyToSprite(this->player_body);
+	this->animations[int(this->current_animation)].ApplyToSprite(&this->player_body);
 
 	map.DrawTilesOverPlayer(map.IsCollidingDrawOver(GetPlayerBodySize()));
 	if (map.IsColliding(GetPlayerBodySize(), this->velocity*this->delta_time))

@@ -139,7 +139,7 @@
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="grass5.png" />
+    <Image Include="Animation\Terrain\isometric_new_tiles_by_spasquini-d4jnp2i.png" />
     <Image Include="iso-64x64-building.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

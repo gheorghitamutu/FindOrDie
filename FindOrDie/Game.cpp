@@ -34,13 +34,18 @@ void Game::GameRun()
 		//	this->enemies.Draw(this->window);
 		//	this->chest.DrawChest(this->window);
 			this->player.Update(this->map);
-			this->camera.setPlayerView();
+			this->camera.SetPlayerView();
 			this->camera.CameraFollowPlayer(this->player.GetPlayer2DPosition());
 			this->player.Draw(this->window);
 		}
 		this->window.display();
 	}
 }
+
+Game::~Game()
+{
+}
+
 
 
 void Game::ProcessEvents()
@@ -57,7 +62,7 @@ void Game::ProcessEvents()
 	{
 		this->menu.Options(this->event, this->player, this->map, this->game_state);
 		this->player.StartingPosition(this->window);
-		this->camera.setPlayerView();
+		this->camera.SetPlayerView();
 	}
 	else if (this->game_state.GetCurrentState() == GameStates::GameState::Running)
 	{
@@ -123,8 +128,3 @@ Game::Game()
 
 	GameRun();
 }
-
-Game::~Game()
-{
-}
-

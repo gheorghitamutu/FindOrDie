@@ -4,8 +4,8 @@ class Animation
 {
 public:
 	Animation() = default;
-	Animation(int x, int y, int width, int height, sf::Texture *texture);
-	void ApplyToSprite(sf::RectangleShape& body);
+	Animation(int x, int y, int width, int height, sf::Texture* texture);
+	void ApplyToSprite(sf::RectangleShape* body);
 	void Update(float delta_time);
 	~Animation();
 private:
