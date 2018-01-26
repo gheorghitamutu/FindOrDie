@@ -16,15 +16,15 @@ public:
 	void SetVelocity();
 	void Draw(sf::RenderWindow& window);
 	void StartingPosition(sf::RenderWindow& window);
-	void SetTexture(string textureType);
-	void SetPlayerPath(pair<string, pair<pair<int, int>, pair<int, int>>> path, vector <pair<sf::Sprite, bool>>& tiles, pair <int, int> map_dimensions);
-	pair<int, int> DecodePath(const char character_direction);
-	pair<float, float> DecodeDirections();
-	void DecodeAnimationPath(pair<float, float> direction);
+	void SetTexture(std::string textureType);
+	void SetPlayerPath(std::pair<std::string, std::pair<std::pair<int, int>, std::pair<int, int>>> path, std::vector <class Tile*> tiles, std::pair <int, int> map_dimensions);
+	std::pair<int, int> DecodePath(const char character_direction);
+	std::pair<float, float> DecodeDirections();
+	void DecodeAnimationPath(std::pair<float, float> direction);
 	void FollowPath();
-	pair <float, float> GetPlayer2DPosition();
+	std::pair <float, float> GetPlayer2DPosition();
 	sf::Vector2f GetPlayerBodySize();
-	vector<int> GetTilesToBeColored();
+	std::vector<int> GetTilesToBeColored();
 	void SetEvent(sf::Event* event);
 public:
 	enum class AnimationIndex
@@ -71,12 +71,12 @@ public:
 	static constexpr float character_texture_size = 80.0f;
 	float delta_time = 0.0f;
 
-	list<pair<pair<int,int>,pair<float, float>>> player_path;
-	vector<int> tiles_to_be_colored;
+	std::list<std::pair<std::pair<int,int>, std::pair<float, float>>> player_path;
+	std::vector<int> tiles_to_be_colored;
 	
 	int dir = 4;
-	vector <int> dx = { 1, 0, -1, 0 };
-	vector <int> dy = { 0, 1, 0, -1 };
+	std::vector <int> dx = { 1, 0, -1, 0 };
+	std::vector <int> dy = { 0, 1, 0, -1 };
 	/*int dir = 8;
 	vector<int> dx = { 1, 1, 0, -1, -1, -1, 0, 1 };
 	vector<int> dy = { 0, 1, 1, 1, 0, -1, -1, -1 };*/

@@ -3,27 +3,20 @@
 
 Map::Map()
 {
-	this->tile_texture = new sf::Texture;
-	this->tile_texture->loadFromFile("iso-64x64-building.png");
-
-	this->tile_brick.first.setTexture(*this->tile_texture);
+	this->tile_factory = new TileFactory;
 
 	this->extreme = { 10000, 0 };
 }
 
 Map::~Map()
 {
-	if (this->tile_texture != nullptr)
-	{
-		delete this->tile_texture;
-	}
 }
 
 void Map::DrawMap(sf::RenderWindow& window)
 {
 	for (auto tile : this->draw_these)
 	{
-			window.draw(*tile);
+			window.draw(*(tile->GetSprite()));
 	}
 }
 
@@ -33,14 +26,14 @@ void Map::DrawTilesOverPlayer(bool is_colliding)
 	{
 		for (auto& elem : this->draw_tile_over_player)
 		{
-			this->non_walkable_tiles[elem].first.setColor(sf::Color(255, 255, 255, 160));
+			this->non_walkable_tiles[elem]->SetColor(sf::Color(255, 255, 255, 160));
 		}
 	}
 	else
 	{
 		for (auto& elem : this->last_known_tiles_over_player)
 		{
-			this->non_walkable_tiles[elem].first.setColor(sf::Color(255, 255, 255, 255));
+			this->non_walkable_tiles[elem]->SetColor(sf::Color(255, 255, 255, 255));
 		}
 		this->draw_tile_over_player.clear();
 		this->last_known_tiles_over_player.clear();
@@ -48,31 +41,37 @@ void Map::DrawTilesOverPlayer(bool is_colliding)
 	
 }
 
-pair<float, float> Map::Convert2DToIso(pair<float, float> pair)
+std::pair<float, float> Map::Convert2DToIso(std::pair<float, float> pair)
 {
 	return { pair.first - pair.second, (pair.first + pair.second) / 2 };
 }
 
-pair<float, float> Map::ConvertIsoTo2D(pair<float, float> pair)
+std::pair<float, float> Map::ConvertIsoTo2D(std::pair<float, float> pair)
 {
 	return { (2 * pair.second + pair.first) / 2, (2 * pair.second - pair.first) / 2 };
 }
 
-bool Map::IsWalkable(pair<int, int> pair)
+bool Map::IsWalkable(std::pair<int, int> pair)
 {
-	if (pair.first == 0 && pair.second == 0) return false;
-	if (pair.first == 0 && pair.second == 3) return true;
+	if (pair.first == 0 && pair.second == 0)
+	{
+		return false;
+	}
+	if (pair.first == 0 && pair.second == 3)
+	{
+		return true;
+	}
 	return true;
 }
 
-pair<float, float> Map::GetTileCenterFromTileCoordinate(pair<float, float> pair)
+std::pair<float, float> Map::GetTileCenterFromTileCoordinate(std::pair<float, float> pair)
 {
-	return { pair.first*tile_size + tile_size / 2, pair.second*this->tile_size + this->tile_size / 2 };
+	return { pair.first*this->tile_size + this->half_tile_size, pair.second*this->tile_size + this->half_tile_size };
 }
 
-bool Map::ContainsPoint(pair<float, float> point, pair<vector<pair<float, float>>, int> non_walkable_area_coords)
+bool Map::ContainsPoint(std::pair<float, float> point, std::pair<std::vector<std::pair<float, float>>, int> non_walkable_area_coords)
 {
-	vector<pair<float, float>>polygon;
+	std::vector<std::pair<float, float>>polygon;
 	for(auto& object : non_walkable_area_coords.first)
 	{
 		polygon.emplace_back(object);
@@ -86,35 +85,35 @@ bool Map::IsColliding(sf::Vector2f body_size, sf::Vector2f velocity)
 	if (this->tile_number_where_player_is != this->last_known_tile_number_where_player_is)
 	{
 		this->non_walkable_objects.clear();
-		if (this->tile_number_where_player_is - this->map_dimensions.first - 1 >= 0 && !this->tiles[this->tile_number_where_player_is - this->map_dimensions.first - 1].second)
+		if (this->tile_number_where_player_is - this->map_dimensions.first - 1 >= 0 && !this->tiles[this->tile_number_where_player_is - this->map_dimensions.first - 1]->GetIsWalkable())
 		{
 			this->non_walkable_objects.emplace_back(this->floor_level_tiles_coords[this->tile_number_where_player_is - this->map_dimensions.first - 1]);
 		}
-		if (this->tile_number_where_player_is - this->map_dimensions.first >= 0 && !this->tiles[this->tile_number_where_player_is - this->map_dimensions.first].second)
+		if (this->tile_number_where_player_is - this->map_dimensions.first >= 0 && !this->tiles[this->tile_number_where_player_is - this->map_dimensions.first]->GetIsWalkable())
 		{
 			this->non_walkable_objects.emplace_back(this->floor_level_tiles_coords[this->tile_number_where_player_is - this->map_dimensions.first]);
 		}
-		if (this->tile_number_where_player_is - this->map_dimensions.first + 1 >= 0 && !this->tiles[this->tile_number_where_player_is - this->map_dimensions.first + 1].second)
+		if (this->tile_number_where_player_is - this->map_dimensions.first + 1 >= 0 && !this->tiles[this->tile_number_where_player_is - this->map_dimensions.first + 1]->GetIsWalkable())
 		{
 			this->non_walkable_objects.emplace_back(this->floor_level_tiles_coords[this->tile_number_where_player_is - this->map_dimensions.first + 1]);
 		}
-		if (this->tile_number_where_player_is - 1 >= 0 && !this->tiles[this->tile_number_where_player_is - 1].second)
+		if (this->tile_number_where_player_is - 1 >= 0 && !this->tiles[this->tile_number_where_player_is - 1]->GetIsWalkable())
 		{
 			this->non_walkable_objects.emplace_back(this->floor_level_tiles_coords[this->tile_number_where_player_is - 1]);
 		}
-		if (this->tile_number_where_player_is + 1 < this->number_of_tiles && !this->tiles[this->tile_number_where_player_is + 1].second)
+		if (this->tile_number_where_player_is + 1 < this->number_of_tiles && !this->tiles[this->tile_number_where_player_is + 1]->GetIsWalkable())
 		{
 			this->non_walkable_objects.emplace_back(this->floor_level_tiles_coords[this->tile_number_where_player_is + 1]);
 		}
-		if (this->tile_number_where_player_is + this->map_dimensions.first - 1 < this->number_of_tiles && !this->tiles[this->tile_number_where_player_is + this->map_dimensions.first - 1].second)
+		if (this->tile_number_where_player_is + this->map_dimensions.first - 1 < this->number_of_tiles && !this->tiles[this->tile_number_where_player_is + this->map_dimensions.first - 1]->GetIsWalkable())
 		{
 			this->non_walkable_objects.emplace_back(this->floor_level_tiles_coords[this->tile_number_where_player_is + this->map_dimensions.first - 1]);
 		}
-		if (this->tile_number_where_player_is + this->map_dimensions.first < this->number_of_tiles && !this->tiles[this->tile_number_where_player_is + this->map_dimensions.first].second)
+		if (this->tile_number_where_player_is + this->map_dimensions.first < this->number_of_tiles && !this->tiles[this->tile_number_where_player_is + this->map_dimensions.first]->GetIsWalkable())
 		{
 			this->non_walkable_objects.emplace_back(this->floor_level_tiles_coords[this->tile_number_where_player_is + this->map_dimensions.first]);
 		}
-		if (this->tile_number_where_player_is + this->map_dimensions.first + 1 < this->map_dimensions.first*this->map_dimensions.second && !this->tiles[this->tile_number_where_player_is + this->map_dimensions.first + 1].second)
+		if (this->tile_number_where_player_is + this->map_dimensions.first + 1 < this->map_dimensions.first*this->map_dimensions.second && !this->tiles[this->tile_number_where_player_is + this->map_dimensions.first + 1]->GetIsWalkable())
 		{
 			this->non_walkable_objects.emplace_back(this->floor_level_tiles_coords[this->tile_number_where_player_is + this->map_dimensions.first + 1]);
 		}
@@ -135,61 +134,61 @@ bool Map::IsCollidingDrawOver(sf::Vector2f body_size)
 		this->draw_tile_over_player.clear();
 		if (this->tile_number_where_player_is - this->map_dimensions.first - 1 >= 0 &&
 			ContainsPoint({ this->player_position.first, this->player_position.second + body_size.y }, this->can_draw_over_player_objects[this->tile_number_where_player_is - this->map_dimensions.first - 1]) &&
-			!this->tiles[this->tile_number_where_player_is - this->map_dimensions.first - 1].second)
+			!this->tiles[this->tile_number_where_player_is - this->map_dimensions.first - 1]->GetIsWalkable())
 		{
 			this->draw_tile_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is - this->map_dimensions.first - 1].second);
 			this->last_known_tiles_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is - this->map_dimensions.first - 1].second);
 		}
 		if (this->tile_number_where_player_is - this->map_dimensions.first >= 0 &&
-			!this->tiles[this->tile_number_where_player_is - this->map_dimensions.first].second &&
+			!this->tiles[this->tile_number_where_player_is - this->map_dimensions.first]->GetIsWalkable() &&
 			ContainsPoint({ this->player_position.first, this->player_position.second + body_size.y }, this->can_draw_over_player_objects[this->tile_number_where_player_is - this->map_dimensions.first]))
 		{
 			this->draw_tile_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is - this->map_dimensions.first].second);
 			this->last_known_tiles_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is - this->map_dimensions.first].second);
 		}
 		if (this->tile_number_where_player_is - this->map_dimensions.first + 1 >= 0 &&
-			!this->tiles[this->tile_number_where_player_is - this->map_dimensions.first + 1].second &&
+			!this->tiles[this->tile_number_where_player_is - this->map_dimensions.first + 1]->GetIsWalkable() &&
 			ContainsPoint({ this->player_position.first, this->player_position.second + body_size.y }, this->can_draw_over_player_objects[this->tile_number_where_player_is - this->map_dimensions.first + 1]))
 		{
 			this->draw_tile_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is - this->map_dimensions.first + 1].second);
 			this->last_known_tiles_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is - this->map_dimensions.first + 1].second);
 		}
 		if (this->tile_number_where_player_is - 1 >= 0 &&
-			!this->tiles[this->tile_number_where_player_is - 1].second &&
+			!this->tiles[this->tile_number_where_player_is - 1]->GetIsWalkable() &&
 			ContainsPoint({ this->player_position.first, this->player_position.second + body_size.y }, this->can_draw_over_player_objects[this->tile_number_where_player_is - 1]))
 		{
 			this->draw_tile_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is - 1].second);
 			this->last_known_tiles_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is - 1].second);
 		}
 		if (this->tile_number_where_player_is + 1 < this->number_of_tiles &&
-			!this->tiles[this->tile_number_where_player_is + 1].second &&
+			!this->tiles[this->tile_number_where_player_is + 1]->GetIsWalkable() &&
 			ContainsPoint({ this->player_position.first, this->player_position.second + body_size.y }, this->can_draw_over_player_objects[this->tile_number_where_player_is + 1]))
 		{
 			this->draw_tile_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is + 1].second);
 			this->last_known_tiles_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is + 1].second);
 		}
 		if (this->tile_number_where_player_is + this->map_dimensions.first - 1 < this->number_of_tiles &&
-			!this->tiles[this->tile_number_where_player_is + this->map_dimensions.first - 1].second &&
+			!this->tiles[this->tile_number_where_player_is + this->map_dimensions.first - 1]->GetIsWalkable() &&
 			ContainsPoint({ this->player_position.first, this->player_position.second + body_size.y }, this->can_draw_over_player_objects[this->tile_number_where_player_is + this->map_dimensions.first - 1]))
 		{
 			this->draw_tile_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is + this->map_dimensions.first - 1].second);
 			this->last_known_tiles_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is + this->map_dimensions.first - 1].second);
 		}
 		if (this->tile_number_where_player_is + this->map_dimensions.first < this->number_of_tiles &&
-			!this->tiles[this->tile_number_where_player_is + this->map_dimensions.first].second &&
+			!this->tiles[this->tile_number_where_player_is + this->map_dimensions.first]->GetIsWalkable() &&
 			ContainsPoint({ this->player_position.first, this->player_position.second + body_size.y }, this->can_draw_over_player_objects[this->tile_number_where_player_is + this->map_dimensions.first]))
 		{
 			this->draw_tile_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is + this->map_dimensions.first].second);
 			this->last_known_tiles_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is + this->map_dimensions.first].second);
 		}
 		if (this->tile_number_where_player_is + this->map_dimensions.first + 1 < this->number_of_tiles &&
-			!this->tiles[this->tile_number_where_player_is + this->map_dimensions.first + 1].second &&
+			!this->tiles[this->tile_number_where_player_is + this->map_dimensions.first + 1]->GetIsWalkable() &&
 			ContainsPoint({ this->player_position.first, this->player_position.second + body_size.y }, this->can_draw_over_player_objects[this->tile_number_where_player_is + this->map_dimensions.first + 1]))
 		{
 			this->draw_tile_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is + this->map_dimensions.first + 1].second);
 			this->last_known_tiles_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is + this->map_dimensions.first + 1].second);
 		}
-		if (!this->tiles[this->tile_number_where_player_is].second &&
+		if (!this->tiles[this->tile_number_where_player_is]->GetIsWalkable() &&
 			ContainsPoint({ this->player_position.first, this->player_position.second + body_size.y }, this->can_draw_over_player_objects[this->tile_number_where_player_is]))
 		{
 			this->draw_tile_over_player.emplace_back(this->can_draw_over_player_objects[this->tile_number_where_player_is].second);
@@ -222,6 +221,8 @@ void Map::CreateMap()
 	this->map_dimensions = { this->dis(this->gen), this->dis(this->gen) };
 	this->number_of_tiles = this->map_dimensions.first*this->map_dimensions.second;
 
+	this->tile_factory->EmptyFactory();
+
 	for (int i = 0; i < this->number_of_tiles; i++)
 	{
 			if (this->dis2(this->gen) == 1 ||
@@ -230,11 +231,11 @@ void Map::CreateMap()
 				i % this->map_dimensions.first  == this->map_dimensions.first - 1 ||
 				i > this->map_dimensions.first*(this->map_dimensions.second-1))
 			{
-				this->tile_type.emplace_back(pair<float,float>( 0, 0 ), false);
+				this->tile_type.emplace_back(std::pair<float,float>( 0, 0 ), false);
 			}
 			else
 			{
-				this->tile_type.emplace_back(pair<float, float>(3, 0), false);
+				this->tile_type.emplace_back(std::pair<float, float>(3, 0), false);
 			}
 	}
 
@@ -242,31 +243,32 @@ void Map::CreateMap()
 	int tile_number = 0;
 	for (auto& pair : this->tile_type)
 	{
-		this->tile_brick.second = IsWalkable({ (int)pair.first.first, (int)pair.first.second });
-		this->tile_brick.first.setPosition(Convert2DToIso({ pos_x*(this->tile_size / 2), pos_y*(this->tile_size / 2) }).first, Convert2DToIso({ pos_x*(this->tile_size / 2) , pos_y*(this->tile_size / 2) }).second);
-		this->tile_brick.first.setTextureRect(sf::IntRect(3 * this->tile_size, (int)(pair.first.second *  this->tile_size), this->tile_size, this->tile_size)); //floor level
-		this->tiles.emplace_back(this->tile_brick);
+		this->tile_factory->SetIsWalkable(IsWalkable({ (int)pair.first.first, (int)pair.first.second }));
+		std::pair<float, float> position = (Convert2DToIso({ pos_x*(this->half_tile_size), pos_y*(this->half_tile_size) }));
+		this->tile_factory->SetPosition(position.first, position.second);
+		this->tile_factory->SetTextureRectangle(sf::IntRect(3 * this->tile_size, (int)(pair.first.second *  this->tile_size), this->tile_size, this->tile_size)); //floor level
+		this->tiles.emplace_back(this->tile_factory->FedTile());
 
-		this->tile_brick.first.setTextureRect(sf::IntRect((int)(pair.first.first *  this->tile_size), (int)(pair.first.second *  this->tile_size), this->tile_size, this->tile_size));
-		this->non_walkable_tiles.emplace_back(this->tile_brick);
+		this->tile_factory->SetTextureRectangle(sf::IntRect((int)(pair.first.first *  this->tile_size), (int)(pair.first.second *  this->tile_size), this->tile_size, this->tile_size));
+		this->non_walkable_tiles.emplace_back(this->tile_factory->FedTile());
 
 		this->floor_level_tiles_coords.emplace_back(
-			std::pair<vector<std::pair<float, float>>, int>
+			std::pair<std::vector<std::pair<float, float>>, int>
 		{
 			{
-				{ this->tile_brick.first.getPosition().x + this->half_tile_size, this->tile_brick.first.getPosition().y + this->half_tile_size },
-				{ this->tile_brick.first.getPosition().x, this->tile_brick.first.getPosition().y + this->three_fourths_tile_size },
-				{ this->tile_brick.first.getPosition().x + this->half_tile_size, this->tile_brick.first.getPosition().y + this->tile_size },
-				{ this->tile_brick.first.getPosition().x + this->tile_size, this->tile_brick.first.getPosition().y + this->three_fourths_tile_size }
+				{ this->tile_factory->GetPosition().x + this->half_tile_size, this->tile_factory->GetPosition().y + this->half_tile_size },
+				{ this->tile_factory->GetPosition().x, this->tile_factory->GetPosition().y + this->three_fourths_tile_size },
+				{ this->tile_factory->GetPosition().x + this->half_tile_size, this->tile_factory->GetPosition().y + this->tile_size },
+				{ this->tile_factory->GetPosition().x + this->tile_size, this->tile_factory->GetPosition().y + this->three_fourths_tile_size }
 			},
 				tile_number
 		});
 
 		can_draw_over_player_objects.emplace_back(
-			std::pair<vector<std::pair<float, float>>, int>
+			std::pair<std::vector<std::pair<float, float>>, int>
 		{
 			{
-				GetPolygonPoints(&this->tile_brick.first)
+				GetPolygonPoints(this->tile_factory->GetLastTile())
 			},
 				tile_number
 		});
@@ -281,7 +283,7 @@ void Map::CreateMap()
 
 	for (int y = 0; y<this->map_dimensions.second; y++)
 	{
-		this->map_matrix.emplace_back(vector<int>(this->map_dimensions.first, 0));
+		this->map_matrix.emplace_back(std::vector<int>(this->map_dimensions.first, 0));
 	}
 
 	int index = 0;
@@ -289,7 +291,7 @@ void Map::CreateMap()
 	{
 		for (auto& elem2 : elem1)
 		{
-			if (this->non_walkable_tiles[index++].second)
+			if (this->non_walkable_tiles[index++]->GetIsWalkable())
 			{
 				elem2 = 0;
 			}
@@ -301,37 +303,37 @@ void Map::CreateMap()
 	}
 }
 
-vector<sf::Sprite*> Map::CheckWhatToDraw()
+std::vector<Tile*> Map::CheckWhatToDraw()
 {
-	std::vector<sf::Sprite*> draw_these_local;
-	for (auto& tile : this->tiles)
+	std::vector<Tile*> draw_these_local;
+	for (auto tile : this->tiles)
 	{
-		if (tile.first.getGlobalBounds().intersects(view_bounds))
+		if (tile->GetSprite()->getGlobalBounds().intersects(view_bounds))
 		{
-			draw_these_local.emplace_back(&tile.first);
+			draw_these_local.emplace_back(tile);
 		}
 	}
 
 	for (auto& tile : this->non_walkable_tiles)
 	{
-		if (tile.first.getGlobalBounds().intersects(view_bounds))
+		if (tile->GetSprite()->getGlobalBounds().intersects(view_bounds))
 		{
-			draw_these_local.emplace_back(&tile.first);
+			draw_these_local.emplace_back(tile);
 		}
 	}
 	return draw_these_local;
 }
 
-vector<pair<float, float>> Map::GetPolygonPoints(sf::Sprite* tile)
+std::vector<std::pair<float, float>> Map::GetPolygonPoints(Tile* tile)
 {
-	return vector<pair<float, float>>
+	return std::vector<std::pair<float, float>>
 	{
-			{ (*tile).getPosition().x + this->half_tile_size, (*tile).getPosition().y},
-			{ (*tile).getPosition().x						, (*tile).getPosition().y + this->quarter_tile_size },
-			{ (*tile).getPosition().x						, (*tile).getPosition().y + this->three_fourths_tile_size },
-			{ (*tile).getPosition().x + this->half_tile_size, (*tile).getPosition().y + this->tile_size },
-			{ (*tile).getPosition().x + this->tile_size		, (*tile).getPosition().y + this->three_fourths_tile_size },
-			{ (*tile).getPosition().x + this->tile_size		, (*tile).getPosition().y + this->quarter_tile_size }
+			{ tile->GetPosition().x + this->half_tile_size, tile->GetPosition().y},
+			{ tile->GetPosition().x						  , tile->GetPosition().y + this->quarter_tile_size },
+			{ tile->GetPosition().x						  , tile->GetPosition().y + this->three_fourths_tile_size },
+			{ tile->GetPosition().x + this->half_tile_size, tile->GetPosition().y + this->tile_size },
+			{ tile->GetPosition().x + this->tile_size	  , tile->GetPosition().y + this->three_fourths_tile_size },
+			{ tile->GetPosition().x + this->tile_size	  , tile->GetPosition().y + this->quarter_tile_size }
 	};
 }
 
@@ -362,12 +364,12 @@ int Map::GetTileNumberClicked(sf::RenderWindow& window)
 	return -1;
 }
 
-pair<string, pair<pair<int, int>, pair<int, int>>> Map::SetFinishLocation(sf::Event event, sf::RenderWindow& window, sf::Vector2f body_size)
+std::pair<std::string, std::pair<std::pair<int, int>, std::pair<int, int>>> Map::SetFinishLocation(sf::Event event, sf::RenderWindow& window, sf::Vector2f body_size)
 {
 	int tile_number_clicked = GetTileNumberClicked(window);
 	if (tile_number_clicked > -1)
 	{
-		if (this->tiles[tile_number_clicked].second)
+		if (this->tiles[tile_number_clicked]->GetIsWalkable())
 		{
 			this->finish_location = {
 				tile_number_clicked / this->map_dimensions.first,
@@ -388,46 +390,47 @@ void Map::SetStartLocation(sf::Vector2f body_size)
 	int tile_number_player_is = GetTileNumberWherePlayerIs(body_size);
 	if (tile_number_player_is > -1)
 	{
-			this->start_location = {
+			this->start_location =
+			{
 				tile_number_player_is / this->map_dimensions.first,
 				tile_number_player_is % this->map_dimensions.first
 			};
 	}
 }
 
-pair<float, float> Map::GetStartLocation()
+std::pair<float, float> Map::GetStartLocation()
 {
 	return this->start_location;
 }
 
-pair<float, float> Map::GetFinishLocation()
+std::pair<float, float> Map::GetFinishLocation()
 {
 	return this->finish_location;
 }
 
-vector<pair<vector<pair<float, float>>, int>> Map::GetFloorLevelTilesCoords()
+std::vector<std::pair<std::vector<std::pair<float, float>>, int>> Map::GetFloorLevelTilesCoords()
 {
 	return this->floor_level_tiles_coords;
 }
 
-pair<int, int> Map::GetMapDimensions()
+std::pair<int, int> Map::GetMapDimensions()
 {
 	return this->map_dimensions;
 }
 
-vector<pair<sf::Sprite, bool>> Map::GetTiles()
+std::vector<Tile*> Map::GetTiles()
 {
 	return this->tiles;
 }
 
-void Map::ChangeTilesOpacity(vector<int> which_tiles)
+void Map::ChangeTilesOpacity(std::vector<int> which_tiles)
 {
 	if (which_tiles.size() == 0 || (which_tiles.size() != this->recolor_tiles.size() && this->recolor_tiles.size() != 0 || this->event->mouseButton.button == sf::Mouse::Left))
 	{
 		for (auto& elem : this->recolor_tiles)
 		{
-			this->non_walkable_tiles[elem].first.setColor(sf::Color(255, 255, 255, 255));
-			this->tiles[elem].first.setColor(sf::Color(255, 255, 255, 255));
+			this->non_walkable_tiles[elem]->SetColor(sf::Color(255, 255, 255, 255));
+			this->tiles[elem]->SetColor(sf::Color(255, 255, 255, 255));
 		}
 		this->recolor_tiles.clear();
 	}
@@ -436,13 +439,13 @@ void Map::ChangeTilesOpacity(vector<int> which_tiles)
 		this->recolor_tiles = which_tiles;
 		for (auto& elem : which_tiles)
 		{
-			this->tiles[elem].first.setColor(sf::Color(255, 255, 255, 30));
-			this->non_walkable_tiles[elem].first.setColor(sf::Color(255, 255, 255, 30));
+			this->tiles[elem]->SetColor(sf::Color(255, 255, 255, 30));
+			this->non_walkable_tiles[elem]->SetColor(sf::Color(255, 255, 255, 30));
 		}
 	}
 }
 
-void Map::SetPlayerPosition(pair<float, float> position)
+void Map::SetPlayerPosition(std::pair<float, float> position)
 {
 	this->player_position = position;
 }
@@ -471,16 +474,16 @@ void Map::SetViewBounds(sf::FloatRect& view_bounds)
 	//this->viewBounds.width -= 400;
 }
 
-bool Map::OnSegment(pair<float, float> p, pair<float, float> q, pair<float, float> r)
+bool Map::OnSegment(std::pair<float, float> p, std::pair<float, float> q, std::pair<float, float> r)
 {
-	if (q.first <= max(p.first, r.first) && q.first >= min(p.first, r.first) && q.second <= max(p.second, r.second) && q.second >= min(p.second, r.second))
+	if (q.first <= std::max(p.first, r.first) && q.first >= std::min(p.first, r.first) && q.second <= std::max(p.second, r.second) && q.second >= std::min(p.second, r.second))
 	{
 		return true;
 	}	
 	return false;
 }
 
-int Map::Orientation(pair<float, float> p, pair<float, float> q, pair<float, float> r)
+int Map::Orientation(std::pair<float, float> p, std::pair<float, float> q, std::pair<float, float> r)
 {
 	int val = (int)((q.second - p.second) * (r.first - q.first) - (q.first - p.first) * (r.second - q.second));
 	if (val == 0)
@@ -490,7 +493,7 @@ int Map::Orientation(pair<float, float> p, pair<float, float> q, pair<float, flo
 	return (val > 0) ? 1 : 2;
 }
 
-bool Map::DoIntersect(pair<float, float> p1, pair<float, float> q1, pair<float, float> p2, pair<float, float> q2)
+bool Map::DoIntersect(std::pair<float, float> p1, std::pair<float, float> q1, std::pair<float, float> p2, std::pair<float, float> q2)
 {
 	int o1 = Orientation(p1, q1, p2);
 	int o2 = Orientation(p1, q1, q2);
@@ -507,7 +510,7 @@ bool Map::DoIntersect(pair<float, float> p1, pair<float, float> q1, pair<float, 
 	return false; 
 }
 
-bool Map::IsInside(vector<pair<float, float>> polygon, int n, pair<float, float> p)
+bool Map::IsInside(std::vector<std::pair<float, float>> polygon, int n, std::pair<float, float> p)
 {
 	if (n < 3)
 	{

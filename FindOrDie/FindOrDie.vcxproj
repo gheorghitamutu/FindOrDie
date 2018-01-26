@@ -123,6 +123,8 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Tile.h" />
+    <ClInclude Include="TileFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
@@ -137,6 +139,8 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="TileFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Animation\Terrain\isometric_new_tiles_by_spasquini-d4jnp2i.png" />

@@ -7,8 +7,7 @@
 #include <vector>
 #include <random>
 #include "Pathfinding.h"
-
-using namespace std;
+#include "TileFactory.h"
 
 class Map
 {
@@ -21,62 +20,61 @@ public:
 	void DrawMap(sf::RenderWindow& window);
 	void DrawTilesOverPlayer(bool is_colliding);
 	bool IsCollidingDrawOver(sf::Vector2f body_size);
-	bool IsWalkable(pair<int, int> pair);
-	bool ContainsPoint(pair<float, float> point, pair<vector<pair<float, float>>, int> non_walkable_area_coords);
+	bool IsWalkable(std::pair<int, int> pair);
+	bool ContainsPoint(std::pair<float, float> point, std::pair<std::vector<std::pair<float, float>>, int> non_walkable_area_coords);
 	bool IsColliding(sf::Vector2f body_size, sf::Vector2f velocity);
-	pair <float, float> Convert2DToIso(pair<float, float> pair);
-	pair <float, float> ConvertIsoTo2D(pair<float, float> pair);
-	pair <float, float> GetTileCenterFromTileCoordinate(pair<float, float> pair);
-	vector<sf::Sprite*> CheckWhatToDraw();
-	vector<pair<float, float>> GetPolygonPoints(sf::Sprite* tile);
+	std::pair <float, float> Convert2DToIso(std::pair<float, float> pair);
+	std::pair <float, float> ConvertIsoTo2D(std::pair<float, float> pair);
+	std::pair <float, float> GetTileCenterFromTileCoordinate(std::pair<float, float> pair);
+	std::vector<Tile*> CheckWhatToDraw();
+	std::vector<std::pair<float, float>> GetPolygonPoints(Tile*);
 	int GetTileNumberWherePlayerIs(sf::Vector2f body_size);
 	int GetTileNumberClicked(sf::RenderWindow& window);
-	pair<string, pair<pair<int, int>, pair<int, int>>> SetFinishLocation(sf::Event event, sf::RenderWindow& window, sf::Vector2f body_size);
+	std::pair<std::string, std::pair<std::pair<int, int>, std::pair<int, int>>> SetFinishLocation(sf::Event event, sf::RenderWindow& window, sf::Vector2f body_size);
 	void SetStartLocation(sf::Vector2f body_size);
-	pair <float, float> GetStartLocation();
-	pair <float, float> GetFinishLocation();
-	vector<pair<vector<pair<float, float>>, int>> GetFloorLevelTilesCoords();
-	pair <int, int> GetMapDimensions();
-	vector <pair<sf::Sprite, bool>> GetTiles();
-	void ChangeTilesOpacity(vector<int> which_tiles);
-	void SetPlayerPosition(pair <float, float> position);
+	std::pair <float, float> GetStartLocation();
+	std::pair <float, float> GetFinishLocation();
+	std::vector<std::pair<std::vector<std::pair<float, float>>, int>> GetFloorLevelTilesCoords();
+	std::pair <int, int> GetMapDimensions();
+	std::vector <Tile*> GetTiles();
+	void ChangeTilesOpacity(std::vector<int> which_tiles);
+	void SetPlayerPosition(std::pair <float, float> position);
 	void SetEvent(sf::Event* event);
 public:
 	std::random_device rd;
 	std::mt19937 gen { rd() };
 	std::uniform_int_distribution<> dis{ 10, 150 };
 	std::uniform_int_distribution<> dis2{ 1, 5 };
-	sf::Texture* tile_texture;
-	pair<sf::Sprite, bool> tile_brick;
-	vector<pair<pair<float, float>, bool>> tile_type;
-	vector<pair<vector<pair<float, float>>, int>> floor_level_tiles_coords;
-	vector <pair<sf::Sprite, bool>> tiles;
-	vector <pair<sf::Sprite, bool>> non_walkable_tiles;
-	pair <int, int> map_dimensions;
-	vector<pair<vector<pair<float, float>>, int>> non_walkable_objects;
-	vector<pair<vector<pair<float, float>>, int>> can_draw_over_player_objects;
 
-	vector<vector<int>> map_matrix;
+	std::vector<std::pair<std::pair<float, float>, bool>> tile_type;
+	std::vector<std::pair<std::vector<std::pair<float, float>>, int>> floor_level_tiles_coords;
+	std::vector <Tile*> tiles;
+	std::vector <Tile*> non_walkable_tiles;
+	std::pair <int, int> map_dimensions;
+	std::vector<std::pair<std::vector<std::pair<float, float>>, int>> non_walkable_objects;
+	std::vector<std::pair<std::vector<std::pair<float, float>>, int>> can_draw_over_player_objects;
+
+	std::vector<std::vector<int>> map_matrix;
 	int dir = 4;
-	vector <int> dx = { 1, 0, -1, 0 };
-	vector<int> dy = { 0, 1, 0, -1 };
+	std::vector <int> dx = { 1, 0, -1, 0 };
+	std::vector<int> dy = { 0, 1, 0, -1 };
 	/*int dir = 8;
 	vector<int> dx = { 1, 1, 0, -1, -1, -1, 0, 1 };
 	vector<int> dy = { 0, 1, 1, 1, 0, -1, -1, -1 };*/
-	pair<int, int> start_location;
-	pair<int, int> finish_location;
-	pair<string, pair<pair<int, int>, pair<int, int>>> player_path;
+	std::pair<int, int> start_location;
+	std::pair<int, int> finish_location;
+	std::pair<std::string, std::pair<std::pair<int, int>, std::pair<int, int>>> player_path;
 
 	int number_of_tiles;
 	int tile_number_where_player_is = 0;
 	int last_known_tile_number_where_player_is = -1;
 
-	pair<float, float> extreme;
+	std::pair<float, float> extreme;
 
-	bool OnSegment(pair<float, float> p, pair<float, float> q, pair<float, float> r);
-	int Orientation(pair<float, float> p, pair<float, float> q, pair<float, float> r);
-	bool DoIntersect(pair<float, float> p1, pair<float, float> q1, pair<float, float> p2, pair<float, float> q2);
-	bool IsInside(vector<pair<float, float>> polygon, int n, pair<float, float> p);
+	bool OnSegment(std::pair<float, float> p, std::pair<float, float> q, std::pair<float, float> r);
+	int Orientation(std::pair<float, float> p, std::pair<float, float> q, std::pair<float, float> r);
+	bool DoIntersect(std::pair<float, float> p1, std::pair<float, float> q1, std::pair<float, float> p2, std::pair<float, float> q2);
+	bool IsInside(std::vector<std::pair<float, float>> polygon, int n, std::pair<float, float> p);
 
 	static constexpr int quarter_tile_size = 16;
 	static constexpr int half_tile_size = 32;
@@ -84,16 +82,18 @@ public:
 	static constexpr int tile_size = 64;
 
 
-	vector<sf::Sprite*> draw_these;
+	std::vector<Tile*> draw_these;
 	sf::FloatRect view_bounds;
 
-	vector<int> draw_tile_over_player;
-	vector<int> last_known_tiles_over_player;
+	std::vector<int> draw_tile_over_player;
+	std::vector<int> last_known_tiles_over_player;
 
-	vector<int> recolor_tiles;
+	std::vector<int> recolor_tiles;
 
-	pair <float, float> player_position;
+	std::pair <float, float> player_position;
 
 	sf::Event* event;
+
+	TileFactory* tile_factory;
 };
 

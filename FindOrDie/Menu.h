@@ -31,11 +31,11 @@ public:
 
 	sf::Font* font;
 	sf::Text text;
-	vector <sf::Text> main;
-	vector <sf::Text> select_character;
-	vector <sf::Text> pause;
+	std::vector <sf::Text> main;
+	std::vector <sf::Text> select_character;
+	std::vector <sf::Text> pause;
 
-	vector <sf::Text> menu;
+	std::vector <sf::Text> menu;
 
 	int items_main_menu = 3;
 	int items_select_character_menu = 2;

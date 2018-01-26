@@ -85,7 +85,7 @@ void Player::StartingPosition(sf::RenderWindow& window)
 	this->player_body.setPosition({ 100,100 });
 }
 
-void Player::SetTexture(string texture_type)
+void Player::SetTexture(std::string texture_type)
 {	
 	if (this->texture != nullptr)
 	{
@@ -105,11 +105,11 @@ void Player::SetTexture(string texture_type)
 	}
 }
 
-void Player::SetPlayerPath(pair<string, pair<pair<int, int>, pair<int, int>>> path, vector <pair<sf::Sprite, bool>>& tiles, pair <int, int> map_dimensions)
+void Player::SetPlayerPath(std::pair<std::string, std::pair<std::pair<int, int>, std::pair<int, int>>> path, std::vector<class Tile*> tiles, std::pair <int, int> map_dimensions)
 {
 	this->player_path.clear();
 	this->tiles_to_be_colored.clear();
-	pair<int, int> location = path.second.first;
+	std::pair<int, int> location = path.second.first;
 	int tileNumber;
 	if (path.first != "")
 	{
@@ -118,13 +118,13 @@ void Player::SetPlayerPath(pair<string, pair<pair<int, int>, pair<int, int>>> pa
 			location.second -= DecodePath(elem).first;
 			location.first -= DecodePath(elem).second;
 			tileNumber = location.first*map_dimensions.first + location.second;
-			this->player_path.emplace_front(location,  pair<float,float>(tiles[tileNumber].first.getPosition().x + 32, tiles[tileNumber].first.getPosition().y + 32));
+			this->player_path.emplace_front(location, std::pair<float,float>(tiles[tileNumber]->GetPosition().x + 32, tiles[tileNumber]->GetPosition().y + 32));
 			this->tiles_to_be_colored.emplace_back(tileNumber);
 		}
 	}
 }
 
-pair<int, int> Player::DecodePath(const char character_direction)
+std::pair<int, int> Player::DecodePath(const char character_direction)
 {
 	if (this->dir == 8)
 	{
@@ -183,20 +183,20 @@ pair<int, int> Player::DecodePath(const char character_direction)
 	return { 0,0 };
 }
 
-pair<float, float> Player::DecodeDirections()
+std::pair<float, float> Player::DecodeDirections()
 {
 	if (!this->player_path.empty())
 	{
-		pair<float, float> d_math_vector = { this->player_path.back().second.first - this->player_body.getPosition().x, this->player_path.back().second.second - this->player_body.getPosition().y };
+		std::pair<float, float> d_math_vector = { this->player_path.back().second.first - this->player_body.getPosition().x, this->player_path.back().second.second - this->player_body.getPosition().y };
 		float d_math_vector_length = sqrt(d_math_vector.first*d_math_vector.first + d_math_vector.second*d_math_vector.second);
-		pair<float, float> d_math_vector_normalized = { d_math_vector.first / d_math_vector_length ,d_math_vector.second / d_math_vector_length };
+		std::pair<float, float> d_math_vector_normalized = { d_math_vector.first / d_math_vector_length ,d_math_vector.second / d_math_vector_length };
 		return d_math_vector_normalized;
 	}
 
 	return { 0,0 };
 }
 
-void Player::DecodeAnimationPath(pair<float, float> direction)
+void Player::DecodeAnimationPath(std::pair<float, float> direction)
 {
 	if (direction.first == 0.0f && direction.second > 0.0f )
 	{
@@ -350,7 +350,7 @@ void Player::FollowPath()
 	}
 }
 
-pair <float, float> Player::GetPlayer2DPosition()
+std::pair <float, float> Player::GetPlayer2DPosition()
 {
 	return{ this->player_body.getPosition().x, this->player_body.getPosition().y };
 }
@@ -360,7 +360,7 @@ sf::Vector2f Player::GetPlayerBodySize()
 	return this->player_body.getSize();
 }
 
-vector<int> Player::GetTilesToBeColored()
+std::vector<int> Player::GetTilesToBeColored()
 {
 	if (this->player_path.empty())
 	{
